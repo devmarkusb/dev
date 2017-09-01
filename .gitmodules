@@ -1,0 +1,15 @@
+[submodule "sdks/ToolsFL/tooBasicCodeSupport"]
+	path = sdks/ToolsFL/tooBasicCodeSupport
+	url = c:/projects/git/libs/ToolsFL/tooBasicCodeSupport/
+[submodule "sdks/ToolsFL/tooBuildEnv"]
+	path = sdks/ToolsFL/tooBuildEnv
+	url = c:/projects/git/libs/ToolsFL/tooBuildEnv/
+[submodule "sdks/Toolib"]
+	path = sdks/Toolib
+	url = c:/projects/git/libs/Toolib/
+[submodule "sdks/ToolsFL/tooLinklib"]
+	path = sdks/ToolsFL/tooLinklib
+	url = c:/projects/git/libs/ToolsFL/tooLinklib/
+[submodule "sdks/ToolsFL/tooString"]
+	path = sdks/ToolsFL/tooString
+	url = c:/projects/git/libs/ToolsFL/tooString/
