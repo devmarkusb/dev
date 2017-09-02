@@ -11,6 +11,7 @@ include(${TOO_CMAKE_INC_DEFAULTS})
 add_subdirectory(sdks)
 
 add_executable(${TargetAppName}
+    src/threads_n_cachelines.cpp
     src/main.cpp
 )
 
