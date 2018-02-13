@@ -1,4 +1,8 @@
 #include "Toolib/performance/performance.h"
+#include "Toolib/finally.h"
+//#if !TOO_DEPLOYMENT_BUILD && !TOO_OS_WINDOWS
+//#include "gperftools/profiler.h"
+//#endif
 #include <iostream>
 #include <math.h>
 #include <random>
@@ -33,6 +37,10 @@ double crunsh_n(int n)
 
 int main(int, char*[])
 {
+//#if !TOO_DEPLOYMENT_BUILD && !TOO_OS_WINDOWS
+//    ProfilerStart("./app.prof");
+//    auto autoStopProfiling = too::finally([](){ ProfilerStop(); });
+//#endif
     {
         too::CPerformanceProfiler perfscope0("all");
         {

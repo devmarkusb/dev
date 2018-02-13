@@ -31,3 +31,10 @@ target_link_libraries(${TargetAppName} PUBLIC Toolib)
 if (LINUX)
     target_link_libraries(${TargetAppName} PUBLIC pthread)
 endif ()
+
+if (NOT TOO_DEPLOYMENT_BUILD AND NOT WIN32)
+    add_dependencies(${TargetAppName} gperftools)
+    target_include_directories(${TargetAppName} PRIVATE ${gperftools_profiler_INCLUDE})
+    target_link_libraries(${TargetAppName} PRIVATE gperftools_profiler)
+endif ()
+
