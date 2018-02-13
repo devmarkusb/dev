@@ -28,3 +28,6 @@ endif ()
 set_target_properties(${TargetAppName} PROPERTIES DEBUG_POSTFIX "d")
 
 target_link_libraries(${TargetAppName} PUBLIC Toolib)
+if (LINUX)
+    target_link_libraries(${TargetAppName} PUBLIC pthread)
+endif ()

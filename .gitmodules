@@ -13,3 +13,9 @@
 [submodule "sdks/ToolsFL/tooString"]
 	path = sdks/ToolsFL/tooString
 	url = c:/projects/git/libs/ToolsFL/tooString/
+[submodule "sdks/googletest"]
+	path = sdks/googletest
+	url = /mnt/data/projects/git/sdks/unit_test/googletest/
+[submodule "sdks/ToolsFL/tooMem"]
+	path = sdks/ToolsFL/tooMem
+	url = /mnt/data/projects/git/libs/ToolsFL/tooMem/

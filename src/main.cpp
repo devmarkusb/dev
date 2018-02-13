@@ -1,5 +1,4 @@
 #include "Toolib/performance/performance.h"
-#include <conio.h>
 #include <iostream>
 #include <math.h>
 #include <random>
@@ -34,7 +33,6 @@ double crunsh_n(int n)
 
 int main(int, char*[])
 {
-    std::getchar();
     {
         too::CPerformanceProfiler perfscope0("all");
         {
@@ -47,6 +45,5 @@ int main(int, char*[])
 
     std::cout << too::CPerformanceProfiler::DumpAllItems(false);
 
-    std::getchar();
     return 0;
 }
