@@ -15,7 +15,7 @@ constexpr std::size_t hardware_destructive_interference_size = 64;
 constexpr std::size_t hardware_constructive_interference_size = 64;
 
 constexpr unsigned kTimingTrialsToComputeAverage = 100;
-constexpr unsigned kInnerLoopTrials = 1000000;
+constexpr unsigned kInnerLoopTrials              = 1000000;
 
 typedef unsigned useless_result_t;
 typedef double elapsed_secs_t;
@@ -23,19 +23,22 @@ typedef double elapsed_secs_t;
 //////// CODE TO BE SAMPLED:
 
 // wraps an int, default alignment allows false-sharing
-struct naive_int {
+struct naive_int
+{
     int value;
 };
 static_assert(alignof(naive_int) < hardware_destructive_interference_size, "");
 
 // wraps an int, cache alignment prevents false-sharing
-struct cache_int {
+struct cache_int
+{
     alignas(hardware_destructive_interference_size) int value;
 };
 static_assert(alignof(cache_int) == hardware_destructive_interference_size, "");
 
 // wraps a pair of int, purposefully pushes them too far apart for true-sharing
-struct bad_pair {
+struct bad_pair
+{
     int first;
     char padding[hardware_constructive_interference_size];
     int second;
@@ -43,7 +46,8 @@ struct bad_pair {
 static_assert(sizeof(bad_pair) > hardware_constructive_interference_size, "");
 
 // wraps a pair of int, ensures they fit nicely together for true-sharing
-struct good_pair {
+struct good_pair
+{
     int first;
     int second;
 };
@@ -51,10 +55,8 @@ static_assert(sizeof(good_pair) <= hardware_constructive_interference_size, "");
 
 // accesses a specific array element many times
 template <typename T, typename Latch>
-useless_result_t sample_array_threadfunc(
-    Latch& latch,
-    unsigned thread_index,
-    T& vec) {
+useless_result_t sample_array_threadfunc(Latch& latch, unsigned thread_index, T& vec)
+{
     // prepare for computation
     std::random_device rd;
     std::mt19937 mt{rd()};
@@ -65,7 +67,8 @@ useless_result_t sample_array_threadfunc(
     latch.count_down_and_wait();
 
     // compute
-    for (unsigned trial = 0; trial != kInnerLoopTrials; ++trial) {
+    for (unsigned trial = 0; trial != kInnerLoopTrials; ++trial)
+    {
         element.value = dist(mt);
     }
 
@@ -74,10 +77,8 @@ useless_result_t sample_array_threadfunc(
 
 // accesses a pair's elements many times
 template <typename T, typename Latch>
-useless_result_t sample_pair_threadfunc(
-    Latch& latch,
-    unsigned,
-    T& pair) {
+useless_result_t sample_pair_threadfunc(Latch& latch, unsigned, T& pair)
+{
     // prepare for computation
     std::random_device rd;
     std::mt19937 mt{rd()};
@@ -86,30 +87,32 @@ useless_result_t sample_pair_threadfunc(
     latch.count_down_and_wait();
 
     // compute
-    for (unsigned trial = 0; trial != kInnerLoopTrials; ++trial) {
-        pair.first = dist(mt);
+    for (unsigned trial = 0; trial != kInnerLoopTrials; ++trial)
+    {
+        pair.first  = dist(mt);
         pair.second = dist(mt);
     }
 
-    return static_cast<useless_result_t>(pair.first) +
-        static_cast<useless_result_t>(pair.second);
+    return static_cast<useless_result_t>(pair.first) + static_cast<useless_result_t>(pair.second);
 }
 
 //////// UTILITIES:
 
 // utility: allow threads to wait until everyone is ready
-class threadlatch {
+class threadlatch
+{
 public:
-    explicit threadlatch(const std::size_t count) :
-        count_{count}
-    {}
+    explicit threadlatch(const std::size_t count) : count_{count} {}
 
-    void count_down_and_wait() {
+    void count_down_and_wait()
+    {
         std::unique_lock<std::mutex> lock{mutex_};
-        if (--count_ == 0) {
+        if (--count_ == 0)
+        {
             cv_.notify_all();
         }
-        else {
+        else
+        {
             cv_.wait(lock, [&] { return count_ == 0; });
         }
     }
@@ -122,13 +125,14 @@ private:
 
 // utility: runs a given function in N threads
 std::tuple<useless_result_t, elapsed_secs_t> run_threads(
-    const std::function<useless_result_t(threadlatch&, unsigned)>& func,
-    const unsigned num_threads) {
+    const std::function<useless_result_t(threadlatch&, unsigned)>& func, const unsigned num_threads)
+{
     threadlatch latch{num_threads + 1};
 
     std::vector<std::future<unsigned>> futures;
     std::vector<std::thread> threads;
-    for (unsigned thread_index = 0; thread_index != num_threads; ++thread_index) {
+    for (unsigned thread_index = 0; thread_index != num_threads; ++thread_index)
+    {
         std::packaged_task<useless_result_t()> task{
             std::bind(func, std::ref(latch), thread_index)
             //[&]() { return func(latch, thread_index); }
@@ -141,18 +145,17 @@ std::tuple<useless_result_t, elapsed_secs_t> run_threads(
     const auto starttime = std::chrono::high_resolution_clock::now();
 
     latch.count_down_and_wait();
-    for (auto& thread : threads) {
+    for (auto& thread : threads)
+    {
         thread.join();
     }
 
     const auto endtime = std::chrono::high_resolution_clock::now();
-    const auto elapsed = std::chrono::duration_cast<
-        std::chrono::duration<double>>(
-            endtime - starttime
-            ).count();
+    const auto elapsed = std::chrono::duration_cast<std::chrono::duration<double>>(endtime - starttime).count();
 
     unsigned result = 0;
-    for (auto& future : futures) {
+    for (auto& future : futures)
+    {
         result += future.get();
     }
 
@@ -160,27 +163,24 @@ std::tuple<useless_result_t, elapsed_secs_t> run_threads(
 }
 
 // utility: sample the time it takes to run func on N threads
-void run_tests(
-    const std::function<useless_result_t(threadlatch&, unsigned)>& func,
-    const unsigned num_threads) {
+void run_tests(const std::function<useless_result_t(threadlatch&, unsigned)>& func, const unsigned num_threads)
+{
     useless_result_t final_result = 0;
-    double avgtime = 0.0;
-    for (unsigned trial = 0; trial != kTimingTrialsToComputeAverage; ++trial) {
+    double avgtime                = 0.0;
+    for (unsigned trial = 0; trial != kTimingTrialsToComputeAverage; ++trial)
+    {
         const auto result_and_elapsed = run_threads(func, num_threads);
-        const auto result = std::get<useless_result_t>(result_and_elapsed);
-        const auto elapsed = std::get<elapsed_secs_t>(result_and_elapsed);
+        const auto result             = std::get<useless_result_t>(result_and_elapsed);
+        const auto elapsed            = std::get<elapsed_secs_t>(result_and_elapsed);
 
         final_result += result;
         avgtime = (avgtime * trial + elapsed) / (trial + 1);
     }
 
-    std::cout
-        << "Average time: " << avgtime
-        << " seconds, useless result: " << final_result
-        << std::endl;
+    std::cout << "Average time: " << avgtime << " seconds, useless result: " << final_result << std::endl;
 }
 
-//int main() {
+// int main() {
 //    const auto cores = std::thread::hardware_concurrency();
 //    std::cout << "Hardware concurrency: " << cores << std::endl;
 //

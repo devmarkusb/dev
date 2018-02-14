@@ -4,17 +4,20 @@
 #include <iostream>
 
 
-namespace {
-    double crunsh_n(int n) {
-        double res{1.0};
-        ++n;
-        for (int i = n; --i;) {
-            too::CPerformanceProfiler perfscope1("single_gen");
-            auto r = pcs::gen_rand_nr();
-            res += r;
-        }
-        return res;
+namespace
+{
+double crunsh_n(int n)
+{
+    double res{1.0};
+    ++n;
+    for (int i = n; --i;)
+    {
+        too::CPerformanceProfiler perfscope1("single_gen");
+        auto r = pcs::gen_rand_nr();
+        res += r;
     }
+    return res;
+}
 } // namespace
 
 void demo_tooperf_measurement()

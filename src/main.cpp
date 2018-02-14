@@ -5,7 +5,7 @@
 
 
 
-int main(int, char*[])
+int main(int, char* [])
 {
     demo_tooperf_measurement();
 
