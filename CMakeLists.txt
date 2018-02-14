@@ -72,6 +72,8 @@ endif ()
 
 set_target_properties(${TargetAppNameTest} PROPERTIES DEBUG_POSTFIX "d")
 
+target_include_directories(${TargetAppNameTest} PRIVATE ${gmock_SOURCE_DIR}/include)
+
 target_link_libraries(${TargetAppNameTest} PRIVATE gtest_main ${TargetAppNameAsLibForTest})
 
 set(do_auto_test    ON)
