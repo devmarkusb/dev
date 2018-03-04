@@ -8,6 +8,10 @@ set(TargetAppName ${PROJECT_NAME})
 
 include(${TOO_CMAKE_INC_DEFAULTS})
 
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    add_compile_options(-fopenmp)
+endif()
+
 add_subdirectory(sdks)
 
 
@@ -32,6 +36,9 @@ target_include_directories(${TargetAppNameAsLibForTest} SYSTEM PUBLIC ${Boost_IN
 target_link_libraries(${TargetAppNameAsLibForTest} PUBLIC Toolib)
 if (LINUX)
     target_link_libraries(${TargetAppNameAsLibForTest} PUBLIC pthread)
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        target_link_libraries(${TargetAppNameAsLibForTest} PUBLIC -fopenmp)
+    endif()
 endif ()
 
 if (NOT TOO_DEPLOYMENT_BUILD AND NOT WIN32)
