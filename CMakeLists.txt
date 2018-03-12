@@ -25,7 +25,7 @@ add_library(${TargetAppNameAsLibForTest} STATIC
         src/util/random.h
         src/source.cpp
         src/source.h
-        src/source.c)
+        src/source.c src/util/profiler.h src/util/profiler.cpp src/util/random.cpp)
 
 target_include_directories(${TargetAppNameAsLibForTest} PUBLIC src)
 target_include_directories(${TargetAppNameAsLibForTest} PUBLIC ${tooBasicCodeSupport_INCLUDE_DIRS})

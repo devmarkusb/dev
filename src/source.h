@@ -18,7 +18,6 @@
 #ifndef __cplusplus
 
 
-
 #endif
 
 
@@ -28,7 +27,6 @@
 extern "C"
 {
 #endif
-
 
 
 #ifdef __cplusplus

@@ -1,8 +1,12 @@
 #ifndef RANDOM_H_asdfjhw34inxth
 #define RANDOM_H_asdfjhw34inxth
 
-#include <random>
 
+// C++ only code goes here
+#ifdef __cplusplus
+
+#include <iostream>
+#include <random>
 
 namespace pcs
 {
@@ -14,5 +18,19 @@ inline double gen_rand_nr()
     return dist(mt);
 }
 } // pcs
+
+#endif
+
+// mixed C/C++ code goes here
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+double pcs_gen_rand_nr();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
