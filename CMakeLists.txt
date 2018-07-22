@@ -2,15 +2,14 @@ cmake_minimum_required(VERSION 3.4.1)
 
 add_subdirectory(sdks/ToolsFL/tooBuildEnv)
 include(${TOO_CMAKE_INC_BUILDNR})
-project(performance_clean_sheet VERSION 0.1.${BUILD_NR}.0)
+project(performance_clean_sheet VERSION 0.1.${BUILD_NR}.0 LANGUAGES C CXX)# CUDA)
 message(STATUS "project version: " ${PROJECT_VERSION})
 set(TargetAppName ${PROJECT_NAME})
 
 include(${TOO_CMAKE_INC_DEFAULTS})
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    add_compile_options(-fopenmp)
-endif()
+include(${TOO_CMAKE_INC_OPENMP})
+include(${TOO_CMAKE_INC_GPERFTOOLS})
 
 add_subdirectory(sdks)
 
@@ -19,13 +18,17 @@ add_subdirectory(sdks)
 
 set(TargetAppNameAsLibForTest ${PROJECT_NAME}AsLibForTest)
 add_library(${TargetAppNameAsLibForTest} STATIC
+        src/cuda/cleansheet.cu
         src/threads_n_cachelines.cpp
         src/tooperf_demo.cpp
         src/tooperf_demo.h
         src/util/random.h
         src/source.cpp
         src/source.h
-        src/source.c src/util/profiler.h src/util/profiler.cpp src/util/random.cpp)
+        src/source.c src/util/profiler.h src/util/profiler.cpp src/util/random.cpp src/wordladder.h
+)
+
+#set_target_properties(${TargetAppNameAsLibForTest} PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 
 target_include_directories(${TargetAppNameAsLibForTest} PUBLIC src)
 target_include_directories(${TargetAppNameAsLibForTest} PUBLIC ${tooBasicCodeSupport_INCLUDE_DIRS})
@@ -36,23 +39,16 @@ target_include_directories(${TargetAppNameAsLibForTest} SYSTEM PUBLIC ${Boost_IN
 target_link_libraries(${TargetAppNameAsLibForTest} PUBLIC Toolib)
 if (LINUX)
     target_link_libraries(${TargetAppNameAsLibForTest} PUBLIC pthread)
-    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-        target_link_libraries(${TargetAppNameAsLibForTest} PUBLIC -fopenmp)
-    endif()
+    target_link_libraries(${TargetAppNameAsLibForTest} PUBLIC -fopenmp)
 endif ()
 
-if (NOT TOO_DEPLOYMENT_BUILD AND NOT WIN32)
-    add_dependencies(${TargetAppNameAsLibForTest} gperftools)
-    target_include_directories(${TargetAppNameAsLibForTest} PRIVATE ${gperftools_profiler_INCLUDE})
-    target_link_libraries(${TargetAppNameAsLibForTest} PRIVATE gperftools_profiler)
-endif ()
-
+too_use_gperftools(${CMAKE_SOURCE_DIR}/sdks/gperftools-2.6.3.tar.gz ${TargetAppNameAsLibForTest})
 
 ######################################################################################################################
 
 add_executable(${TargetAppName}
         src/main.cpp
-        )
+)
 
 target_link_libraries(${TargetAppName} PRIVATE ${TargetAppNameAsLibForTest})
 
@@ -60,8 +56,10 @@ if (WIN32)
     set_property(TARGET ${TargetAppName} APPEND PROPERTY COMPILE_DEFINITIONS UNICODE _UNICODE)
 endif ()
 
-set_target_properties(${TargetAppName} PROPERTIES DEBUG_POSTFIX "d")
-
+set_target_properties(${TargetAppName} PROPERTIES
+        DEBUG_POSTFIX "d"
+        #CUDA_SEPARABLE_COMPILATION ON
+)
 
 ######################################################################################################################
 
