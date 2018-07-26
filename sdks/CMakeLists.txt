@@ -3,4 +3,4 @@ if (TOO_BUILD_UNITTESTS)
 endif ()
 
 add_subdirectory(tfl)
-add_subdirectory(Toolib)
+add_subdirectory(toolib)

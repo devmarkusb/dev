@@ -1,9 +1,9 @@
-[submodule "sdks/Toolib"]
-	path = sdks/Toolib
-	url = /home/markus/projects/git/libs/Toolib/
 [submodule "sdks/googletest"]
 	path = sdks/googletest
 	url = /home/markus/projects/git/sdks/unit_test/googletest/
 [submodule "sdks/tfl"]
 	path = sdks/tfl
 	url = /home/markus/projects/git/libs/tfl/
+[submodule "sdks/toolib"]
+	path = sdks/toolib
+	url = /home/markus/projects/git/libs/toolib
