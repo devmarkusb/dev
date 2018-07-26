@@ -1,21 +1,9 @@
-[submodule "sdks/ToolsFL/tooBasicCodeSupport"]
-	path = sdks/ToolsFL/tooBasicCodeSupport
-	url = /home/markus/projects/git/libs/ToolsFL/tooBasicCodeSupport/
-[submodule "sdks/ToolsFL/tooBuildEnv"]
-	path = sdks/ToolsFL/tooBuildEnv
-	url = /home/markus/projects/git/libs/ToolsFL/tooBuildEnv/
 [submodule "sdks/Toolib"]
 	path = sdks/Toolib
 	url = /home/markus/projects/git/libs/Toolib/
-[submodule "sdks/ToolsFL/tooLinklib"]
-	path = sdks/ToolsFL/tooLinklib
-	url = /home/markus/projects/git/libs/ToolsFL/tooLinklib/
-[submodule "sdks/ToolsFL/tooString"]
-	path = sdks/ToolsFL/tooString
-	url = /home/markus/projects/git/libs/ToolsFL/tooString/
 [submodule "sdks/googletest"]
 	path = sdks/googletest
 	url = /home/markus/projects/git/sdks/unit_test/googletest/
-[submodule "sdks/ToolsFL/tooMem"]
-	path = sdks/ToolsFL/tooMem
-	url = /home/markus/projects/git/libs/ToolsFL/tooMem/
+[submodule "sdks/tfl"]
+	path = sdks/tfl
+	url = /home/markus/projects/git/libs/tfl/

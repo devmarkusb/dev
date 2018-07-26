@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.4.1)
 
-add_subdirectory(sdks/ToolsFL/tooBuildEnv)
+add_subdirectory(sdks/tfl/buildenv)
 include(${TOO_CMAKE_INC_BUILDNR})
 project(performance_clean_sheet VERSION 0.1.${BUILD_NR}.0 LANGUAGES C CXX)# CUDA)
 message(STATUS "project version: " ${PROJECT_VERSION})
