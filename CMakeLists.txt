@@ -25,7 +25,7 @@ add_library(${TargetAppNameAsLibForTest} STATIC
         src/util/random.h
         src/source.cpp
         src/source.h
-        src/source.c src/util/profiler.h src/util/profiler.cpp src/util/random.cpp src/wordladder.h
+        src/source.c src/util/profiler.h src/util/profiler.cpp src/util/random.cpp
 )
 
 #set_target_properties(${TargetAppNameAsLibForTest} PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
