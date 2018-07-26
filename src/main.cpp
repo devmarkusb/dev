@@ -1,7 +1,6 @@
 #include "tooperf_demo.h"
 #include "source.h"
 #include "util/random.h"
-#include "wordladder.h"
 #include "Toolib/finally.h"
 #include "Toolib/performance/performance.h"
 #if TOO_ENABLE_PROFILING_GPERF

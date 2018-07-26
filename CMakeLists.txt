@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.4.1)
 
-add_subdirectory(sdks/tfl/buildenv)
+include(sdks/tfl/buildenv/cmake_util.cmake)
 include(${TOO_CMAKE_INC_BUILDNR})
+
 project(performance_clean_sheet VERSION 0.1.${BUILD_NR}.0 LANGUAGES C CXX)# CUDA)
 message(STATUS "project version: " ${PROJECT_VERSION})
 set(TargetAppName ${PROJECT_NAME})
@@ -31,8 +32,7 @@ add_library(${TargetAppNameAsLibForTest} STATIC
 #set_target_properties(${TargetAppNameAsLibForTest} PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 
 target_include_directories(${TargetAppNameAsLibForTest} PUBLIC src)
-target_include_directories(${TargetAppNameAsLibForTest} PUBLIC ${tooBasicCodeSupport_INCLUDE_DIRS})
-target_include_directories(${TargetAppNameAsLibForTest} PUBLIC ${tooString_INCLUDE_DIRS})
+target_include_directories(${TargetAppNameAsLibForTest} PUBLIC ${tfl_INCLUDE_DIRS})
 target_include_directories(${TargetAppNameAsLibForTest} PUBLIC ${Toolib_INCLUDE_DIRS})
 target_include_directories(${TargetAppNameAsLibForTest} SYSTEM PUBLIC ${Boost_INCLUDE_DIRS})
 
