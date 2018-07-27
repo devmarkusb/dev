@@ -20,29 +20,25 @@ add_subdirectory(sdks)
 set(TargetAppNameAsLibForTest ${PROJECT_NAME}AsLibForTest)
 add_library(${TargetAppNameAsLibForTest} STATIC
         src/cuda/cleansheet.cu
+        src/source.c
+        src/source.cpp
+        src/source.h
         src/threads_n_cachelines.cpp
         src/tooperf_demo.cpp
         src/tooperf_demo.h
+        src/util/profiler.cpp
+        src/util/profiler.h
+        src/util/random.cpp
         src/util/random.h
-        src/source.cpp
-        src/source.h
-        src/source.c src/util/profiler.h src/util/profiler.cpp src/util/random.cpp
 )
-
-#set_target_properties(${TargetAppNameAsLibForTest} PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 
 target_include_directories(${TargetAppNameAsLibForTest} PUBLIC src)
 target_include_directories(${TargetAppNameAsLibForTest} PUBLIC ${tfl_INCLUDE_DIRS})
-target_include_directories(${TargetAppNameAsLibForTest} PUBLIC ${Toolib_INCLUDE_DIRS})
+target_include_directories(${TargetAppNameAsLibForTest} PUBLIC ${toolib_INCLUDE_DIRS})
 target_include_directories(${TargetAppNameAsLibForTest} SYSTEM PUBLIC ${Boost_INCLUDE_DIRS})
 
-target_link_libraries(${TargetAppNameAsLibForTest} PUBLIC Toolib)
-if (LINUX)
-    target_link_libraries(${TargetAppNameAsLibForTest} PUBLIC pthread)
-    target_link_libraries(${TargetAppNameAsLibForTest} PUBLIC -fopenmp)
-endif ()
+target_link_libraries(${TargetAppNameAsLibForTest} PUBLIC toolib)
 
-too_use_gperftools(${CMAKE_SOURCE_DIR}/sdks/gperftools-2.6.3.tar.gz ${TargetAppNameAsLibForTest})
 
 ######################################################################################################################
 
@@ -52,14 +48,12 @@ add_executable(${TargetAppName}
 
 target_link_libraries(${TargetAppName} PRIVATE ${TargetAppNameAsLibForTest})
 
-if (WIN32)
-    set_property(TARGET ${TargetAppName} APPEND PROPERTY COMPILE_DEFINITIONS UNICODE _UNICODE)
-endif ()
+too_set_target_defaults(${TargetAppName})
+too_set_target_openmp(${TargetAppName})
+#too_set_target_cuda_separable_compilation(${TargetAppName})
 
-set_target_properties(${TargetAppName} PROPERTIES
-        DEBUG_POSTFIX "d"
-        #CUDA_SEPARABLE_COMPILATION ON
-)
+too_use_gperftools(${TargetAppName} ${CMAKE_SOURCE_DIR}/sdks/gperftools-2.6.3.tar.gz)
+
 
 ######################################################################################################################
 
@@ -68,22 +62,13 @@ if (NOT TOO_BUILD_UNITTESTS)
 endif ()
 
 set(TargetAppNameTest ${PROJECT_NAME}Test)
+
 add_executable(${TargetAppNameTest}
         src/source.test.cpp)
 
-if (WIN32)
-    set_property(TARGET ${TargetAppNameTest} APPEND PROPERTY COMPILE_DEFINITIONS UNICODE _UNICODE)
-endif ()
-
-set_target_properties(${TargetAppNameTest} PROPERTIES DEBUG_POSTFIX "d")
-
 target_link_libraries(${TargetAppNameTest} PRIVATE gmock_main gtest ${TargetAppNameAsLibForTest})
 
-set(do_auto_test    ON)
+too_set_target_defaults(${TargetAppNameTest})
+too_set_target_openmp(${TargetAppNameTest})
 
-if (do_auto_test)
-    add_custom_command(
-            TARGET ${TargetAppNameTest} POST_BUILD
-            COMMAND ${TargetAppNameTest}
-    )
-endif ()
+too_run_target_postbuild(${TargetAppNameTest})
