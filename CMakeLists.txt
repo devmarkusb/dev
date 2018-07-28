@@ -39,6 +39,8 @@ target_include_directories(${TargetAppNameAsLibForTest} SYSTEM PUBLIC ${Boost_IN
 
 target_link_libraries(${TargetAppNameAsLibForTest} PUBLIC toolib)
 
+too_set_target_defaults(${TargetAppNameAsLibForTest})
+
 
 ######################################################################################################################
 
