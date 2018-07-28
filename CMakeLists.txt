@@ -1,16 +1,16 @@
 cmake_minimum_required(VERSION 3.4.1)
 
 include(sdks/tfl/buildenv/cmake_util.cmake)
-include(${TOO_CMAKE_INC_BUILDNR})
+too_include(buildnr.cmake)
 
 project(performance_clean_sheet VERSION 0.1.${BUILD_NR}.0 LANGUAGES C CXX)# CUDA)
 message(STATUS "project version: " ${PROJECT_VERSION})
 set(TargetAppName ${PROJECT_NAME})
 
-include(${TOO_CMAKE_INC_DEFAULTS})
+too_include(defaults.cmake)
 
-include(${TOO_CMAKE_INC_OPENMP})
-include(${TOO_CMAKE_INC_GPERFTOOLS})
+too_include(openmp.cmake)
+too_include(gperftools.cmake)
 
 add_subdirectory(sdks)
 

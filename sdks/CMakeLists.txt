@@ -1,5 +1,5 @@
 if (TOO_BUILD_UNITTESTS)
-    include(${TOO_CMAKE_INC_GOOGLETEST_AS_SUBDIR})
+    too_include(googletest_as_subdir.cmake)
 endif ()
 
 add_subdirectory(tfl)
