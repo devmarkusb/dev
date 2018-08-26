@@ -1,0 +1,40 @@
+#ifndef ALLTHETHINGS_H_jkasghfuix3gt83gnz847xt2t
+#define ALLTHETHINGS_H_jkasghfuix3gt83gnz847xt2t
+
+#include <omp.h>
+#include <algorithm>
+#include <array>
+#include <atomic>
+#include <bitset>
+#include <chrono>
+#include <cmath>
+#include <cctype>
+#include <climits>
+#include <complex>
+#include <cstdarg>
+#include <cstdio>
+#include <deque>
+#include <iomanip>
+#include <iostream>
+#include <iterator>
+#include <fstream>
+#include <functional>
+#include <limits>
+#include <list>
+#include <map>
+#include <memory>
+#include <numeric>
+#include <random>
+#include <regex>
+#include <set>
+#include <stack>
+#include <sstream>
+#include <string>
+#include <type_traits>
+#include <queue>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
+#include <vector>
+
+#endif
