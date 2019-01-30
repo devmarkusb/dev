@@ -9,8 +9,9 @@ set(TargetAppName ${PROJECT_NAME})
 
 too_include(defaults.cmake)
 
-too_include(openmp.cmake)
+too_include(asio.cmake)
 too_include(gperftools.cmake)
+too_include(openmp.cmake)
 
 add_subdirectory(sdks)
 
@@ -37,6 +38,9 @@ target_include_directories(${TargetAppNameAsLibForTest} PUBLIC ${tfl_INCLUDE_DIR
 target_include_directories(${TargetAppNameAsLibForTest} PUBLIC ${toolib_INCLUDE_DIRS})
 
 target_link_libraries(${TargetAppNameAsLibForTest} PUBLIC toolib)
+
+too_use_asio(${TargetAppNameAsLibForTest} ${CMAKE_SOURCE_DIR}/sdks/asio-1.12.2.tar.gz
+        MD5=43c53b8d255edc385dc4e704e59b3641)
 
 too_set_target_defaults(${TargetAppNameAsLibForTest})
 
@@ -84,3 +88,6 @@ add_executable(${SecondProcess}
 
 target_include_directories(${SecondProcess} PUBLIC .)
 target_include_directories(${SecondProcess} PUBLIC ${tfl_INCLUDE_DIRS})
+
+too_use_asio(${SecondProcess} ${CMAKE_SOURCE_DIR}/sdks/asio-1.12.2.tar.gz
+        MD5=43c53b8d255edc385dc4e704e59b3641)
