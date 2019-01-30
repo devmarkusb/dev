@@ -26,16 +26,15 @@ add_library(${TargetAppNameAsLibForTest} STATIC
         src/threads_n_cachelines.cpp
         src/tooperf_demo.cpp
         src/tooperf_demo.h
-        src/util/profiler.cpp
-        src/util/profiler.h
-        src/util/random.cpp
-        src/util/random.h
+        util/profiler.cpp
+        util/profiler.h
+        util/random.cpp
+        util/random.h
 )
 
-target_include_directories(${TargetAppNameAsLibForTest} PUBLIC src)
+target_include_directories(${TargetAppNameAsLibForTest} PUBLIC .)
 target_include_directories(${TargetAppNameAsLibForTest} PUBLIC ${tfl_INCLUDE_DIRS})
 target_include_directories(${TargetAppNameAsLibForTest} PUBLIC ${toolib_INCLUDE_DIRS})
-target_include_directories(${TargetAppNameAsLibForTest} SYSTEM PUBLIC ${Boost_INCLUDE_DIRS})
 
 target_link_libraries(${TargetAppNameAsLibForTest} PUBLIC toolib)
 
@@ -74,3 +73,14 @@ too_set_target_defaults(${TargetAppNameTest})
 too_set_target_openmp(${TargetAppNameTest})
 
 too_run_target_postbuild(${TargetAppNameTest})
+
+######################################################################################################################
+
+set(SecondProcess "SecondProcess")
+
+add_executable(${SecondProcess}
+        src2/main2.cpp
+)
+
+target_include_directories(${SecondProcess} PUBLIC .)
+target_include_directories(${SecondProcess} PUBLIC ${tfl_INCLUDE_DIRS})

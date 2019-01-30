@@ -1,14 +1,12 @@
-#include <toolib/mem/alloc/default.h>
-#include "tooperf_demo.h"
 #include "source.h"
+#include "util/profiler.h"
 #include "util/random.h"
 #include "toolib/finally.h"
 #include "toolib/performance/performance.h"
 #if TOO_ENABLE_PROFILING_GPERF
 #include "gperftools/profiler.h"
 #endif
-#include "allthethings.h"
-
+#include "util/allthethings.h"
 
 
 int main(int, char* [])
