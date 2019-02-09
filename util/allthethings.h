@@ -6,6 +6,7 @@
 #include <array>
 #include <atomic>
 #include <bitset>
+#include <cassert>
 #include <chrono>
 #include <cmath>
 #include <cctype>
