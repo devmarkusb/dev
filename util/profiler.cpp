@@ -10,5 +10,5 @@ ProfilerTimePoint pcs_profiler_now()
 
 double pcs_profiler_diff_s(ProfilerTimePoint start, ProfilerTimePoint end)
 {
-    return (end - start) / 1e9;
+    return static_cast<double>(end - start) / 1e9;
 }
