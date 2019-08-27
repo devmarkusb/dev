@@ -1,6 +1,7 @@
 #include "tooperf_demo.h"
-#include "util/random.h"
 #include "toolib/performance/performance.h"
+#include "toolib/profiler.h"
+#include "toolib/random.h"
 #include <iostream>
 
 
@@ -17,7 +18,7 @@ double crunsh_n(int n)
     {
         auto s = too::profiler_now();
         too::PerformanceProfiler perfscope1("single_gen", 3);
-        auto r = pcs::gen_rand_nr();
+        auto r = too::math::random_frac();
         res += r;
         sec += too::profiler_diff_s(s, too::profiler_now());
     }
@@ -31,7 +32,7 @@ void demo_tooperf_measurement()
 {
     {
         too::PerformanceProfiler perfscope0("all", 0);
-        pcs::gen_rand_nr();
+        too::math::random_frac();
         {
             too::PerformanceProfiler perfscope1("crunsh_n", 1);
             const auto res = crunsh_n(100000);

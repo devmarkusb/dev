@@ -1,8 +1,8 @@
 #include "source.h"
-#include "util/profiler.h"
-#include "util/random.h"
 #include "toolib/finally.h"
 #include "toolib/performance/performance.h"
+#include "toolib/profiler.h"
+#include "toolib/random.h"
 #if TOO_ENABLE_PROFILING_GPERF
 #include "gperftools/profiler.h"
 #endif

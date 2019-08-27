@@ -27,10 +27,6 @@ add_library(${TargetAppNameAsLibForTest} STATIC
         src/threads_n_cachelines.cpp
         src/tooperf_demo.cpp
         src/tooperf_demo.h
-        util/profiler.cpp
-        util/profiler.h
-        util/random.cpp
-        util/random.h
 )
 
 target_include_directories(${TargetAppNameAsLibForTest} PUBLIC .)
