@@ -1,5 +1,5 @@
 [submodule "sdks/googletest"]
-	path = sdks/googletest
+	path = 3rdparty/googletest
 	url = /home/markus/projects/git/sdks/unit_test/googletest/
 [submodule "sdks/tfl"]
 	path = sdks/tfl

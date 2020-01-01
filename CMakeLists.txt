@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.4.1)
 include(sdks/tfl/buildenv/cmake_util.cmake)
 too_include(buildnr.cmake)
 
-project(performance_clean_sheet VERSION 0.1.${BUILD_NR}.0 LANGUAGES C CXX)# CUDA)
+project(dev VERSION 0.1.${BUILD_NR}.0 LANGUAGES C CXX)# CUDA)
 message(STATUS "project version: " ${PROJECT_VERSION})
 set(TargetAppName ${PROJECT_NAME})
 
@@ -13,6 +13,7 @@ too_include(asio.cmake)
 too_include(gperftools.cmake)
 too_include(openmp.cmake)
 
+add_subdirectory(3rdparty)
 add_subdirectory(sdks)
 
 
@@ -35,7 +36,7 @@ target_include_directories(${TargetAppNameAsLibForTest} PUBLIC ${toolib_INCLUDE_
 
 target_link_libraries(${TargetAppNameAsLibForTest} PUBLIC toolib)
 
-too_use_asio(${TargetAppNameAsLibForTest} ${CMAKE_SOURCE_DIR}/sdks/asio-1.12.2.tar.gz
+too_use_asio(${TargetAppNameAsLibForTest} ${CMAKE_SOURCE_DIR}/3rdparty/asio-1.12.2.tar.gz
         MD5=43c53b8d255edc385dc4e704e59b3641)
 
 too_set_target_defaults(${TargetAppNameAsLibForTest})
@@ -53,7 +54,7 @@ too_set_target_defaults(${TargetAppName})
 too_set_target_openmp(${TargetAppName})
 #too_set_target_cuda_separable_compilation(${TargetAppName})
 
-too_use_gperftools(${TargetAppName} ${CMAKE_SOURCE_DIR}/sdks/gperftools-2.6.3.tar.gz)
+too_use_gperftools(${TargetAppName} ${CMAKE_SOURCE_DIR}/3rdparty/gperftools-2.6.3.tar.gz)
 
 
 ######################################################################################################################
@@ -85,5 +86,5 @@ add_executable(${SecondProcess}
 target_include_directories(${SecondProcess} PUBLIC .)
 target_include_directories(${SecondProcess} PUBLIC ${tfl_INCLUDE_DIRS})
 
-too_use_asio(${SecondProcess} ${CMAKE_SOURCE_DIR}/sdks/asio-1.12.2.tar.gz
+too_use_asio(${SecondProcess} ${CMAKE_SOURCE_DIR}/3rdparty/asio-1.12.2.tar.gz
         MD5=43c53b8d255edc385dc4e704e59b3641)
