@@ -1,0 +1,1 @@
+add_subdirectory(tooperf_demo)

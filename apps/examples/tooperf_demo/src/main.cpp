@@ -1,4 +1,4 @@
-#include "tooperf_demo.h"
+#include "toolib/error.h"
 #include "toolib/performance/performance.h"
 #include "toolib/profiler.h"
 #include "toolib/random.h"
@@ -42,4 +42,11 @@ void demo_tooperf_measurement()
     }
 
     std::cout << too::PerformanceProfiler::dumpAllItems();
+}
+
+int main()
+{
+    demo_tooperf_measurement();
+
+    return too::prog_exit_success;
 }

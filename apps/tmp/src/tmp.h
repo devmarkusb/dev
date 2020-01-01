@@ -1,13 +1,10 @@
-#ifndef SOURCE_H_suigth3478tgnxt3
-#define SOURCE_H_suigth3478tgnxt3
+#ifndef TMP_H_suigth3478tgnxt3
+#define TMP_H_suigth3478tgnxt3
 
 
 //#####################################################################################################################
 // C++ only code goes here
 #ifdef __cplusplus
-
-#include <iostream>
-
 
 
 #endif

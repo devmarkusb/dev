@@ -180,55 +180,55 @@ void run_tests(const std::function<useless_result_t(threadlatch&, unsigned)>& fu
     std::cout << "Average time: " << avgtime << " seconds, useless result: " << final_result << std::endl;
 }
 
-// int main() {
-//    const auto cores = std::thread::hardware_concurrency();
-//    std::cout << "Hardware concurrency: " << cores << std::endl;
-//
-//    std::cout << "sizeof(naive_int): " << sizeof(naive_int) << std::endl;
-//    std::cout << "alignof(naive_int): " << alignof(naive_int) << std::endl;
-//    std::cout << "sizeof(cache_int): " << sizeof(cache_int) << std::endl;
-//    std::cout << "alignof(cache_int): " << alignof(cache_int) << std::endl;
-//    std::cout << "sizeof(bad_pair): " << sizeof(bad_pair) << std::endl;
-//    std::cout << "alignof(bad_pair): " << alignof(bad_pair) << std::endl;
-//    std::cout << "sizeof(good_pair): " << sizeof(good_pair) << std::endl;
-//    std::cout << "alignof(good_pair): " << alignof(good_pair) << std::endl;
-//
-//    {
-//        std::cout << "Running naive_int test." << std::endl;
-//
-//        std::vector<naive_int> vec;
-//        vec.resize((1u << 28) / sizeof(naive_int));  // allocate 256 mibibytes
-//
-//        run_tests([&](threadlatch& latch, unsigned thread_index) {
-//            return sample_array_threadfunc(latch, thread_index, vec);
-//        }, cores);
-//    }
-//    {
-//        std::cout << "Running cache_int test." << std::endl;
-//
-//        std::vector<cache_int> vec;
-//        vec.resize((1u << 28) / sizeof(cache_int));  // allocate 256 mibibytes
-//
-//        run_tests([&](threadlatch& latch, unsigned thread_index) {
-//            return sample_array_threadfunc(latch, thread_index, vec);
-//        }, cores);
-//    }
-//    {
-//        std::cout << "Running bad_pair test." << std::endl;
-//
-//        bad_pair p;
-//
-//        run_tests([&](threadlatch& latch, unsigned thread_index) {
-//            return sample_pair_threadfunc(latch, thread_index, p);
-//        }, cores);
-//    }
-//    {
-//        std::cout << "Running good_pair test." << std::endl;
-//
-//        good_pair p;
-//
-//        run_tests([&](threadlatch& latch, unsigned thread_index) {
-//            return sample_pair_threadfunc(latch, thread_index, p);
-//        }, cores);
-//    }
-//}
+ int main() {
+    const auto cores = std::thread::hardware_concurrency();
+    std::cout << "Hardware concurrency: " << cores << std::endl;
+
+    std::cout << "sizeof(naive_int): " << sizeof(naive_int) << std::endl;
+    std::cout << "alignof(naive_int): " << alignof(naive_int) << std::endl;
+    std::cout << "sizeof(cache_int): " << sizeof(cache_int) << std::endl;
+    std::cout << "alignof(cache_int): " << alignof(cache_int) << std::endl;
+    std::cout << "sizeof(bad_pair): " << sizeof(bad_pair) << std::endl;
+    std::cout << "alignof(bad_pair): " << alignof(bad_pair) << std::endl;
+    std::cout << "sizeof(good_pair): " << sizeof(good_pair) << std::endl;
+    std::cout << "alignof(good_pair): " << alignof(good_pair) << std::endl;
+
+    {
+        std::cout << "Running naive_int test." << std::endl;
+
+        std::vector<naive_int> vec;
+        vec.resize((1u << 28) / sizeof(naive_int));  // allocate 256 mibibytes
+
+        run_tests([&](threadlatch& latch, unsigned thread_index) {
+            return sample_array_threadfunc(latch, thread_index, vec);
+        }, cores);
+    }
+    {
+        std::cout << "Running cache_int test." << std::endl;
+
+        std::vector<cache_int> vec;
+        vec.resize((1u << 28) / sizeof(cache_int));  // allocate 256 mibibytes
+
+        run_tests([&](threadlatch& latch, unsigned thread_index) {
+            return sample_array_threadfunc(latch, thread_index, vec);
+        }, cores);
+    }
+    {
+        std::cout << "Running bad_pair test." << std::endl;
+
+        bad_pair p;
+
+        run_tests([&](threadlatch& latch, unsigned thread_index) {
+            return sample_pair_threadfunc(latch, thread_index, p);
+        }, cores);
+    }
+    {
+        std::cout << "Running good_pair test." << std::endl;
+
+        good_pair p;
+
+        run_tests([&](threadlatch& latch, unsigned thread_index) {
+            return sample_pair_threadfunc(latch, thread_index, p);
+        }, cores);
+    }
+}
