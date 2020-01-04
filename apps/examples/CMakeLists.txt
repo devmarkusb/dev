@@ -1,1 +1,2 @@
+add_subdirectory(cmake_util_test)
 add_subdirectory(tooperf_demo)
