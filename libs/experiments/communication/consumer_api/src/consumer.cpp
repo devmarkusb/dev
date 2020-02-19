@@ -6,7 +6,8 @@ namespace consumer
 {
 void consume(const std::vector<int>& numbers)
 {
-    for (auto n : numbers) {
+    for (auto n : numbers)
+    {
         std::cout << n << std::endl;
     }
 }
