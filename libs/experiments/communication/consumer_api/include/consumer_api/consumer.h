@@ -1,0 +1,12 @@
+#ifndef CONSUMER_H_439zt73t3894h8y3gf3hewf
+#define CONSUMER_H_439zt73t3894h8y3gf3hewf
+
+#include <vector>
+
+
+namespace consumer
+{
+void consume(const std::vector<int>& numbers);
+} // consumer
+
+#endif
