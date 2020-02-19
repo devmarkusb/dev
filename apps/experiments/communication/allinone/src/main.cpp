@@ -8,8 +8,6 @@
 
 namespace
 {
-volatile std::sig_atomic_t g_signalStatus;
-
 struct DestrTest
 {
     ~DestrTest()
@@ -17,7 +15,10 @@ struct DestrTest
         std::cout << "DestrTest destructed" << std::endl;
     }
 };
-}
+
+volatile std::sig_atomic_t g_signalStatus{};
+DestrTest g_globalDestrTest;
+} // namespace
 
 void signal_handler(int signal)
 {
@@ -42,6 +43,6 @@ int main()
         consumer::consume(transformed);
     }
 
-    std::cout << "Finishing..." << std::endl;
+    std::cout << "finishing..." << std::endl;
     return 0;
 }

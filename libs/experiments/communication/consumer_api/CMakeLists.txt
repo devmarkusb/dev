@@ -1,6 +1,6 @@
 include(${tfl_CMAKE_DIRS}/cmake_util.cmake)
 
-project(consumer_api LANGUAGES C CXX)
+project(consumer_api)
 set(TargetLibName ${PROJECT_NAME})
 
 file(GLOB_RECURSE TargetToolib_INCS "include/*.h*")

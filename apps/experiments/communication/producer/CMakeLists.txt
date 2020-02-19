@@ -1,6 +1,6 @@
 include(${tfl_CMAKE_DIRS}/cmake_util.cmake)
 
-project(communication_producer LANGUAGES C CXX)
+project(communication_producer)
 set(TargetAppName ${PROJECT_NAME})
 
 too_include(defaults.cmake)

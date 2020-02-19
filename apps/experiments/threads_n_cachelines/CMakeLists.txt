@@ -1,6 +1,6 @@
 include(${tfl_CMAKE_DIRS}/cmake_util.cmake)
 
-project(threads_n_cachelines LANGUAGES C CXX)
+project(threads_n_cachelines)
 set(TargetAppName ${PROJECT_NAME})
 
 too_include(defaults.cmake)
