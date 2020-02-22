@@ -1,6 +1,6 @@
 #include "consumer_api/consumer.h"
 
-#define DUMP 1
+#define DUMP 0
 #if DUMP
 #include <iostream>
 #endif
