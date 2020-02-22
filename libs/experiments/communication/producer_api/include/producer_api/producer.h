@@ -7,7 +7,9 @@
 
 namespace producer
 {
-std::vector<std::string> produce();
+using Product = std::vector<std::string>;
+
+Product produce();
 } // producer
 
 #endif

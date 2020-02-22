@@ -3,7 +3,7 @@
 
 namespace producer
 {
-std::vector<std::string> produce()
+Product produce()
 {
     return {"a", "bb", "ccc", "dd", "e"};
 }

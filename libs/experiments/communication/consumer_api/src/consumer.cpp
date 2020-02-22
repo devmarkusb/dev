@@ -1,14 +1,23 @@
 #include "consumer_api/consumer.h"
+
+#define DUMP 1
+#if DUMP
 #include <iostream>
+#endif
 
 
 namespace consumer
 {
-void consume(const std::vector<int>& numbers)
+void consume(const Product& product)
 {
-    for (auto n : numbers)
+#if DUMP
+    std::cout << "consumed one" << std::endl;
+#endif
+    for (auto part : product)
     {
-        std::cout << n << std::endl;
+//#if DUMP
+//        std::cout << part << std::endl;
+//#endif
     }
 }
 } // consumer
