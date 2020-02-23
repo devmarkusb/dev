@@ -14,20 +14,14 @@
 
 namespace
 {
-struct DestrTest
-{
-    ~DestrTest()
-    {
-        std::cout << "DestrTest destructed" << std::endl;
-    }
-};
-
 class Application
 {
 public:
-    static inline constexpr auto inputInterval{std::chrono::microseconds(1)};
+    static inline constexpr auto inputInterval{std::chrono::milliseconds(1)};
     static inline constexpr auto measurementInterval{inputInterval};
     static inline constexpr auto printInterval{std::chrono::seconds(3)};
+    static inline constexpr auto simulatedAdditionalProcessingTime{inputInterval * 5};
+    static const auto processingThreadCount{5};
 
     ~Application()
     {
@@ -53,29 +47,35 @@ public:
             }
         }};
 
-        transformerThread_ = std::thread{[this]() {
-            while (isRunning_)
-            {
-                producer::Product product;
-                if (!products_.waitAndPop(product))
-                    break;
+        for (auto& processingThread : processingThreads_)
+        {
+            processingThread = std::thread{[this]() {
+              while (isRunning_)
+              {
+                  producer::Product product;
+                  if (!products_.waitAndPop(product))
+                      break;
 
-                consumer::Product transformed;
-                transformed.reserve(product.size());
-                std::transform(std::cbegin(product), std::cend(product), std::back_inserter(transformed),
-                    [](const auto string) { return string.size(); });
-                if (!transformedProducts_.push(transformed))
-                {
-                    std::cout << "queue of transformed elements full\n";
-                }
-            }
-        }};
+                  consumer::Product transformed;
+                  transformed.reserve(product.size());
+
+                  std::this_thread::sleep_for(simulatedAdditionalProcessingTime);
+                  std::transform(std::cbegin(product), std::cend(product), std::back_inserter(transformed),
+                                 [](const auto string) { return string.size(); });
+
+                  if (!processedProducts_.push(transformed))
+                  {
+                      std::cout << "queue of transformed elements full\n";
+                  }
+              }
+            }};
+        }
 
         consumerThread_ = std::thread{[this]() {
             while (isRunning_)
             {
                 consumer::Product product;
-                if (!transformedProducts_.waitAndPop(product))
+                if (!processedProducts_.waitAndPop(product))
                     break;
                 consumer::consume(product);
             }
@@ -90,9 +90,9 @@ public:
     {
         isRunning_ = false;
         products_.stop();
-        transformedProducts_.stop();
+        processedProducts_.stop();
         producerThread_.join();
-        transformerThread_.join();
+        std::for_each(std::begin(processingThreads_), std::end(processingThreads_), [](auto& t) { t.join(); });
         consumerThread_.join();
         measurementTimer_.cancel();
         printTimer_.cancel();
@@ -103,11 +103,11 @@ private:
     bool isRunning_{};
     asio::io_context ioContext_;
     too::thread::WaitQueue<producer::Product> products_{};
-    too::thread::WaitQueue<consumer::Product> transformedProducts_{};
+    too::thread::WaitQueue<consumer::Product> processedProducts_{};
     asio::steady_timer measurementTimer_{ioContext_};
     asio::steady_timer printTimer_{ioContext_};
     std::thread producerThread_;
-    std::thread transformerThread_;
+    std::array<std::thread, processingThreadCount> processingThreads_;
     std::thread consumerThread_;
     size_t measurementCount_{};
     size_t measurementProductQueueSize_{};
@@ -131,8 +131,8 @@ private:
             std::max(measurementProductQueueSizeMax_, products_.size());
         measurementProductQueueSize_ += products_.size();
         measurementTransformedProductQueueSizeMax_ =
-            std::max(measurementTransformedProductQueueSizeMax_, transformedProducts_.size());
-        measurementTransformedProductQueueSize_ += transformedProducts_.size();
+            std::max(measurementTransformedProductQueueSizeMax_, processedProducts_.size());
+        measurementTransformedProductQueueSize_ += processedProducts_.size();
 
         measurementTimer_.expires_from_now(measurementInterval);
 
@@ -175,7 +175,6 @@ private:
 };
 
 //volatile std::sig_atomic_t g_signal{};
-DestrTest g_globalDestrTest;
 Application* g_application{};
 
 void signal_handler(int)
@@ -188,8 +187,6 @@ void signal_handler(int)
 
 int main()
 {
-    DestrTest destrTest;
-
     std::signal(SIGINT, signal_handler);
     std::signal(SIGTERM, signal_handler);
 
