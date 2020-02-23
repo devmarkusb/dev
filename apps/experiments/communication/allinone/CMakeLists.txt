@@ -6,6 +6,8 @@ set(TargetAppName ${PROJECT_NAME})
 too_include(defaults.cmake)
 
 add_executable(${TargetAppName}
+        src/alternative.h
+        src/application.h
         src/main.cpp
 )
 

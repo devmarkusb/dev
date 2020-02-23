@@ -1,4 +1,6 @@
-#include "alternative.h"
+#ifndef ALTERNATIVE_H_45th24xusidisa
+#define ALTERNATIVE_H_45th24xusidisa
+
 #include "application.h"
 #include "consumer_api/consumer.h"
 #include "producer_api/producer.h"
@@ -14,22 +16,18 @@
 #include <vector>
 
 
-namespace
+/** Idea is to simulate a multi-process szenario as realistically as possible in this allinone app.
+    todo: wip
+ */
+namespace client_server
 {
-/** producer: pushes into product queue
-    processor: pulls from queue, processes, pushes into processed products (result) queue
-    consumer: pulls from processed products queue
-
-    Alternative:
-    set product queue size as tiny as there are processors; this seems to suffice most of
-    the time*/
 class App : public Application
 {
 public:
     static inline constexpr auto inputInterval{std::chrono::milliseconds(1)};
     static inline constexpr auto measurementInterval{inputInterval};
     static inline constexpr auto printInterval{std::chrono::seconds(3)};
-    static inline constexpr auto simulatedAdditionalProcessingTime{inputInterval * 5};
+    static inline constexpr auto simulatedAdditionalProcessingTime{inputInterval};
     static const auto processingThreadCount{5};
 
     ~App() override
@@ -39,46 +37,43 @@ public:
         std::cout << "Application destructed" << std::endl;
     }
 
+    consumer::Product sendToProcessor(const producer::Product& product)
+    {
+        consumer::Product processed;
+        processed.reserve(product.size());
+
+        std::this_thread::sleep_for(simulatedAdditionalProcessingTime);
+        std::transform(std::cbegin(product), std::cend(product), std::back_inserter(processed),
+                       [](const auto string) { return string.size(); });
+
+        return processed;
+    }
+
     void run() override
     {
         isRunning_ = true;
 
-        producerThread_ = std::thread{[this]() {
+        clientProducerThread_ = std::thread{[this]() {
             asio::steady_timer timer{ioContext_};
             while (isRunning_)
             {
                 timer.expires_from_now(inputInterval);
-                timer.wait();
-                if (!products_.push(producer::produce()))
+                auto futureRes{std::async(&App::sendToProcessor, this, producer::produce())};
+                auto status{futureRes.wait_for(inputInterval)};
+                if (status != std::future_status::ready)
                 {
-                    std::cout << "queue of produced elements full\n";
+                    std::cout << "result did not return in time\n";
                 }
-            }
-        }};
-
-        for (auto& processingThread : processingThreads_)
-        {
-            processingThread = std::thread{[this]() {
-                while (isRunning_)
+                else
                 {
-                    producer::Product product;
-                    if (!products_.waitAndPop(product))
-                        break;
-
-                    consumer::Product processed;
-                    processed.reserve(product.size());
-
-                    std::this_thread::sleep_for(simulatedAdditionalProcessingTime);
-                    std::transform(std::cbegin(product), std::cend(product), std::back_inserter(processed),
-                        [](const auto string) { return string.size(); });
-
-                    if (!processedProducts_.push(processed))
+                    if (!processedProducts_.push(futureRes.get()))
                     {
                         std::cout << "queue of transformed elements full\n";
                     }
                 }
-            }};
-        }
+                timer.wait();
+            }
+        }};
 
         consumerThread_ = std::thread{[this]() {
             while (isRunning_)
@@ -100,7 +95,7 @@ public:
         isRunning_ = false;
         products_.stop();
         processedProducts_.stop();
-        producerThread_.join();
+        clientProducerThread_.join();
         std::for_each(std::begin(processingThreads_), std::end(processingThreads_), [](auto& t) { t.join(); });
         consumerThread_.join();
         measurementTimer_.cancel();
@@ -111,11 +106,11 @@ public:
 private:
     bool isRunning_{};
     asio::io_context ioContext_;
-    too::thread::WaitQueue<producer::Product> products_{/*processingThreadCount*/};
+    too::thread::WaitQueue<producer::Product> products_{processingThreadCount};
     too::thread::WaitQueue<consumer::Product> processedProducts_{};
     asio::steady_timer measurementTimer_{ioContext_};
     asio::steady_timer printTimer_{ioContext_};
-    std::thread producerThread_;
+    std::thread clientProducerThread_;
     std::array<std::thread, processingThreadCount> processingThreads_;
     std::thread consumerThread_;
     size_t measurementCount_{};
@@ -181,28 +176,6 @@ private:
         printTimer_.async_wait(std::bind(&App::onPrintTimer, this, _1));
     }
 };
+} // namespace alternative
 
-// volatile std::sig_atomic_t g_signal{};
-Application* g_application{};
-
-void signal_handler(int)
-{
-    // g_signal = signal;
-    if (g_application)
-        g_application->terminate();
-}
-} // namespace
-
-int main()
-{
-    std::signal(SIGINT, signal_handler);
-    std::signal(SIGTERM, signal_handler);
-
-    auto app{std::make_unique<client_server::App>()};
-    g_application = app.get();
-
-    app->run();
-
-    std::cout << "finishing..." << std::endl;
-    return 0;
-}
+#endif
