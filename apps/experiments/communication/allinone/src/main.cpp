@@ -14,6 +14,13 @@
 
 namespace
 {
+/** producer: pushes into product queue
+    processor: pulls from queue, processes, pushes into processed products (result) queue
+    consumer: pulls from processed products queue
+
+    Alternative:
+    set product queue size as tiny as there are processors; this seems to suffice most of
+    the time*/
 class Application
 {
 public:
@@ -50,24 +57,24 @@ public:
         for (auto& processingThread : processingThreads_)
         {
             processingThread = std::thread{[this]() {
-              while (isRunning_)
-              {
-                  producer::Product product;
-                  if (!products_.waitAndPop(product))
-                      break;
+                while (isRunning_)
+                {
+                    producer::Product product;
+                    if (!products_.waitAndPop(product))
+                        break;
 
-                  consumer::Product transformed;
-                  transformed.reserve(product.size());
+                    consumer::Product processed;
+                    processed.reserve(product.size());
 
-                  std::this_thread::sleep_for(simulatedAdditionalProcessingTime);
-                  std::transform(std::cbegin(product), std::cend(product), std::back_inserter(transformed),
-                                 [](const auto string) { return string.size(); });
+                    std::this_thread::sleep_for(simulatedAdditionalProcessingTime);
+                    std::transform(std::cbegin(product), std::cend(product), std::back_inserter(processed),
+                        [](const auto string) { return string.size(); });
 
-                  if (!processedProducts_.push(transformed))
-                  {
-                      std::cout << "queue of transformed elements full\n";
-                  }
-              }
+                    if (!processedProducts_.push(processed))
+                    {
+                        std::cout << "queue of transformed elements full\n";
+                    }
+                }
             }};
         }
 
@@ -102,7 +109,7 @@ public:
 private:
     bool isRunning_{};
     asio::io_context ioContext_;
-    too::thread::WaitQueue<producer::Product> products_{};
+    too::thread::WaitQueue<producer::Product> products_{/*processingThreadCount*/};
     too::thread::WaitQueue<consumer::Product> processedProducts_{};
     asio::steady_timer measurementTimer_{ioContext_};
     asio::steady_timer printTimer_{ioContext_};
@@ -127,8 +134,7 @@ private:
         }
 
         ++measurementCount_;
-        measurementProductQueueSizeMax_ =
-            std::max(measurementProductQueueSizeMax_, products_.size());
+        measurementProductQueueSizeMax_ = std::max(measurementProductQueueSizeMax_, products_.size());
         measurementProductQueueSize_ += products_.size();
         measurementTransformedProductQueueSizeMax_ =
             std::max(measurementTransformedProductQueueSizeMax_, processedProducts_.size());
@@ -174,12 +180,12 @@ private:
     }
 };
 
-//volatile std::sig_atomic_t g_signal{};
+// volatile std::sig_atomic_t g_signal{};
 Application* g_application{};
 
 void signal_handler(int)
 {
-    //g_signal = signal;
+    // g_signal = signal;
     if (g_application)
         g_application->terminate();
 }
