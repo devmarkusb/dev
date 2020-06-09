@@ -1,4 +1,4 @@
-project(tmp-2 LANGUAGES CXX)
+project(tmp-cleansheet LANGUAGES CXX)
 set(TargetAppName ${PROJECT_NAME})
 
 add_executable(${TargetAppName}

@@ -1,15 +1,11 @@
-project(tmp LANGUAGES C CXX)# CUDA)
+project(mixing_c_cpp LANGUAGES C CXX)
 set(TargetAppName ${PROJECT_NAME})
-
-too_include(asio.cmake)
-too_include(gperftools.cmake)
-too_include(openmp.cmake)
 
 ######################################################################################################################
 
 set(TargetAppNameAsLibForTest ${PROJECT_NAME}AsLibForTest)
 add_library(${TargetAppNameAsLibForTest} STATIC
-        src/cuda/tmp.cu
+        src/tmp.c
         src/tmp.cpp
         src/tmp.h
 )
@@ -36,9 +32,6 @@ target_link_libraries(${TargetAppName} PRIVATE ${TargetAppNameAsLibForTest})
 
 too_set_target_defaults(${TargetAppName})
 too_set_target_openmp(${TargetAppName})
-#too_set_target_cuda_separable_compilation(${TargetAppName})
-
-too_use_gperftools(${TargetAppName} ${CMAKE_SOURCE_DIR}/3rdparty/gperftools-2.6.3.tar.gz)
 
 
 ######################################################################################################################

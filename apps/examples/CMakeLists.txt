@@ -1,2 +1,3 @@
 add_subdirectory(cmake_util_test)
+add_subdirectory(mixing_c_cpp)
 add_subdirectory(tooperf_demo)
