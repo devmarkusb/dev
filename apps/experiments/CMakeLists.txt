@@ -1,2 +1,3 @@
 add_subdirectory(communication)
 add_subdirectory(threads_n_cachelines)
+add_subdirectory(variant_cycle)
