@@ -1,4 +1,4 @@
-project(elements_of_programming LANGUAGES CXX)
+project(programming_principles_practice LANGUAGES C CXX)
 set(TargetAppName ${PROJECT_NAME})
 
 add_executable(${TargetAppName}

@@ -1,4 +1,5 @@
 add_subdirectory(cmake_util_test)
 add_subdirectory(elements_of_programming)
 add_subdirectory(mixing_c_cpp)
+add_subdirectory(programming_principles_practice)
 add_subdirectory(tooperf_demo)
