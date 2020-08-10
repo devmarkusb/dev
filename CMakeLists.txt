@@ -7,3 +7,5 @@ add_subdirectory(3rdparty)
 
 add_subdirectory(libs)
 add_subdirectory(apps)
+
+too_include(clang-format.cmake)
