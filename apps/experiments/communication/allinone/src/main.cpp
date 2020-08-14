@@ -69,8 +69,10 @@ public:
                     processed.reserve(product.size());
 
                     std::this_thread::sleep_for(simulatedAdditionalProcessingTime);
-                    std::transform(std::cbegin(product), std::cend(product), std::back_inserter(processed),
-                        [](const auto string) { return string.size(); });
+                    std::transform(
+                        std::cbegin(product), std::cend(product), std::back_inserter(processed), [](const auto string) {
+                            return string.size();
+                        });
 
                     if (!processedProducts_.push(processed))
                     {
@@ -101,7 +103,9 @@ public:
         products_.stop();
         processedProducts_.stop();
         producerThread_.join();
-        std::for_each(std::begin(processingThreads_), std::end(processingThreads_), [](auto& t) { t.join(); });
+        std::for_each(std::begin(processingThreads_), std::end(processingThreads_), [](auto& t) {
+            t.join();
+        });
         consumerThread_.join();
         measurementTimer_.cancel();
         printTimer_.cancel();

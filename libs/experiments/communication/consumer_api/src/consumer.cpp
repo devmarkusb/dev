@@ -15,9 +15,9 @@ void consume(const Product& product)
 #endif
     for (auto part : product)
     {
-//#if DUMP
-//        std::cout << part << std::endl;
-//#endif
+#if DUMP
+        //std::cout << part << std::endl;
+#endif
     }
 }
-} // consumer
+} // namespace consumer

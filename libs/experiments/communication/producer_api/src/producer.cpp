@@ -7,4 +7,4 @@ Product produce()
 {
     return {"a", "bb", "ccc", "dd", "e"};
 }
-} // producer
+} // namespace producer

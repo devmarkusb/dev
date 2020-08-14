@@ -15,7 +15,7 @@ constexpr std::size_t hardware_destructive_interference_size = 64;
 constexpr std::size_t hardware_constructive_interference_size = 64;
 
 constexpr unsigned kTimingTrialsToComputeAverage = 100;
-constexpr unsigned kInnerLoopTrials              = 1000000;
+constexpr unsigned kInnerLoopTrials = 1000000;
 
 typedef unsigned useless_result_t;
 typedef double elapsed_secs_t;
@@ -89,7 +89,7 @@ useless_result_t sample_pair_threadfunc(Latch& latch, unsigned, T& pair)
     // compute
     for (unsigned trial = 0; trial != kInnerLoopTrials; ++trial)
     {
-        pair.first  = dist(mt);
+        pair.first = dist(mt);
         pair.second = dist(mt);
     }
 
@@ -102,7 +102,10 @@ useless_result_t sample_pair_threadfunc(Latch& latch, unsigned, T& pair)
 class threadlatch
 {
 public:
-    explicit threadlatch(const std::size_t count) : count_{count} {}
+    explicit threadlatch(const std::size_t count)
+        : count_{count}
+    {
+    }
 
     void count_down_and_wait()
     {
@@ -113,7 +116,9 @@ public:
         }
         else
         {
-            cv_.wait(lock, [&] { return count_ == 0; });
+            cv_.wait(lock, [&] {
+                return count_ == 0;
+            });
         }
     }
 
@@ -166,12 +171,12 @@ std::tuple<useless_result_t, elapsed_secs_t> run_threads(
 void run_tests(const std::function<useless_result_t(threadlatch&, unsigned)>& func, const unsigned num_threads)
 {
     useless_result_t final_result = 0;
-    double avgtime                = 0.0;
+    double avgtime = 0.0;
     for (unsigned trial = 0; trial != kTimingTrialsToComputeAverage; ++trial)
     {
         const auto result_and_elapsed = run_threads(func, num_threads);
-        const auto result             = std::get<useless_result_t>(result_and_elapsed);
-        const auto elapsed            = std::get<elapsed_secs_t>(result_and_elapsed);
+        const auto result = std::get<useless_result_t>(result_and_elapsed);
+        const auto elapsed = std::get<elapsed_secs_t>(result_and_elapsed);
 
         final_result += result;
         avgtime = (avgtime * trial + elapsed) / (trial + 1);
@@ -180,7 +185,8 @@ void run_tests(const std::function<useless_result_t(threadlatch&, unsigned)>& fu
     std::cout << "Average time: " << avgtime << " seconds, useless result: " << final_result << std::endl;
 }
 
- int main() {
+int main()
+{
     const auto cores = std::thread::hardware_concurrency();
     std::cout << "Hardware concurrency: " << cores << std::endl;
 
@@ -197,38 +203,46 @@ void run_tests(const std::function<useless_result_t(threadlatch&, unsigned)>& fu
         std::cout << "Running naive_int test." << std::endl;
 
         std::vector<naive_int> vec;
-        vec.resize((1u << 28) / sizeof(naive_int));  // allocate 256 mibibytes
+        vec.resize((1u << 28) / sizeof(naive_int)); // allocate 256 mibibytes
 
-        run_tests([&](threadlatch& latch, unsigned thread_index) {
-            return sample_array_threadfunc(latch, thread_index, vec);
-        }, cores);
+        run_tests(
+            [&](threadlatch& latch, unsigned thread_index) {
+                return sample_array_threadfunc(latch, thread_index, vec);
+            },
+            cores);
     }
     {
         std::cout << "Running cache_int test." << std::endl;
 
         std::vector<cache_int> vec;
-        vec.resize((1u << 28) / sizeof(cache_int));  // allocate 256 mibibytes
+        vec.resize((1u << 28) / sizeof(cache_int)); // allocate 256 mibibytes
 
-        run_tests([&](threadlatch& latch, unsigned thread_index) {
-            return sample_array_threadfunc(latch, thread_index, vec);
-        }, cores);
+        run_tests(
+            [&](threadlatch& latch, unsigned thread_index) {
+                return sample_array_threadfunc(latch, thread_index, vec);
+            },
+            cores);
     }
     {
         std::cout << "Running bad_pair test." << std::endl;
 
         bad_pair p;
 
-        run_tests([&](threadlatch& latch, unsigned thread_index) {
-            return sample_pair_threadfunc(latch, thread_index, p);
-        }, cores);
+        run_tests(
+            [&](threadlatch& latch, unsigned thread_index) {
+                return sample_pair_threadfunc(latch, thread_index, p);
+            },
+            cores);
     }
     {
         std::cout << "Running good_pair test." << std::endl;
 
         good_pair p;
 
-        run_tests([&](threadlatch& latch, unsigned thread_index) {
-            return sample_pair_threadfunc(latch, thread_index, p);
-        }, cores);
+        run_tests(
+            [&](threadlatch& latch, unsigned thread_index) {
+                return sample_pair_threadfunc(latch, thread_index, p);
+            },
+            cores);
     }
 }

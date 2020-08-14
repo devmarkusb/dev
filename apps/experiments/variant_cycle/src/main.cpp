@@ -2,7 +2,7 @@
 #include "util/allthethings.h"
 
 
-int main(int, char* [])
+int main(int, char*[])
 {
     Var v{TypeB{}};
     std::cout << doSth(v);
