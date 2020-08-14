@@ -9,7 +9,11 @@
 int doSth(const Var& v)
 {
     Var aLocalOne{TypeB{}};
-    return std::visit([&aLocalOne](const auto& t) { return doSthSpecific(t, aLocalOne); }, v);
+    return std::visit(
+        [&aLocalOne](const auto& t) {
+            return doSthSpecific(t, aLocalOne);
+        },
+        v);
 }
 
 #endif

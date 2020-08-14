@@ -43,8 +43,9 @@ public:
         processed.reserve(product.size());
 
         std::this_thread::sleep_for(simulatedAdditionalProcessingTime);
-        std::transform(std::cbegin(product), std::cend(product), std::back_inserter(processed),
-                       [](const auto string) { return string.size(); });
+        std::transform(std::cbegin(product), std::cend(product), std::back_inserter(processed), [](const auto string) {
+            return string.size();
+        });
 
         return processed;
     }
@@ -96,7 +97,9 @@ public:
         products_.stop();
         processedProducts_.stop();
         clientProducerThread_.join();
-        std::for_each(std::begin(processingThreads_), std::end(processingThreads_), [](auto& t) { t.join(); });
+        std::for_each(std::begin(processingThreads_), std::end(processingThreads_), [](auto& t) {
+            t.join();
+        });
         consumerThread_.join();
         measurementTimer_.cancel();
         printTimer_.cancel();
@@ -176,6 +179,6 @@ private:
         printTimer_.async_wait(std::bind(&App::onPrintTimer, this, _1));
     }
 };
-} // namespace alternative
+} // namespace client_server
 
 #endif

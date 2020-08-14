@@ -39,7 +39,6 @@ using Integer = int; // interpretion represented by some fixed number of bits us
 // abstract species
 struct WholeNumber
 {
-
 };
 
 // abstract genus, the last two species would share
@@ -69,7 +68,6 @@ struct Person
 // concrete species
 struct Cat
 {
-
 };
 
 // concrete genus, the last two species would share

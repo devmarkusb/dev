@@ -10,6 +10,6 @@ namespace producer
 using Product = std::vector<std::string>;
 
 Product produce();
-} // producer
+} // namespace producer
 
 #endif

@@ -9,6 +9,6 @@ namespace consumer
 using Product = std::vector<int>;
 
 void consume(const Product& pro);
-} // consumer
+} // namespace consumer
 
 #endif
