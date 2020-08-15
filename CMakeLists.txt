@@ -10,3 +10,4 @@ add_subdirectory(apps)
 
 too_include(githooks.cmake)
 too_include(clang-format.cmake)
+too_include(clang-tidy.cmake)
