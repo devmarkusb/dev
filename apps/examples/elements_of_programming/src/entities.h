@@ -77,7 +77,6 @@ struct Cat
 inline NaturalNumber minAge(Person, Person)
 {
     throw too::not_implemented{TOO_LOCATION};
-    return {};
 }
 
 #endif
