@@ -6,7 +6,7 @@
 #include "variant_decl.h"
 #include <variant>
 
-int doSth(const Var& v)
+inline int doSth(const Var& v)
 {
     Var aLocalOne{TypeB{}};
     return std::visit(

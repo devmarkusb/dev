@@ -26,7 +26,6 @@ double crunsh_n(int n)
     std::cout << sec << "\n";
     return res;
 }
-} // namespace
 
 void demo_tooperf_measurement()
 {
@@ -43,6 +42,7 @@ void demo_tooperf_measurement()
 
     std::cout << too::PerformanceProfiler::dumpAllItems();
 }
+} // namespace
 
 int main()
 {

@@ -25,7 +25,7 @@ void checkRegularity(const Regular& r)
     // underlying type?
 }
 
-void checkRegularity()
+inline void checkRegularity()
 {
     RegularEx1 r;
     checkRegularity(r);

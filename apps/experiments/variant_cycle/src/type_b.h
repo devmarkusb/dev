@@ -5,7 +5,7 @@
 #include "variant_decl.h"
 #include <variant>
 
-int doSthSpecific(const TypeB&, const Var& v)
+inline int doSthSpecific(const TypeB&, const Var& v)
 {
     Var aLocalOne{TypeA{}};
     return 2 + std::visit(
@@ -13,7 +13,6 @@ int doSthSpecific(const TypeB&, const Var& v)
                        return doSthSpecific(t, aLocalOne);
                    },
                    v);
-    ;
 }
 
 #endif

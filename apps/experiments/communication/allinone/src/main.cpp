@@ -164,8 +164,8 @@ private:
         }
 
         std::stringstream outP;
-        outP << "avg. products queue size: " << (double)(measurementProductQueueSize_) / (double)(measurementCount_)
-             << std::endl;
+        outP << "avg. products queue size: "
+             << static_cast<double>(measurementProductQueueSize_) / static_cast<double>(measurementCount_) << std::endl;
         std::cout << outP.str();
         std::stringstream outTP;
         outTP << "avg. transformed products queue size: "
