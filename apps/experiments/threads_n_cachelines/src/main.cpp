@@ -128,6 +128,8 @@ private:
     std::size_t count_;
 };
 
+namespace
+{
 // utility: runs a given function in N threads
 std::tuple<useless_result_t, elapsed_secs_t> run_threads(
     const std::function<useless_result_t(threadlatch&, unsigned)>& func, const unsigned num_threads)
@@ -184,6 +186,7 @@ void run_tests(const std::function<useless_result_t(threadlatch&, unsigned)>& fu
 
     std::cout << "Average time: " << avgtime << " seconds, useless result: " << final_result << std::endl;
 }
+} // namespace
 
 int main()
 {
