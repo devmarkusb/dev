@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.4.1)
+cmake_minimum_required(VERSION 3.10)
 
 project(dev LANGUAGES C CXX)
 
@@ -11,3 +11,4 @@ add_subdirectory(apps)
 too_include(githooks.cmake)
 too_include(clang-format.cmake)
 too_include(clang-tidy.cmake)
+too_include(cppcheck.cmake)
