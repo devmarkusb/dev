@@ -8,11 +8,12 @@
 inline int doSthSpecific(const TypeB&, const Var& v)
 {
     Var aLocalOne{TypeA{}};
-    return 2 + std::visit(
-                   [&aLocalOne](const auto& t) {
-                       return doSthSpecific(t, aLocalOne);
-                   },
-                   v);
+    return 2
+           + std::visit(
+               [&aLocalOne](const auto& t) {
+                   return doSthSpecific(t, aLocalOne);
+               },
+               v);
 }
 
 #endif
