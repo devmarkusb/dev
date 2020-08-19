@@ -2,7 +2,7 @@
 Language: Cpp
 BasedOnStyle: LLVM
 AccessModifierOffset: -4
-AlignAfterOpenBracket: DontAlign
+AlignAfterOpenBracket: AlwaysBreak
 AlignConsecutiveMacros: true
 AlignConsecutiveAssignments: false
 AlignConsecutiveDeclarations: false
@@ -22,8 +22,8 @@ AlwaysBreakAfterDefinitionReturnType: None
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: false
 AlwaysBreakTemplateDeclarations: Yes
-BinPackArguments: true
-BinPackParameters: true
+BinPackArguments: false
+BinPackParameters: false
 BraceWrapping:
   AfterCaseLabel: true
   AfterClass: false
@@ -33,14 +33,15 @@ BraceWrapping:
   AfterNamespace: true
   AfterStruct: true
   AfterUnion: true
-  AfterExternBlock: true
+  # necessary exception because of a bug indenting the content otherwise (v9 at least)
+  AfterExternBlock: false
   BeforeCatch: true
   BeforeElse: true
   IndentBraces: false
   SplitEmptyFunction: true
   SplitEmptyRecord: true
   SplitEmptyNamespace: true
-BreakBeforeBinaryOperators: None
+BreakBeforeBinaryOperators: All #NonAssignment
 BreakBeforeBraces: Allman
 #BreakBeforeInheritanceComma: false
 BreakInheritanceList: BeforeComma
@@ -66,7 +67,7 @@ IncludeCategories:
     Priority: 4
   # Instead of adding every 3rd party lib in the world, you're better off achieving grouping by using empty lines
   # around that 3rd party block.
-  - Regex: '^"((gtest|gmock|json)/.*")|asio.*'
+  - Regex: '^"((google|gtest|gmock)/.*")|asio.*'
     Priority: 3
   - Regex: '^".*/.*"'
     Priority: 2
@@ -79,7 +80,7 @@ IndentGotoLabels: false
 IndentPPDirectives: None
 IndentWidth: 4
 IndentWrappedFunctionNames: false
-KeepEmptyLinesAtTheStartOfBlocks: true
+KeepEmptyLinesAtTheStartOfBlocks: false
 MacroBlockBegin: '' # #if
 MacroBlockEnd: '' # #endif|#else|#elif
 MaxEmptyLinesToKeep: 2
@@ -87,13 +88,13 @@ NamespaceIndentation: None
 #NamespaceMacros:
 #  - TOO_PRAGMA_WARNINGS_PUSH
 PenaltyBreakAssignment: 2
-PenaltyBreakBeforeFirstCallParameter: 1
+PenaltyBreakBeforeFirstCallParameter: 19
 PenaltyBreakComment: 300
 PenaltyBreakFirstLessLess: 120
 PenaltyBreakString: 1000
 PenaltyBreakTemplateDeclaration: 10
 PenaltyExcessCharacter: 1000000
-PenaltyReturnTypeOnItsOwnLine: 200
+PenaltyReturnTypeOnItsOwnLine: 60
 PointerAlignment: Left
 ReflowComments: true
 SortIncludes: true
