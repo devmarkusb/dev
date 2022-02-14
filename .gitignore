@@ -6,3 +6,4 @@ lib
 lib_*
 .idea
 cmake-build-*
+venv
