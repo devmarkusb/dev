@@ -1,5 +1,5 @@
-include(${tfl_CMAKE_DIRS}/cmake_util.cmake)
-too_include(defaults.cmake)
+include(${ul_CMAKE_DIRS}/cmake_util.cmake)
+ul_include(defaults.cmake)
 
 add_subdirectory(tmp)
 add_subdirectory(tmp-cleansheet)

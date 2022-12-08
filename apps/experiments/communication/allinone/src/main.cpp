@@ -2,7 +2,7 @@
 #include "application.h"
 #include "consumer_api/consumer.h"
 #include "producer_api/producer.h"
-#include "toolib/thread/waitqueue.h"
+#include "util/allthethings.h"
 #include "asio.hpp"
 #include <algorithm>
 #include <csignal>
@@ -12,7 +12,6 @@
 #include <string>
 #include <thread>
 #include <vector>
-
 
 namespace
 {
@@ -115,8 +114,8 @@ public:
 private:
     bool isRunning_{};
     asio::io_context ioContext_;
-    too::thread::WaitQueue<producer::Product> products_{/*processingThreadCount*/};
-    too::thread::WaitQueue<consumer::Product> processedProducts_{};
+    ul::thread::WaitQueue<producer::Product> products_{/*processingThreadCount*/};
+    ul::thread::WaitQueue<consumer::Product> processedProducts_{};
     asio::steady_timer measurementTimer_{ioContext_};
     asio::steady_timer printTimer_{ioContext_};
     std::thread producerThread_;

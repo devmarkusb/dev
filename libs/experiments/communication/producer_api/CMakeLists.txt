@@ -1,4 +1,4 @@
-include(${tfl_CMAKE_DIRS}/cmake_util.cmake)
+include(${ul_CMAKE_DIRS}/cmake_util.cmake)
 
 project(producer_api)
 set(TargetLibName ${PROJECT_NAME})

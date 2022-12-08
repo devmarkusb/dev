@@ -1,8 +1,7 @@
 #ifndef ENTITIES_H_ix23478gnfyx28gf8gf
 #define ENTITIES_H_ix23478gnfyx28gf8gf
 
-#include "toolib/debug.h"
-#include "toolib/error.h"
+#include "util/allthethings.h"
 
 // Representations of the notions in C++:
 //      species, value/object type -> type
@@ -76,7 +75,7 @@ struct Cat
 // function
 inline NaturalNumber minAge(Person, Person)
 {
-    throw too::not_implemented{TOO_LOCATION};
+    throw ul::not_implemented{UL_LOCATION};
 }
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef REGULAR_TYPE_H_o3xtinh23478gty2347g
 #define REGULAR_TYPE_H_o3xtinh23478gty2347g
 
-#include "toolib/ignore_unused.h"
+#include "util/allthethings.h"
 
 struct RegularEx1
 {
@@ -17,9 +17,9 @@ void checkRegularity(const Regular& r)
 {
     Regular rOther;
     bool _{r == rOther};
-    too::ignore_unused(_);
+    ul::ignore_unused(_);
     Regular rCopiedFrom{r};
-    too::ignore_unused(rCopiedFrom);
+    ul::ignore_unused(rCopiedFrom);
     rOther = r;
     // total ordering?
     // underlying type?

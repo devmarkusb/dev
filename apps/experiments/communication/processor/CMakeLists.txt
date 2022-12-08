@@ -1,15 +1,15 @@
-include(${tfl_CMAKE_DIRS}/cmake_util.cmake)
+include(${ul_CMAKE_DIRS}/cmake_util.cmake)
 
 project(communication_processor)
 set(TargetAppName ${PROJECT_NAME})
 
-too_include(defaults.cmake)
+ul_include(defaults.cmake)
 
 add_executable(${TargetAppName}
         src/main.cpp
 )
 
-too_set_target_pthread(${TargetAppName})
+ul_set_target_pthread(${TargetAppName})
 
 target_include_directories(${TargetAppName} PRIVATE
         ${lib_consumer_api_INCLUDE_DIRS}

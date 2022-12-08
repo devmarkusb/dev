@@ -1,6 +1,7 @@
 #ifndef ALLTHETHINGS_H_jkasghfuix3gt83gnz847xt2t
 #define ALLTHETHINGS_H_jkasghfuix3gt83gnz847xt2t
 
+#include "ul/ul.h"
 #include <algorithm>
 #include <array>
 #include <atomic>
@@ -37,5 +38,7 @@
 #include <unordered_set>
 #include <utility>
 #include <vector>
+
+namespace ul = mb::ul;
 
 #endif
