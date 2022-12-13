@@ -16,7 +16,7 @@ double crunsh_n(int n)
     {
         auto s = ul::profiler_now();
         too::PerformanceProfiler perfscope1("single_gen", 3);
-        auto r = ul::math::random_frac();
+        auto r = ul::math::randomFrac();
         res += r;
         sec += ul::profiler_diff_s(s, ul::profiler_now());
     }
@@ -29,7 +29,7 @@ void demo_tooperf_measurement()
 {
     {
         too::PerformanceProfiler perfscope0("all", 0);
-        ul::math::random_frac();
+        ul::math::randomFrac();
         {
             too::PerformanceProfiler perfscope1("crunsh_n", 1);
             const auto res = crunsh_n(100000);
