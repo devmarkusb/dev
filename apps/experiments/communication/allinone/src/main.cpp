@@ -25,10 +25,10 @@ namespace
 class App : public Application
 {
 public:
-    static inline constexpr auto inputInterval{std::chrono::milliseconds(1)};
-    static inline constexpr auto measurementInterval{inputInterval};
-    static inline constexpr auto printInterval{std::chrono::seconds(3)};
-    static inline constexpr auto simulatedAdditionalProcessingTime{inputInterval * 5};
+    static constexpr auto inputInterval{std::chrono::milliseconds(1)};
+    static constexpr auto measurementInterval{inputInterval};
+    static constexpr auto printInterval{std::chrono::seconds(3)};
+    static constexpr auto simulatedAdditionalProcessingTime{inputInterval * 5};
     static const auto processingThreadCount{5};
 
     ~App() override
