@@ -39,6 +39,4 @@
 #include <utility>
 #include <vector>
 
-namespace ul = mb::ul;
-
 #endif
