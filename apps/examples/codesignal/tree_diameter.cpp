@@ -7,6 +7,7 @@ namespace mb
 UL_PRAGMA_WARNINGS_PUSH
 // clang-format off
 UL_WARNING_DISABLE_CLANG(sign-conversion)
+
 // clang-format on
 
 [[maybe_unused]] int solution(int n, std::vector<std::vector<int>> tree)
