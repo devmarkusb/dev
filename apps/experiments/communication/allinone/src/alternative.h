@@ -7,7 +7,6 @@
 #include "util/allthethings.h"
 #include "asio.hpp"
 
-
 /** Idea is to simulate a multi-process szenario as realistically as possible in this allinone app.
     todo: wip
  */
@@ -35,9 +34,12 @@ public:
         processed.reserve(product.size());
 
         std::this_thread::sleep_for(simulatedAdditionalProcessingTime);
-        std::transform(std::cbegin(product), std::cend(product), std::back_inserter(processed), [](const auto string) {
-            return string.size();
-        });
+        std::transform(
+            std::cbegin(product), std::cend(product), std::back_inserter(processed),
+            [](const auto string)
+            {
+                return string.size();
+            });
 
         return processed;
     }
@@ -46,37 +48,40 @@ public:
     {
         isRunning_ = true;
 
-        clientProducerThread_ = std::thread{[this]() {
-            asio::steady_timer timer{ioContext_};
-            while (isRunning_)
+        clientProducerThread_ = std::thread{
+            [this]()
             {
-                timer.expires_from_now(inputInterval);
-                auto futureRes{std::async(&App::sendToProcessor, this, producer::produce())};
-                auto status{futureRes.wait_for(inputInterval)};
-                if (status != std::future_status::ready)
+                asio::steady_timer timer{ioContext_};
+                while (isRunning_)
                 {
-                    std::cout << "result did not return in time\n";
-                }
-                else
-                {
-                    if (!processedProducts_.push(futureRes.get()))
+                    timer.expires_from_now(inputInterval);
+                    auto futureRes{std::async(&App::sendToProcessor, this, producer::produce())};
+                    auto status{futureRes.wait_for(inputInterval)};
+                    if (status != std::future_status::ready)
                     {
-                        std::cout << "queue of transformed elements full\n";
+                        std::cout << "result did not return in time\n";
                     }
+                    else
+                    {
+                        if (!processedProducts_.push(futureRes.get()))
+                        {
+                            std::cout << "queue of transformed elements full\n";
+                        }
+                    }
+                    timer.wait();
                 }
-                timer.wait();
-            }
-        }};
+            }};
 
-        consumerThread_ = std::thread{[this]() {
-            while (isRunning_)
-            {
-                consumer::Product product;
-                if (!processedProducts_.waitAndPop(product))
-                    break;
-                consumer::consume(product);
-            }
-        }};
+        consumerThread_ = std::thread{[this]()
+                                      {
+                                          while (isRunning_)
+                                          {
+                                              consumer::Product product;
+                                              if (!processedProducts_.waitAndPop(product))
+                                                  break;
+                                              consumer::consume(product);
+                                          }
+                                      }};
 
         onMeasurementTimer({});
         onPrintTimer({});
@@ -89,9 +94,12 @@ public:
         products_.stop();
         processedProducts_.stop();
         clientProducerThread_.join();
-        std::for_each(std::begin(processingThreads_), std::end(processingThreads_), [](auto& t) {
-            t.join();
-        });
+        std::for_each(
+            std::begin(processingThreads_), std::end(processingThreads_),
+            [](auto& t)
+            {
+                t.join();
+            });
         consumerThread_.join();
         measurementTimer_.cancel();
         printTimer_.cancel();

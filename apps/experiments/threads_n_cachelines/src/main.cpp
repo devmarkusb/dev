@@ -27,6 +27,7 @@ struct naive_int
 {
     int value;
 };
+
 static_assert(alignof(naive_int) < hardware_destructive_interference_size, "");
 
 // wraps an int, cache alignment prevents false-sharing
@@ -34,6 +35,7 @@ struct cache_int
 {
     alignas(hardware_destructive_interference_size) int value;
 };
+
 static_assert(alignof(cache_int) == hardware_destructive_interference_size, "");
 
 // wraps a pair of int, purposefully pushes them too far apart for true-sharing
@@ -43,6 +45,7 @@ struct bad_pair
     char padding[hardware_constructive_interference_size];
     int second;
 };
+
 static_assert(sizeof(bad_pair) > hardware_constructive_interference_size, "");
 
 // wraps a pair of int, ensures they fit nicely together for true-sharing
@@ -51,6 +54,7 @@ struct good_pair
     int first;
     int second;
 };
+
 static_assert(sizeof(good_pair) <= hardware_constructive_interference_size, "");
 
 // accesses a specific array element many times
@@ -116,9 +120,12 @@ public:
         }
         else
         {
-            cv_.wait(lock, [&] {
-                return count_ == 0;
-            });
+            cv_.wait(
+                lock,
+                [&]
+                {
+                    return count_ == 0;
+                });
         }
     }
 
@@ -209,7 +216,8 @@ int main()
         vec.resize((1u << 28) / sizeof(naive_int)); // allocate 256 mibibytes
 
         run_tests(
-            [&](threadlatch& latch, unsigned thread_index) {
+            [&](threadlatch& latch, unsigned thread_index)
+            {
                 return sample_array_threadfunc(latch, thread_index, vec);
             },
             cores);
@@ -221,7 +229,8 @@ int main()
         vec.resize((1u << 28) / sizeof(cache_int)); // allocate 256 mibibytes
 
         run_tests(
-            [&](threadlatch& latch, unsigned thread_index) {
+            [&](threadlatch& latch, unsigned thread_index)
+            {
                 return sample_array_threadfunc(latch, thread_index, vec);
             },
             cores);
@@ -232,7 +241,8 @@ int main()
         bad_pair p;
 
         run_tests(
-            [&](threadlatch& latch, unsigned thread_index) {
+            [&](threadlatch& latch, unsigned thread_index)
+            {
                 return sample_pair_threadfunc(latch, thread_index, p);
             },
             cores);
@@ -243,7 +253,8 @@ int main()
         good_pair p;
 
         run_tests(
-            [&](threadlatch& latch, unsigned thread_index) {
+            [&](threadlatch& latch, unsigned thread_index)
+            {
                 return sample_pair_threadfunc(latch, thread_index, p);
             },
             cores);

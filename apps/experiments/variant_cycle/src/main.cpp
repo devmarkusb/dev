@@ -1,7 +1,6 @@
 #include "variant.h"
 #include "util/allthethings.h"
 
-
 int main(int, char*[])
 {
     Var v{TypeB{}};

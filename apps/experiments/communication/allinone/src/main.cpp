@@ -42,54 +42,60 @@ public:
     {
         isRunning_ = true;
 
-        producerThread_ = std::thread{[this]() {
-            asio::steady_timer timer{ioContext_};
-            while (isRunning_)
-            {
-                timer.expires_from_now(inputInterval);
-                timer.wait();
-                if (!products_.push(producer::produce()))
-                {
-                    std::cout << "queue of produced elements full\n";
-                }
-            }
-        }};
+        producerThread_ = std::thread{[this]()
+                                      {
+                                          asio::steady_timer timer{ioContext_};
+                                          while (isRunning_)
+                                          {
+                                              timer.expires_from_now(inputInterval);
+                                              timer.wait();
+                                              if (!products_.push(producer::produce()))
+                                              {
+                                                  std::cout << "queue of produced elements full\n";
+                                              }
+                                          }
+                                      }};
 
         for (auto& processingThread : processingThreads_)
         {
-            processingThread = std::thread{[this]() {
-                while (isRunning_)
+            processingThread = std::thread{
+                [this]()
                 {
-                    producer::Product product;
-                    if (!products_.waitAndPop(product))
-                        break;
-
-                    consumer::Product processed;
-                    processed.reserve(product.size());
-
-                    std::this_thread::sleep_for(simulatedAdditionalProcessingTime);
-                    std::transform(
-                        std::cbegin(product), std::cend(product), std::back_inserter(processed), [](const auto string) {
-                            return string.size();
-                        });
-
-                    if (!processedProducts_.push(processed))
+                    while (isRunning_)
                     {
-                        std::cout << "queue of transformed elements full\n";
+                        producer::Product product;
+                        if (!products_.waitAndPop(product))
+                            break;
+
+                        consumer::Product processed;
+                        processed.reserve(product.size());
+
+                        std::this_thread::sleep_for(simulatedAdditionalProcessingTime);
+                        std::transform(
+                            std::cbegin(product), std::cend(product), std::back_inserter(processed),
+                            [](const auto string)
+                            {
+                                return string.size();
+                            });
+
+                        if (!processedProducts_.push(processed))
+                        {
+                            std::cout << "queue of transformed elements full\n";
+                        }
                     }
-                }
-            }};
+                }};
         }
 
-        consumerThread_ = std::thread{[this]() {
-            while (isRunning_)
-            {
-                consumer::Product product;
-                if (!processedProducts_.waitAndPop(product))
-                    break;
-                consumer::consume(product);
-            }
-        }};
+        consumerThread_ = std::thread{[this]()
+                                      {
+                                          while (isRunning_)
+                                          {
+                                              consumer::Product product;
+                                              if (!processedProducts_.waitAndPop(product))
+                                                  break;
+                                              consumer::consume(product);
+                                          }
+                                      }};
 
         onMeasurementTimer({});
         onPrintTimer({});
@@ -102,9 +108,12 @@ public:
         products_.stop();
         processedProducts_.stop();
         producerThread_.join();
-        std::for_each(std::begin(processingThreads_), std::end(processingThreads_), [](auto& t) {
-            t.join();
-        });
+        std::for_each(
+            std::begin(processingThreads_), std::end(processingThreads_),
+            [](auto& t)
+            {
+                t.join();
+            });
         consumerThread_.join();
         measurementTimer_.cancel();
         printTimer_.cancel();
