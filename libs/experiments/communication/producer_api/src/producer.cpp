@@ -1,6 +1,5 @@
 #include "producer_api/producer.h"
 
-
 namespace producer
 {
 Product produce()

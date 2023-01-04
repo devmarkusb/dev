@@ -3,7 +3,6 @@
 
 #include <vector>
 
-
 namespace consumer
 {
 using Product = std::vector<int>;

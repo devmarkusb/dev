@@ -6,7 +6,9 @@ namespace mb
 {
 UL_PRAGMA_WARNINGS_PUSH
 UL_WARNING_DISABLE_CLANG(sign-conversion)
-[[maybe_unused]] int solution(int n, std::vector<std::vector<int>> tree) {
+
+[[maybe_unused]] int solution(int n, std::vector<std::vector<int>> tree)
+{
     // convert input to adjacency list
     std::vector<std::vector<size_t>> tree_adjlist(static_cast<size_t>(n));
     for (const auto& e : tree)
@@ -52,8 +54,9 @@ UL_WARNING_DISABLE_CLANG(sign-conversion)
 
     return max_d.first;
 }
+
 UL_PRAGMA_WARNINGS_POP
-}
+} // namespace mb
 
 inline namespace chatgpt
 {
@@ -62,7 +65,9 @@ UL_WARNING_DISABLE_CLANG_ALL
 #pragma GCC diagnostic ignored "-Wsign-compare"
 #pragma GCC diagnostic ignored "-Wunused-function"
 using std::vector;
-int solution(int n, vector<vector<int>> tree) {
+
+int solution(int n, vector<vector<int>> tree)
+{
     // Initialize a vector to store the maximum depth of each vertex.
     vector<int> max_depths(n, -1);
 
@@ -70,12 +75,14 @@ int solution(int n, vector<vector<int>> tree) {
     int max_depth = 0;
 
     // Iterate through all the vertices of the tree.
-    for (int i = 0; i < n; i++) {
+    for (int i = 0; i < n; i++)
+    {
         // Initialize a variable to store the current depth.
         int depth = 0;
 
         // Follow the path from the current vertex to the root of the tree, keeping track of the depth.
-        for (int j = i; max_depths[j] == -1; j = tree[j][0]) {
+        for (int j = i; max_depths[j] == -1; j = tree[j][0])
+        {
             depth++;
         }
 
@@ -89,8 +96,9 @@ int solution(int n, vector<vector<int>> tree) {
     // Return the maximum depth of the tree.
     return max_depth;
 }
+
 UL_PRAGMA_WARNINGS_POP
-}
+} // namespace chatgpt
 } // namespace
 
 int main()
