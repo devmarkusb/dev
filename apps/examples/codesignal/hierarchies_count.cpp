@@ -67,7 +67,7 @@ void recurseChildren(
     assert(1 <= nh && nh < 1'000'000'007);
     return nh;
 }
-}
+} // namespace mb
 
 namespace chatgpt
 {
@@ -76,34 +76,43 @@ UL_WARNING_DISABLE_CLANG_ALL
 #pragma GCC diagnostic ignored "-Wsign-compare"
 #pragma GCC diagnostic ignored "-Wunused-function"
 using std::vector;
+
 // Function to check if it's possible to add the pair (a, b) to the hierarchy
-bool isValid(int a, int b, vector<vector<int>>& respectList, vector<int>& hierarchy) {
+bool isValid(int a, int b, vector<vector<int>>& respectList, vector<int>& hierarchy)
+{
     // Check if a respects b
-    if (find(respectList[a].begin(), respectList[a].end(), b) == respectList[a].end()) {
+    if (find(respectList[a].begin(), respectList[a].end(), b) == respectList[a].end())
+    {
         return false;
     }
 
     // Check if b respects a
-    if (find(respectList[b].begin(), respectList[b].end(), a) == respectList[b].end()) {
+    if (find(respectList[b].begin(), respectList[b].end(), a) == respectList[b].end())
+    {
         return false;
     }
 
     // Check if a and b are already in the hierarchy
-    if (hierarchy[a] != -1 && hierarchy[b] != -1) {
+    if (hierarchy[a] != -1 && hierarchy[b] != -1)
+    {
         return false;
     }
 
     // Check if a is already a descendant of b or vice versa
-    if (hierarchy[a] != -1 && hierarchy[b] != -1) {
+    if (hierarchy[a] != -1 && hierarchy[b] != -1)
+    {
         int currA = a;
         int currB = b;
-        while (hierarchy[currA] != -1) {
+        while (hierarchy[currA] != -1)
+        {
             currA = hierarchy[currA];
         }
-        while (hierarchy[currB] != -1) {
+        while (hierarchy[currB] != -1)
+        {
             currB = hierarchy[currB];
         }
-        if (currA == currB) {
+        if (currA == currB)
+        {
             return false;
         }
     }
@@ -112,16 +121,20 @@ bool isValid(int a, int b, vector<vector<int>>& respectList, vector<int>& hierar
 }
 
 // DFS function to find all the possible hierarchies
-void dfs(int curr, vector<vector<int>>& respectList, vector<int>& hierarchy, int& count) {
+void dfs(int curr, vector<vector<int>>& respectList, vector<int>& hierarchy, int& count)
+{
     // If we have assigned a parent to all the employees, increment the count
-    if (curr == hierarchy.size()) {
+    if (curr == hierarchy.size())
+    {
         count++;
         return;
     }
 
     // Try all the possible pairs of (curr, x) where x is an employee who respects curr
-    for (int x : respectList[curr]) {
-        if (isValid(curr, x, respectList, hierarchy)) {
+    for (int x : respectList[curr])
+    {
+        if (isValid(curr, x, respectList, hierarchy))
+        {
             hierarchy[curr] = x;
             dfs(curr + 1, respectList, hierarchy, count);
             hierarchy[curr] = -1;
@@ -129,7 +142,8 @@ void dfs(int curr, vector<vector<int>>& respectList, vector<int>& hierarchy, int
     }
 }
 
-int solution(int n, vector<vector<int>> respectList) {
+int solution(int n, vector<vector<int>> respectList)
+{
     // Initialize the hierarchy with all employees having no parent (-1)
     vector<int> hierarchy(n, -1);
 
@@ -141,8 +155,9 @@ int solution(int n, vector<vector<int>> respectList) {
 
     return count;
 }
+
 UL_PRAGMA_WARNINGS_POP
-}
+} // namespace chatgpt
 } // namespace
 
 int main()
