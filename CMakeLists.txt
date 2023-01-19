@@ -8,7 +8,6 @@ add_subdirectory(3rdparty)
 add_subdirectory(libs)
 add_subdirectory(apps)
 
-ul_include(fetch-clangformat-repo.cmake)
 ul_include(clang-format.cmake)
 ul_include(githooks.cmake)
 #ul_include(clang-tidy.cmake)
