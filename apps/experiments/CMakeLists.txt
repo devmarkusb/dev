@@ -1,3 +1,7 @@
+add_subdirectory(cmake_util_test)
+add_subdirectory(codesignal)
 add_subdirectory(communication)
+add_subdirectory(elements_of_programming)
+add_subdirectory(programming_principles_practice)
 add_subdirectory(threads_n_cachelines)
 add_subdirectory(variant_cycle)
