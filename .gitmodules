@@ -1,6 +1,6 @@
-[submodule "sdks/toolib"]
-	path = sdks/toolib
-	url = /home/markus/projects/git/libs/toolib
 [submodule "sdks/util"]
 	path = sdks/util
 	url = https://github.com/devmarkusb/util
+[submodule "sdks/toolib"]
+	path = sdks/toolib
+	url = git@github.com:devmarkusb/toolib.git
