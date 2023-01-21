@@ -1,20 +1,20 @@
 include(${ul_CMAKE_DIRS}/cmake_util.cmake)
 
 project(communication_producer)
-set(TargetAppName ${PROJECT_NAME})
+set(target ${PROJECT_NAME})
 
 ul_include(defaults.cmake)
 
-add_executable(${TargetAppName}
+add_executable(${target}
         src/main.cpp
 )
 
-ul_set_target_pthread(${TargetAppName})
+ul_set_target_pthread(${target})
 
-target_include_directories(${TargetAppName} PRIVATE
+target_include_directories(${target} PRIVATE
         ${lib_producer_api_INCLUDE_DIRS}
 )
 
-target_link_libraries(${TargetAppName} PRIVATE
+target_link_libraries(${target} PRIVATE
         producer_api
 )

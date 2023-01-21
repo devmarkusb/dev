@@ -1,7 +1,7 @@
 project(variant_cycle LANGUAGES CXX)
-set(TargetAppName ${PROJECT_NAME})
+set(target ${PROJECT_NAME})
 
-add_executable(${TargetAppName}
+add_executable(${target}
         src/main.cpp
         src/type_a.h
         src/type_a_decl.h
@@ -10,5 +10,5 @@ add_executable(${TargetAppName}
         src/variant_decl.h
 )
 
-target_include_directories(${TargetAppName} PUBLIC ${lib_util_INCLUDE_DIRS})
-target_include_directories(${TargetAppName} PUBLIC ${ul_INCLUDE_DIRS})
+target_include_directories(${target} PUBLIC ${lib_util_INCLUDE_DIRS})
+target_include_directories(${target} PUBLIC ${ul_INCLUDE_DIRS})

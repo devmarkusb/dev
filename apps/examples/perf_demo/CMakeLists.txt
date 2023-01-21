@@ -1,4 +1,4 @@
-project(elements_of_programming LANGUAGES CXX)
+project(perf_demo LANGUAGES C CXX)
 set(target ${PROJECT_NAME})
 
 add_executable(${target}

@@ -1,2 +1,2 @@
 add_subdirectory(mixing_c_cpp)
-add_subdirectory(tooperf_demo)
+add_subdirectory(perf_demo)

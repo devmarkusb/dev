@@ -3,8 +3,8 @@ include(${ul_CMAKE_DIRS}/cmake_util.cmake)
 project(consumer_api)
 set(TargetLibName ${PROJECT_NAME})
 
-file(GLOB_RECURSE TargetToolib_INCS "include/*.h*")
-file(GLOB_RECURSE TargetToolib_SRC_INCS "src/*.h*")
+file(GLOB_RECURSE TargetLibName_INCS "include/*.h*")
+file(GLOB_RECURSE TargetLibName_SRC_INCS "src/*.h*")
 
 set(TargetLibName_SOURCES
         src/consumer.cpp
