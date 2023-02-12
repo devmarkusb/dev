@@ -5,6 +5,8 @@ project(dev LANGUAGES C CXX)
 add_subdirectory(sdks)
 add_subdirectory(3rdparty)
 
+ul_include(googlebenchmark.cmake)
+
 add_subdirectory(libs)
 add_subdirectory(apps)
 
