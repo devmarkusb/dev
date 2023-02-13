@@ -1,4 +1,4 @@
-project(variant_cycle LANGUAGES CXX)
+project(variant_cycle)
 set(target ${PROJECT_NAME})
 
 add_executable(${target}

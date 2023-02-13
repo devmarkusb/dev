@@ -15,9 +15,9 @@ double crunsh_n(int n)
         ul::PerformanceProfiler perfscope1("single_gen", 3);
         auto r = ul::math::randomFrac();
         res += r;
-        sec += ul::profiler_diff_s(s, ul::profiler_now());
+        sec += std::chrono::duration<double>(ul::profiler_diff(s, ul::profiler_now())).count();
     }
-    std::cout << ul::profiler_diff_s(sloop, ul::profiler_now()) << "\n";
+    std::cout << std::chrono::duration<double>(ul::profiler_diff(sloop, ul::profiler_now())).count() << "\n";
     std::cout << sec << "\n";
     return res;
 }

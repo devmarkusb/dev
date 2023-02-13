@@ -1,4 +1,4 @@
-project(programming_principles_practice LANGUAGES C CXX)
+project(programming_principles_practice)
 set(target ${PROJECT_NAME})
 
 add_executable(${target}

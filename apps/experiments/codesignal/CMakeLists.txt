@@ -1,4 +1,4 @@
-project(codesignal LANGUAGES CXX)
+project(codesignal)
 
 add_executable(hierarchies_count
         hierarchies_count.cpp

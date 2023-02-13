@@ -1,4 +1,4 @@
-project(tmp-cleansheet LANGUAGES CXX)
+project(tmp-cleansheet)
 set(target ${PROJECT_NAME})
 
 add_executable(${target}
