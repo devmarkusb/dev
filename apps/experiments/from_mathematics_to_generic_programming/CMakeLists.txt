@@ -8,4 +8,4 @@ add_executable(multiplyBm
 
 target_include_directories(multiplyBm PRIVATE ${ul_INCLUDE_DIRS})
 
-target_link_libraries(multiplyBm benchmark::benchmark)
+target_link_libraries(multiplyBm benchmark::benchmark benchmark::benchmark_main)

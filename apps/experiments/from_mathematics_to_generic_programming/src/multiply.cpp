@@ -137,7 +137,7 @@ int multiply5(int n, int a)
     return n * a;
 }
 
-int multiply_by_15(int a)
+int multiply6_by_15(int a)
 {
     int b = (a + a) + a; // b == 3*a
     int c = b + b; // c == 6*a

@@ -9,7 +9,7 @@ int multiply2(int n, int a);
 int multiply3(int n, int a);
 int multiply4(int n, int a);
 int multiply5(int n, int a);
-int multiply_by_15(int a);
+int multiply6_by_15(int a);
 } // namespace math
 
 #endif
