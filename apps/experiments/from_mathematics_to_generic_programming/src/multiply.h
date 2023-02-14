@@ -8,6 +8,7 @@ int multiply1(int n, int a);
 int multiply2(int n, int a);
 int multiply3(int n, int a);
 int multiply4(int n, int a);
+//! Ordinary multiplication.
 int multiply5(int n, int a);
 int multiply6_by_15(int a);
 } // namespace math
