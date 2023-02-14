@@ -1,6 +1,8 @@
 #include "prime-sieve.h"
 #include "gtest/gtest.h"
 
+namespace
+{
 constexpr auto m{100};
 constexpr auto mi{(m - 3) / 2};
 
@@ -15,3 +17,4 @@ TEST(sift2, test)
             std::cout << 2 * i + 3 << " ";
     }
 }
+} // namespace
