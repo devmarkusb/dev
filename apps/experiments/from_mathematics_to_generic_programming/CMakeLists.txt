@@ -18,6 +18,14 @@ target_include_directories(prime-sieveTest PRIVATE ${ul_INCLUDE_DIRS})
 target_link_libraries(prime-sieveTest gtest_main)
 
 
+add_executable(prime-sieveBm
+        src/prime-sieve.bm.cpp
+        src/prime-sieve.h
+        )
+target_include_directories(prime-sieveBm PRIVATE ${ul_INCLUDE_DIRS})
+target_link_libraries(prime-sieveBm benchmark::benchmark benchmark::benchmark_main)
+
+
 ul_include(matplotlib-cpp.cmake)
 add_executable(prime-graph
         src/prime-sieve.h
@@ -27,9 +35,8 @@ target_include_directories(prime-graph PRIVATE ${ul_INCLUDE_DIRS} ${matplotlib-c
 target_link_libraries(prime-graph PRIVATE matplotlib_cpp)
 
 
-add_executable(prime-sieveBm
-        src/prime-sieve.bm.cpp
+add_executable(prime-palindromes
         src/prime-sieve.h
+        src/prime-palindromes.cpp
         )
-target_include_directories(prime-sieveBm PRIVATE ${ul_INCLUDE_DIRS})
-target_link_libraries(prime-sieveBm benchmark::benchmark benchmark::benchmark_main)
+target_include_directories(prime-palindromes PRIVATE ${ul_INCLUDE_DIRS})
