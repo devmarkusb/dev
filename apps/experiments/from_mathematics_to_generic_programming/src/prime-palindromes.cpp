@@ -1,6 +1,9 @@
 #include "prime-sieve.h"
+#include <bitset>
 #include <vector>
 
+namespace
+{
 template <typename T>
 constexpr T value(T index)
 {
@@ -8,25 +11,19 @@ constexpr T value(T index)
     return 2 * index + 3;
 }
 
-int main()
+void listPalindromesDec(const std::vector<uint8_t>& primes)
 {
-    constexpr auto m{1'000'000};
-    constexpr auto mi{(m - 3) / 2};
-
-    std::vector<uint8_t> primes;
-    primes.resize(mi);
-    math::sift2(std::begin(primes), mi);
     for (size_t i{}; i < primes.size(); ++i)
     {
         if (!primes[i])
             continue;
 
         const auto val{value(i)};
-        const auto digitCount{ul::math::getDigitCount(value(i))};
+        const auto digitCountDec{ul::math::getDigitCount(value(i))};
         bool palindromeDec{true};
-        for (std::remove_const_t<decltype(digitCount)> d{}; d < digitCount / 2; ++d)
+        for (std::remove_const_t<decltype(digitCountDec)> d{}; d < digitCountDec / 2; ++d)
         {
-            if (ul::math::getDigit(val, d) != ul::math::getDigit(val, digitCount - d - 1))
+            if (ul::math::getDigit(val, d) != ul::math::getDigit(val, digitCountDec - d - 1))
             {
                 palindromeDec = false;
                 break;
@@ -42,6 +39,79 @@ int main()
         if (palindromeDec)
             std::cout << ul::fmt::groupThousands(value(i)) << " ";
     }
+}
+
+void listPalindromesHex(const std::vector<uint8_t>& primes)
+{
+    for (size_t i{}; i < primes.size(); ++i)
+    {
+        if (!primes[i])
+            continue;
+
+        const auto val{value(i)};
+        const auto digitCountHex{ul::math::getDigitCount(value(i), ul::math::NumBase::HEX)};
+        bool palindromeHex{true};
+        for (std::remove_const_t<decltype(digitCountHex)> d{}; d < digitCountHex / 2; ++d)
+        {
+            if (ul::math::getDigit(val, d, ul::math::NumBase::HEX)
+                != ul::math::getDigit(val, digitCountHex - d - 1, ul::math::NumBase::HEX))
+            {
+                palindromeHex = false;
+                break;
+            }
+        }
+        // Similar to dec we have only odd digit counts, except for 11.
+        if (palindromeHex)
+            std::cout << std::hex << value(i) << " ";
+    }
+}
+
+void listPalindromesBin(const std::vector<uint8_t>& primes)
+{
+    for (size_t i{}; i < primes.size(); ++i)
+    {
+        if (!primes[i])
+            continue;
+        
+        const auto val{value(i)};
+        const auto digitCountBin{ul::math::getDigitCount(value(i), ul::math::NumBase::BIN)};
+        bool palindromeBin{true};
+        for (std::remove_const_t<decltype(digitCountBin)> d{}; d < digitCountBin / 2; ++d)
+        {
+            if (ul::math::getDigit(val, d, ul::math::NumBase::BIN)
+                != ul::math::getDigit(val, digitCountBin - d - 1, ul::math::NumBase::BIN))
+            {
+                palindromeBin = false;
+                break;
+            }
+        }
+        // Similar to dec and hex we have only odd digit counts, except for 3 (0b11).
+        if (palindromeBin)
+        {
+            std::bitset<32> b{value(i)};
+            std::cout << b << " ";
+        }
+    }
+}
+} // namespace
+
+int main()
+{
+    constexpr auto m{100'000'000};
+    constexpr auto mi{(m - 3) / 2};
+
+    std::vector<uint8_t> primes;
+    primes.resize(mi);
+    math::sift2(std::begin(primes), mi);
+
+    std::cout << "palindrome primes in dec:\n";
+    listPalindromesDec(primes);
+
+    std::cout << "\npalindrome primes in hex:\n";
+    listPalindromesHex(primes);
+
+    std::cout << "\npalindrome primes in bin:\n";
+    listPalindromesBin(primes);
 
     return {};
 }
