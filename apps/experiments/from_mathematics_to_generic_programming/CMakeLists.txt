@@ -17,14 +17,14 @@ ul_add_test(prime-sieveTest)
 target_include_directories(prime-sieveTest PRIVATE ${ul_INCLUDE_DIRS})
 target_link_libraries(prime-sieveTest gtest_main)
 
-ul_include(matplotlib-cpp.cmake)
 
-add_executable(prime-sieve
+ul_include(matplotlib-cpp.cmake)
+add_executable(prime-graph
         src/prime-sieve.h
-        src/prime-sieve.cpp
+        src/prime-graph.cpp
         )
-target_include_directories(prime-sieve PRIVATE ${ul_INCLUDE_DIRS} ${matplotlib-cpp_INCLUDE_DIRS})
-target_link_libraries(prime-sieve PRIVATE matplotlib_cpp)
+target_include_directories(prime-graph PRIVATE ${ul_INCLUDE_DIRS} ${matplotlib-cpp_INCLUDE_DIRS})
+target_link_libraries(prime-graph PRIVATE matplotlib_cpp)
 
 
 add_executable(prime-sieveBm

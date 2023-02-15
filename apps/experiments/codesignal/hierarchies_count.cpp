@@ -1,6 +1,12 @@
 #include "util/allthethings.h"
 #include <cassert>
 
+UL_PRAGMA_WARNINGS_PUSH
+// clang-format off
+UL_WARNING_DISABLE_CLANG_ALL
+#pragma GCC diagnostic ignored "-Wsign-compare"
+#pragma GCC diagnostic ignored "-Wunused-function"
+// clang-format on
 namespace
 {
 inline namespace mb
@@ -71,10 +77,6 @@ void recurseChildren(
 
 namespace chatgpt
 {
-UL_PRAGMA_WARNINGS_PUSH
-UL_WARNING_DISABLE_CLANG_ALL
-#pragma GCC diagnostic ignored "-Wsign-compare"
-#pragma GCC diagnostic ignored "-Wunused-function"
 using std::vector;
 
 // Function to check if it's possible to add the pair (a, b) to the hierarchy
@@ -159,6 +161,7 @@ int solution(int n, vector<vector<int>> respectList)
 UL_PRAGMA_WARNINGS_POP
 } // namespace chatgpt
 } // namespace
+UL_PRAGMA_WARNINGS_POP
 
 int main()
 {

@@ -32,10 +32,9 @@ add_executable(${target}
         src/main.cpp
 )
 
-target_link_libraries(${target} PRIVATE ${targetAsLibForTest})
+target_link_libraries(${target} PRIVATE ${targetAsLibForTest} OpenMP::OpenMP_CXX)
 
 ul_set_target_defaults(${target})
-ul_set_target_openmp(${target})
 #ul_set_target_cuda_separable_compilation(${target})
 
 ul_use_gperftools(${target} ${CMAKE_SOURCE_DIR}/3rdparty/gperftools-2.6.3.tar.gz)
@@ -53,9 +52,8 @@ add_executable(${targetTest}
         src/tmp.test.cpp
 )
 
-target_link_libraries(${targetTest} PRIVATE gmock_main gtest ${targetAsLibForTest})
+target_link_libraries(${targetTest} PRIVATE gmock_main gtest ${targetAsLibForTest} OpenMP::OpenMP_CXX)
 
 ul_set_target_defaults(${targetTest})
-ul_set_target_openmp(${targetTest})
 
 ul_run_target_postbuild(${targetTest})

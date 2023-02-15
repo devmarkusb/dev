@@ -7,6 +7,7 @@ namespace mb
 UL_PRAGMA_WARNINGS_PUSH
 // clang-format off
 UL_WARNING_DISABLE_CLANG(sign-conversion)
+UL_WARNING_DISABLE_CLANG(missing-prototypes)
 
 // clang-format on
 
