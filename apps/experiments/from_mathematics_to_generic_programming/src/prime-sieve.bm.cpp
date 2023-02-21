@@ -1,6 +1,6 @@
 #include "prime-sieve.h"
 #include "benchmark/benchmark.h"
-#include <string>
+#include <vector>
 
 namespace
 {
