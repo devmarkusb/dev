@@ -6,6 +6,7 @@ UL_PRAGMA_WARNINGS_PUSH
 UL_WARNING_DISABLE_CLANG_ALL
 #pragma GCC diagnostic ignored "-Wsign-compare"
 #pragma GCC diagnostic ignored "-Wunused-function"
+
 // clang-format on
 namespace
 {
@@ -161,6 +162,7 @@ int solution(int n, vector<vector<int>> respectList)
 UL_PRAGMA_WARNINGS_POP
 } // namespace chatgpt
 } // namespace
+
 UL_PRAGMA_WARNINGS_POP
 
 int main()

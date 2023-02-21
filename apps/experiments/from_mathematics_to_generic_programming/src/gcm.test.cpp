@@ -87,6 +87,7 @@ TEST_P(GcmTest, various)
     EXPECT_EQ(GetParam()(12, 3), 3);
     EXPECT_EQ(GetParam()(3, 12), 3);
 }
+
 // NOLINTEND
 
 TEST_P(GcmTest, equal)
@@ -138,8 +139,7 @@ class RemainderTest : public testing::TestWithParam<std::function<int(int, int)>
 };
 
 INSTANTIATE_TEST_SUITE_P(
-    RemainderVariousImpl, RemainderTest,
-    testing::Values(math::remainder0, math::remainder1, math::remainder2));
+    RemainderVariousImpl, RemainderTest, testing::Values(math::remainder0, math::remainder1, math::remainder2));
 
 TEST_P(RemainderTest, zero)
 {
@@ -163,9 +163,7 @@ class QuotientTest : public testing::TestWithParam<std::function<int(int, int)>>
 {
 };
 
-INSTANTIATE_TEST_SUITE_P(
-    QuotientVariousImpl, QuotientTest,
-    testing::Values(math::quotient0));
+INSTANTIATE_TEST_SUITE_P(QuotientVariousImpl, QuotientTest, testing::Values(math::quotient0));
 
 TEST_P(QuotientTest, zero)
 {
@@ -190,8 +188,7 @@ class QuotientRemainderTest : public testing::TestWithParam<std::function<std::p
 };
 
 INSTANTIATE_TEST_SUITE_P(
-    QuotientRemainderVariousImpl, QuotientRemainderTest,
-    testing::Values(math::quotient_remainder0));
+    QuotientRemainderVariousImpl, QuotientRemainderTest, testing::Values(math::quotient_remainder0));
 
 TEST_P(QuotientRemainderTest, zero)
 {

@@ -72,7 +72,7 @@ void listPalindromesBin(const std::vector<uint8_t>& primes)
     {
         if (!primes[i])
             continue;
-        
+
         const auto val{value(i)};
         const auto digitCountBin{ul::math::getDigitCount(value(i), ul::math::NumBase::BIN)};
         bool palindromeBin{true};

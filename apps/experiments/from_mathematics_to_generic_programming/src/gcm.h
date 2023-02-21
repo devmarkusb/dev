@@ -83,7 +83,8 @@ inline LineSegment remainder0(LineSegment a, LineSegment b)
     return a - b;
 }
 
-inline LineSegment largest_doubling(LineSegment a, LineSegment b) {
+inline LineSegment largest_doubling(LineSegment a, LineSegment b)
+{
     UL_EXPECT(b > 0);
     while (a - b >= b)
         b += b;
