@@ -3,6 +3,21 @@
 #include "gtest/gtest.h"
 #include <random>
 
+namespace std
+{
+static ostream& operator<<(ostream& os, const function<int(int, int)>&)
+{
+    os << "std::function<std::pair<int, int>(int, int)>";
+    return os;
+}
+
+static ostream& operator<<(ostream& os, const function<std::pair<int, int>(int, int)>&)
+{
+    os << "std::function<std::pair<int, int>(int, int)>";
+    return os;
+}
+} // namespace std
+
 namespace
 {
 constexpr auto arbitraryEven{42};
@@ -17,6 +32,11 @@ struct Rand
     static inline std::mt19937 gen_{dev_()};
     static inline std::uniform_int_distribution<> distrib_{randRangeMin, randRangeMax};
 };
+
+std::string printRandoms(int r1, int r2)
+{
+    return "randoms: " + std::to_string(r1) + ", " + std::to_string(r2);
+}
 
 class GcmTest : public testing::TestWithParam<std::function<int(int, int)>>
 {
@@ -188,7 +208,8 @@ class QuotientRemainderTest : public testing::TestWithParam<std::function<std::p
 };
 
 INSTANTIATE_TEST_SUITE_P(
-    QuotientRemainderVariousImpl, QuotientRemainderTest, testing::Values(math::quotient_remainder0));
+    QuotientRemainderVariousImpl, QuotientRemainderTest,
+    testing::Values(math::quotient_remainder0, math::quotient_remainder1/*, math::quotient_remainder2*/));
 
 TEST_P(QuotientRemainderTest, zero)
 {
@@ -204,7 +225,8 @@ TEST_P(QuotientRemainderTest, general)
     {
         const auto randnr1{Rand::distrib_(Rand::gen_)};
         const auto randnr2{Rand::distrib_(Rand::gen_)};
-        EXPECT_EQ(GetParam()(randnr1, randnr2), std::make_pair(randnr1 / randnr2, randnr1 % randnr2));
+        EXPECT_EQ(GetParam()(randnr1, randnr2), std::make_pair(randnr1 / randnr2, randnr1 % randnr2))
+            << printRandoms(randnr1, randnr2);
     }
 }
 } // namespace

@@ -228,6 +228,36 @@ inline LineSegment remainder2(LineSegment a, LineSegment b)
     } while (b < c);
     return a;
 }
+
+/// Fibonacci.
+inline std::pair<int, LineSegment> quotient_remainder2(LineSegment a, LineSegment b)
+{
+    UL_EXPECT(b > 0);
+    if (a < b)
+        return {0, a};
+    auto c{b};
+    auto n{1};
+    auto m{n};
+    do
+    {
+        auto tmp = c;
+        c += b;
+        b = tmp;
+        auto tmp2{m};
+        m += n;
+        n = tmp2;
+    } while (a >= c);
+    --m;
+    do
+    {
+        if (a >= b)
+            a -= b;
+        auto tmp = c - b;
+        c = b;
+        b = tmp;
+    } while (b < c);
+    return {m, a};
+}
 } // namespace math
 
 #endif
