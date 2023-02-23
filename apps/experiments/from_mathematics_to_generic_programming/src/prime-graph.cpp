@@ -39,7 +39,8 @@ int main()
         }
         x[static_cast<size_t>(i)] = i;
         y[static_cast<size_t>(i)] = pi;
-        yfit[static_cast<size_t>(i)] = ul::math::round_to<int>(1. / 16. * i + 40000);
+        // poor: 1. / 16. * i + 40000;
+        yfit[static_cast<size_t>(i)] = ul::math::round_to<int>(i / std::log(i));
     }
 
     matplotlibcpp::title("Number of primes < x");
