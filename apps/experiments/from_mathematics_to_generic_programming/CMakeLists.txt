@@ -1,12 +1,26 @@
 project(from_mathematics_to_generic_programming)
 
 add_executable(multiplyBm
+    src/math.h
     src/multiply.bm.cpp
     src/multiply.cpp
     src/multiply.h
 )
 target_include_directories(multiplyBm PRIVATE ${ul_INCLUDE_DIRS})
 target_link_libraries(multiplyBm benchmark::benchmark benchmark::benchmark_main)
+
+
+add_executable(mathTest
+        src/math.h
+        src/multiply.cpp
+        src/multiply.h
+        src/multiply.test.cpp
+        src/power.h
+        src/power.test.cpp
+)
+ul_add_test(mathTest)
+target_include_directories(mathTest PRIVATE ${ul_INCLUDE_DIRS})
+target_link_libraries(mathTest gtest_main)
 
 
 add_executable(prime-sieveTest
