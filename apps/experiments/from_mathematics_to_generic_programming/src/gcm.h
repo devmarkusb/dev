@@ -236,27 +236,29 @@ inline std::pair<int, LineSegment> quotient_remainder2(LineSegment a, LineSegmen
     if (a < b)
         return {0, a};
     auto c{b};
-    auto n{1};
-    auto m{n};
     do
     {
         auto tmp = c;
         c += b;
         b = tmp;
-        auto tmp2{m};
-        m += n;
-        n = tmp2;
     } while (a >= c);
-    --m;
+    auto n{1};
+    //auto m{n};
     do
     {
+        ++n;
         if (a >= b)
+        {
             a -= b;
+            //auto tmp2{n};
+            //n += m;
+            //m = tmp2;
+        }
         auto tmp = c - b;
         c = b;
         b = tmp;
     } while (b < c);
-    return {m, a};
+    return {n, a};
 }
 } // namespace math
 
