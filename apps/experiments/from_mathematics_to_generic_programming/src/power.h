@@ -67,6 +67,7 @@ A power_accumulate_semigroup(A r, A a, N n, Op op)
     }
 }
 
+/// For a multiply operation as op you achieve the canonical 'power'.
 template <Regular A, Integer N, SemigroupOperation Op>
 A power_semigroup(A a, N n, Op op)
 {

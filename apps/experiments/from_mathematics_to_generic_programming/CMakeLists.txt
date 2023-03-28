@@ -12,6 +12,7 @@ target_link_libraries(multiplyBm benchmark::benchmark benchmark::benchmark_main)
 
 add_executable(mathTest
         src/math.h
+        src/math.test.cpp
         src/multiply.cpp
         src/multiply.h
         src/multiply.test.cpp
