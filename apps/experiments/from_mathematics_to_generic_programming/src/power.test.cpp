@@ -33,14 +33,14 @@ TEST(power_semigroup, transitive_closure)
     }}};
 
     EXPECT_EQ(
-        math::power_semigroup(adjacencyMatrix, 1, math::mat_mul_gen_bool<Matrix>{}),
+        math::power_semigroup(adjacencyMatrix, 1, math::MatMulGenBool<Matrix>{}),
         adjacencyMatrix);
 
     using math::operator<<;
-    std::cout << math::power_semigroup(adjacencyMatrix, 2, math::mat_mul_gen_bool<Matrix>{})
+    std::cout << math::power_semigroup(adjacencyMatrix, 2, math::MatMulGenBool<Matrix>{})
               << "\n";
 
-    std::cout << math::power_semigroup(adjacencyMatrix, dim - 1, math::mat_mul_gen_bool<Matrix>{})
+    std::cout << math::power_semigroup(adjacencyMatrix, dim - 1, math::MatMulGenBool<Matrix>{})
               << "\n";
 
     // aka friends over max. paths
@@ -57,7 +57,7 @@ TEST(power_semigroup, transitive_closure)
     EXPECT_EQ(
         math::power_semigroup(
             adjacencyMatrix, dim - 1,
-            math::mat_mul_gen_bool<Matrix>{}),
+            math::MatMulGenBool<Matrix>{}),
         transitiveClosure);
 }
 
@@ -65,10 +65,10 @@ TEST(power_semigroup, transitive_closure)
 TEST(power_semigroup, transitive_closure2)
 {
     constexpr auto dim{7};
-    using Matrix = math::Matrix<int, dim, dim>;
-    using mat_mul_gen_tropical = math::mat_mul_gen_tropical<int, dim, dim, dim>;
+    constexpr auto inf{math::Tropical::inf};
+    using Matrix = math::Matrix<math::Tropical, dim, dim>;
+    using mat_mul_gen_tropical = math::MatMulGenTropical<math::Tropical, dim, dim, dim>;
     // aka unit of min part of semiring (min, +)
-    constexpr auto inf{std::numeric_limits<int>::max()};
     // aka distances
     constexpr auto weightedAdjacencyMatrix{Matrix{{
         {0, 6, inf, 3, inf, inf, inf},
@@ -97,13 +97,13 @@ TEST(power_semigroup, transitive_closure2)
 
     // aka shortest paths to everywhere
     constexpr auto transitiveClosure{Matrix{{
-        {1, 1, 1, 1, 0, 1, 0},
-        {1, 1, 1, 1, 0, 1, 0},
-        {1, 1, 1, 1, 0, 1, 0},
-        {1, 1, 1, 1, 0, 1, 0},
-        {0, 0, 0, 0, 1, 0, 1},
-        {1, 1, 1, 1, 0, 1, 0},
-        {0, 0, 0, 0, 1, 0, 1},
+        {0, 6, 8, 3, 8, 7, 11},
+        {23, 0, 16, 26, 2, 10, 5},
+        {7, 13, 0, 10, 15, 14, 18},
+        {12, 18, 5, 0, 11, 4, 12},
+        {35, 12, 28, 38, 0, 22, 3},
+        {13, 17, 6, 16, 7, 0, 8},
+        {32, 9, 25, 35, 11, 19, 0},
     }}};
 
     EXPECT_EQ(

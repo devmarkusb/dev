@@ -21,9 +21,9 @@ TEST(multiply, tests)
     std::cout << matrix2x2_2 << "\n";
     std::cout << colVec2 << "\n";
     std::cout << rowVec2 << "\n";
-    EXPECT_EQ(math::multiply(rowVec1, colVec1, std::multiplies{}, std::plus{}), scalar1);
-    EXPECT_EQ(math::multiply(colVec1, rowVec1, std::multiplies{}, std::plus{}), matrix2x2_1);
-    EXPECT_EQ(math::multiply(matrix2x2_1, colVec1, std::multiplies{}, std::plus{}), colVec2);
-    EXPECT_EQ(math::multiply(rowVec1, matrix2x2_1, std::multiplies{}, std::plus{}), rowVec2);
-    EXPECT_EQ(math::multiply(matrix2x2_1, matrix2x2_1, std::multiplies{}, std::plus{}), matrix2x2_2);
+    EXPECT_EQ(math::multiply(rowVec1, colVec1, std::plus{}, std::multiplies{}), scalar1);
+    EXPECT_EQ(math::multiply(colVec1, rowVec1, std::plus{}, std::multiplies{}), matrix2x2_1);
+    EXPECT_EQ(math::multiply(matrix2x2_1, colVec1, std::plus{}, std::multiplies{}), colVec2);
+    EXPECT_EQ(math::multiply(rowVec1, matrix2x2_1, std::plus{}, std::multiplies{}), rowVec2);
+    EXPECT_EQ(math::multiply(matrix2x2_1, matrix2x2_1, std::plus{}, std::multiplies{}), matrix2x2_2);
 }

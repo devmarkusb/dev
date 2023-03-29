@@ -3,6 +3,7 @@
 
 #include "ul/ul.h"
 #include <array>
+#include <compare>
 #include <concepts>
 #include <ostream>
 
@@ -72,7 +73,7 @@ std::ostream& operator<<(std::ostream& os, const Matrix<T, m, n>& matrix)
 
 template <SemiRing T, size_t m, size_t k, size_t n>
 Matrix<T, m, n> multiply(
-    Matrix<T, m, k> l, Matrix<T, k, n> r, SemigroupOperation auto&& innerMul, SemigroupOperation auto&& innerAdd)
+    Matrix<T, m, k> l, Matrix<T, k, n> r, SemigroupOperation auto&& innerAdd, SemigroupOperation auto&& innerMul)
 {
     Matrix<T, m, n> res{};
     for (decltype(m) i{}; i < m; ++i)
@@ -86,7 +87,7 @@ template <SemiRing T, size_t m, size_t k, size_t n>
 Matrix<T, m, n> operator*(
     Matrix<T, m, k> l, Matrix<T, k, n> r)
 {
-    return multiply(l, r, std::multiplies{}, std::plus{});
+    return multiply(l, r, std::plus{}, std::multiplies{});
 }
 
 template <Integer N>
@@ -120,7 +121,7 @@ T identity_element(std::multiplies<T>)
 }
 
 template <MultiplicativeGroup A>
-struct reciprocal : public std::unary_function<A, A>
+struct Reciprocal : public std::unary_function<A, A>
 {
     A operator()(const A& a) const
     {
@@ -135,13 +136,13 @@ std::negate<T> inverse_operation(std::plus<T>)
 }
 
 template <MultiplicativeGroup T>
-reciprocal<T> inverse_operation(std::multiplies<T>)
+Reciprocal<T> inverse_operation(std::multiplies<T>)
 {
-    return reciprocal<T>();
+    return Reciprocal<T>();
 }
 
 template <MatrixLike A>
-struct mat_mul : public std::binary_function<A, A, A>
+struct MatMul : public std::binary_function<A, A, A>
 {
     A operator()(const A& a1, const A& a2) const
     {
@@ -150,16 +151,16 @@ struct mat_mul : public std::binary_function<A, A, A>
 };
 
 template <MatrixLike A>
-struct mat_mul_gen_bool : public std::binary_function<A, A, A>
+struct MatMulGenBool : public std::binary_function<A, A, A>
 {
     A operator()(const A& a1, const A& a2) const
     {
-        return multiply(a1, a2, std::logical_and{}, std::logical_or{});
+        return multiply(a1, a2, std::logical_or{}, std::logical_and{});
     }
 };
 
 template <MultiplicativeSemigroup A>
-struct min : public std::binary_function<A, A, A>
+struct Min : public std::binary_function<A, A, A>
 {
     A operator()(const A& a1, const A& a2) const
     {
@@ -167,12 +168,31 @@ struct min : public std::binary_function<A, A, A>
     }
 };
 
+struct Tropical
+{
+    constexpr static auto inf{std::numeric_limits<double>::infinity()};
+
+    constexpr Tropical() noexcept = default;
+    constexpr /*implicit*/ Tropical(double d) noexcept
+        : d_{d}
+    {
+    }
+    constexpr /*implicit*/ operator double() const noexcept
+    {
+        return d_;
+    }
+    auto operator<=>(const Tropical&) const noexcept = default;
+
+private:
+    double d_{inf};
+};
+
 template <SemiRing A, size_t m, size_t k, size_t n>
-struct mat_mul_gen_tropical : public std::binary_function<Matrix<A, m, n>, Matrix<A, m, k>, Matrix<A, k, n>>
+struct MatMulGenTropical : public std::binary_function<Matrix<A, m, n>, Matrix<A, m, k>, Matrix<A, k, n>>
 {
     Matrix<A, m, n> operator()(const Matrix<A, m, k>& a1, const Matrix<A, k, n>& a2) const
     {
-        return multiply(a1, a2, std::plus{}, min<A>{});
+        return multiply(a1, a2, Min<A>{}, std::plus{});
     }
 };
 } // namespace math
