@@ -34,7 +34,7 @@ A multiply_accumulate_semigroup(A r, N n, A a)
     }
 }
 
-template <NoncommutativeAdditiveMonoid A, Integer N>
+template <NoncommutativeAdditiveMonoid A, Integral N>
 A multiply_monoid(N n, A a)
 {
     UL_EXPECT(n >= 0);
@@ -43,7 +43,7 @@ A multiply_monoid(N n, A a)
     return multiply_semigroup(n, a);
 }
 
-template <NoncommutativeAdditiveGroup A, Integer N>
+template <NoncommutativeAdditiveGroup A, Integral N>
 A multiply_group(N n, A a)
 {
     if (n < 0)

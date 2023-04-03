@@ -12,15 +12,17 @@ TEST(power_accumulate_semigroup, tests)
 TEST(power_semigroup, tests)
 {
     // abuse as multiply
-    EXPECT_EQ(math::power_semigroup(2, 4, std::plus{}), 8);
-    EXPECT_EQ(math::power_semigroup(2, 4, std::multiplies{}), 16);
+    EXPECT_EQ(math::power_semigroup(2, 4, std::plus<int>{}), 8);
+    EXPECT_EQ(math::power_semigroup(2, 4, std::multiplies<int>{}), 16);
 }
 
 // aka social_net_paths
 TEST(power_semigroup, transitive_closure)
 {
     constexpr auto dim{7};
-    using Matrix = math::Matrix<int, dim, dim>;
+    using ElemT = bool;
+    using Matrix = math::Matrix<ElemT, dim, dim>;
+    // NOLINTBEGIN
     // aka directFriends
     constexpr auto adjacencyMatrix{Matrix{{
         {1, 1, 0, 1, 0, 0, 0},
@@ -31,18 +33,20 @@ TEST(power_semigroup, transitive_closure)
         {0, 1, 0, 1, 0, 1, 0},
         {0, 0, 0, 0, 1, 0, 1},
     }}};
+    // NOLINTEND
 
     EXPECT_EQ(
-        math::power_semigroup(adjacencyMatrix, 1, math::MatMulGenBool<Matrix>{}),
+        math::power_semigroup(adjacencyMatrix, 1, math::MatMulGenBool<ElemT, Matrix>{}),
         adjacencyMatrix);
 
     using math::operator<<;
-    std::cout << math::power_semigroup(adjacencyMatrix, 2, math::MatMulGenBool<Matrix>{})
+    std::cout << math::power_semigroup(adjacencyMatrix, 2, math::MatMulGenBool<ElemT, Matrix>{})
               << "\n";
 
-    std::cout << math::power_semigroup(adjacencyMatrix, dim - 1, math::MatMulGenBool<Matrix>{})
+    std::cout << math::power_semigroup(adjacencyMatrix, dim - 1, math::MatMulGenBool<ElemT, Matrix>{})
               << "\n";
 
+    // NOLINTBEGIN
     // aka friends over max. paths
     constexpr auto transitiveClosure{Matrix{{
         {1, 1, 1, 1, 0, 1, 0},
@@ -53,11 +57,12 @@ TEST(power_semigroup, transitive_closure)
         {1, 1, 1, 1, 0, 1, 0},
         {0, 0, 0, 0, 1, 0, 1},
     }}};
+    // NOLINTEND
 
     EXPECT_EQ(
         math::power_semigroup(
             adjacencyMatrix, dim - 1,
-            math::MatMulGenBool<Matrix>{}),
+            math::MatMulGenBool<ElemT, Matrix>{}),
         transitiveClosure);
 }
 
@@ -68,8 +73,7 @@ TEST(power_semigroup, transitive_closure2)
     constexpr auto inf{math::Tropical::inf};
     using Matrix = math::Matrix<math::Tropical, dim, dim>;
     using mat_mul_gen_tropical = math::MatMulGenTropical<math::Tropical, dim, dim, dim>;
-    // aka unit of min part of semiring (min, +)
-    // aka distances
+    // aka distances (directed)
     constexpr auto weightedAdjacencyMatrix{Matrix{{
         {0, 6, inf, 3, inf, inf, inf},
         {inf, 0, inf, inf, 2, 10, inf},

@@ -9,56 +9,242 @@
 
 namespace math
 {
-/// requires (Domain<Op, AxA>)
+inline namespace most_generic_regular
+{
+/**
+    Opposed to std::regular this doesn't contain std::default_initializable.
+    The intention of the latter might be to be able to write something like 'R x;' with possibly uninitialized x,
+    perhaps modelling a mathematical 'let x be an arbitrary element of R'. But to be honest that's not needed in
+    programming. You are more likely to have a function implementation of 'f(R x)' (or 'f(Regular auto x)') getting in
+    an arbitrary x. Also it is the preferable principle of generalization to impose less constraints. You can still
+    have it for your specific type R if you want to.
+
+    Semantics:
+        * T a{b} => (b=c => a=c)
+        * a:=b => (b=c => a=c)
+        * f RegularFunction and a=b => f(a)=f(b)
+    Time/space complexity:
+        * each operation on Regular is no worse than linear in the memory of the object
+ */
+template <typename R>
+concept Regular = std::copyable<R> && std::equality_comparable<R>;
+} // namespace most_generic_regular
+
+namespace generic_regular
+{
+/**
+    Opposed to Regular from most_generic_regular implies default initializable also. This allows for the equivalence
+    of 'T a; a = b;' and ' T a{b};'.
+ */
+template <typename R>
+concept Regular = std::regular<R>;
+} // namespace generic_regular
+
+/**
+    Synonym of Regular suiting a mathematically oriented naming scheme.
+    Roughly, you can think of the concept as the category of sets, e.g. int being a type fulfilling/implementing that,
+    i.e. being a set. Any variable then being an element or object of that set.
+    More precisely, Set is a concept (programming) is a theory (math, like also Group can be considered as a theory and
+    not only an algebraic structure) is a genus (Aristotle),
+    and e.g. int is a value/object type (programming) is a model (math) is a species (Aristotle),
+    and e.g. 42 is a value/object/instance (programming) is an element (math) is an individual (Aristotle).
+ */
+template <typename S>
+concept Set = Regular<S>;
+
+template <typename Op, typename SetT>
+concept SemigroupOperation =
+    Set<SetT> && std::convertible_to<Op, std::binary_function<SetT, SetT, SetT>>
+    && requires(Op op, SetT a, SetT b, SetT c) { UL_SEMANTICS { op(op(a, b), c) == op(a, op(b, c)); }; };
+
+template <typename SetT, typename Op>
+concept Semigroup = Set<SetT> && SemigroupOperation<Op, SetT>;
+
+template <typename SetT>
+concept NoncommutativeAdditiveSemigroup = Semigroup<SetT, std::plus<SetT>>;
+
+template <typename SetT>
+concept MultiplicativeSemigroup = Semigroup<SetT, std::multiplies<SetT>>;
+
+template <typename Op, typename SetT>
+concept MonoidOperation = Set<SetT> && SemigroupOperation<Op, SetT> && requires(Op op, SetT a, SetT identity) {
+                                                                           UL_SEMANTICS
+                                                                           {
+                                                                               op(identity, a) == identity;
+                                                                               op(a, identity) == identity;
+                                                                           };
+                                                                       };
+
+template <typename Op, typename SetT>
+concept CommutativeMonoidOperation = Set<SetT> && MonoidOperation<Op, SetT> && requires(Op op, SetT a, SetT b) {
+    UL_SEMANTICS
+    {
+        op(a, b) == op(b, a);
+    };
+};
+
+template <typename SetT, typename Op>
+concept Monoid = Set<SetT> && MonoidOperation<Op, SetT>;
+
+template <typename SetT, typename Op>
+concept CommutativeMonoid = Monoid<SetT, Op> && CommutativeMonoidOperation<Op, SetT>;
+
+template <typename SetT>
+concept NoncommutativeAdditiveMonoid = Monoid<SetT, std::plus<SetT>>;
+
+template <typename SetT>
+concept MultiplicativeMonoid = Monoid<SetT, std::multiplies<SetT>>;
+
+template <typename Op, typename SetT>
+concept GroupOperation = Set<SetT> && MonoidOperation<Op, SetT>;
+
+template <typename Op, typename SetT>
+concept GroupInverseOperation =
+    Set<SetT> && std::convertible_to<Op, std::unary_function<SetT, SetT>>
+    && requires(Op op, SetT a) {
+           UL_SEMANTICS
+           {
+               op(op(a)) == a;
+           };
+       };
+
+template <typename SetT, typename Op, typename InverseOp>
+concept Group = Set<SetT> && GroupOperation<Op, SetT> && GroupInverseOperation<InverseOp, SetT>
+                && requires(Op op, InverseOp inverseOp, SetT a, SetT identity) {
+                       UL_SEMANTICS
+                       {
+                           op(a, inverseOp(a)) == identity;
+                           op(inverseOp(a), a) == identity;
+                       };
+                   };
+
+template <typename SetT>
+concept NoncommutativeAdditiveGroup = Group<SetT, std::plus<SetT>, std::negate<SetT>>;
+
+template <typename SetT>
+concept AdditiveGroup = NoncommutativeAdditiveGroup<SetT> && requires(SetT a, SetT b) {
+    UL_SEMANTICS
+    {
+        a + b == b + a;
+    };
+};
+
+/** Borderline, works for arithmetic types but enforces general Regular to provide a constructor accepting integer 1
+    to produce the multiplicative identity element.*/
+template <Regular T>
+T identity_element(std::multiplies<T>)
+{
+    return T{1};
+}
+
+template <Regular T>
+T identity_element(std::plus<T>)
+{
+    return T{};
+}
+
+/** Borderline, works for arithmetic types but enforces general Regular to provide a constructor accepting integer 1
+    to produce the multiplicative identity element.*/
+template <Regular T>
+T multiplicative_inverse(T a)
+{
+    return identity_element(std::multiplies<T>{}) / a;
+}
+
+template <Regular T>
+struct Reciprocal : public std::unary_function<T, T>
+{
+    T operator()(const T& a) const
+    {
+        return multiplicative_inverse(a);
+    }
+};
+
+template <typename SetT>
+concept MultiplicativeGroup = Group<SetT, std::multiplies<SetT>, Reciprocal<SetT>>;
+
+template <typename SetT, typename OpCommutativeMonoid /*add*/, typename OpMonoid /*multiply*/>
+concept SemiRing =
+    Set<SetT> && CommutativeMonoid<SetT, OpCommutativeMonoid> && Monoid<SetT, OpMonoid>
+    && requires(
+        OpCommutativeMonoid opCommutativeMonoid, OpMonoid opMonoid, SetT a, SetT b, SetT c,
+        SetT commutativeMonoidIdentity, SetT monoidIdentity) {
+           UL_SEMANTICS
+           {
+               commutativeMonoidIdentity != monoidIdentity;
+               opMonoid(commutativeMonoidIdentity, a) == commutativeMonoidIdentity;
+               opMonoid(a, opCommutativeMonoid(b, c)) == opCommutativeMonoid(opMonoid(a, b), opMonoid(a, c));
+           };
+       };
+
+/// for bwds. compatibility
+template<typename>
+concept SemiRingGeneral = true;
+
 template <typename T>
-concept SemigroupOperation = true;
+concept Integral = std::integral<T>;
 
+/// Broader than Integral, which is restricted to built-in integer types.
+/** Would be interesting to construct. Won't like to built it upon algebraic structure like ring, but perhaps more
+    likely upon Peano axioms.*/
 template <typename>
-concept NoncommutativeAdditiveSemigroup = true;
+concept Integer = true;
 
-template <typename>
-concept MultiplicativeSemigroup = true;
+template <Integral N>
+bool odd(N n)
+{
+    return static_cast<bool>(n & 0x1);
+}
 
-/// requires (Domain<Op, AxA>)
-template <typename T>
-concept MonoidOperation = true;
+template <Integral N>
+N half(N n)
+{
+    return n >> 1;
+}
 
-template <typename>
-concept NoncommutativeAdditiveMonoid = true;
+template <AdditiveGroup T>
+std::negate<T> inverse_operation(std::plus<T>)
+{
+    return std::negate<T>{};
+}
 
-template <typename>
-concept MultiplicativeMonoid = true;
+template <MultiplicativeGroup T>
+Reciprocal<T> inverse_operation(std::multiplies<T>)
+{
+    return Reciprocal<T>{};
+}
 
-/// requires (Domain<Op, AxA>)
-template <typename T>
-concept GroupOperation = true;
+namespace wip
+{
+/// m x n matrix, m rows, n cols, [row][col], over general semiring elements
+template <
+    Set ElemT, CommutativeMonoidOperation<ElemT> OpCommutativeMonoid /*add*/,
+    MonoidOperation<ElemT> OpMonoid /*multiply*/, size_t m, size_t n>
+    requires SemiRing<ElemT, OpCommutativeMonoid, OpMonoid>
+using Matrix = std::array<std::array<ElemT, n>, m>;
 
-template <typename>
-concept NoncommutativeAdditiveGroup = true;
+template <
+    typename MatrixT, typename ElemT, typename OpMatrixCommutativeMonoid /*add*/, typename OpMatrixMonoid /*multiply*/,
+    typename OpElemCommutativeMonoid /*add*/, typename OpElemMonoid /*multiply*/>
+concept MatrixLike =
+    SemiRing<MatrixT, OpMatrixCommutativeMonoid, OpMatrixMonoid>
+    && SemiRing<ElemT, OpElemCommutativeMonoid, OpElemMonoid> && requires(MatrixT m, size_t r, size_t c) {
+           m[r];
+           // clang-format off
+           { m[r][c] } -> std::same_as<ElemT>;
+           // clang-format on
+           // same, but let's practice some syntax
+           requires std::is_same_v<decltype(m[r][c]), ElemT>;
+       };
+}
 
-template <typename>
-concept AdditiveGroup = true;
-
-template <typename>
-concept MultiplicativeGroup = true;
-
-template <typename>
-concept SemiRing = true;
-
-template <typename T>
-concept Integer = std::integral<T>;
-
-template <typename T>
-concept Regular = std::regular<T>;
-
-/// m rows, n cols, [row][col]
-template <SemiRing T, size_t m, size_t n>
+template <SemiRingGeneral T, size_t m, size_t n>
 using Matrix = std::array<std::array<T, n>, m>;
 
-template <typename T>
+template <typename>
 concept MatrixLike = true;
 
-template <SemiRing T, size_t m, size_t n>
+template <SemiRingGeneral T, size_t m, size_t n>
 std::ostream& operator<<(std::ostream& os, const Matrix<T, m, n>& matrix)
 {
     for (decltype(m) i{}; i < m; ++i)
@@ -71,11 +257,10 @@ std::ostream& operator<<(std::ostream& os, const Matrix<T, m, n>& matrix)
     return os;
 }
 
-template <SemiRing T, size_t m, size_t k, size_t n>
-Matrix<T, m, n> multiply(
-    Matrix<T, m, k> l, Matrix<T, k, n> r, SemigroupOperation auto&& innerAdd, SemigroupOperation auto&& innerMul)
+template <SemiRingGeneral ElemType, size_t m, size_t k, size_t n>
+Matrix<ElemType, m, n> multiply(Matrix<ElemType, m, k> l, Matrix<ElemType, k, n> r, SemigroupOperation<ElemType> auto&& innerAdd, SemigroupOperation<ElemType> auto&& innerMul)
 {
-    Matrix<T, m, n> res{};
+    Matrix<ElemType, m, n> res{};
     for (decltype(m) i{}; i < m; ++i)
         for (decltype(k) h{}; h < k; ++h)
             for (decltype(n) j{}; j < n; ++j)
@@ -83,79 +268,27 @@ Matrix<T, m, n> multiply(
     return res;
 }
 
-template <SemiRing T, size_t m, size_t k, size_t n>
-Matrix<T, m, n> operator*(
-    Matrix<T, m, k> l, Matrix<T, k, n> r)
+template <SemiRingGeneral ElemT, size_t m, size_t k, size_t n>
+Matrix<ElemT, m, n> operator*(Matrix<ElemT, m, k> l, Matrix<ElemT, k, n> r)
 {
-    return multiply(l, r, std::plus{}, std::multiplies{});
+    return multiply(l, r, std::plus<ElemT>{}, std::multiplies<ElemT>{});
 }
 
-template <Integer N>
-bool odd(N n)
+template <SemiRingGeneral ElemT, MatrixLike M>
+struct MatMul : public std::binary_function<M, M, M>
 {
-    return static_cast<bool>(n & 0x1);
-}
-
-template <Integer N>
-N half(N n)
-{
-    return n >> 1;
-}
-
-template <MultiplicativeGroup A>
-A multiplicative_inverse(A a)
-{
-    return A{1} / a;
-}
-
-template <NoncommutativeAdditiveMonoid T>
-T identity_element(std::plus<T>)
-{
-    return T{0};
-}
-
-template <MultiplicativeMonoid T>
-T identity_element(std::multiplies<T>)
-{
-    return T{1};
-}
-
-template <MultiplicativeGroup A>
-struct Reciprocal : public std::unary_function<A, A>
-{
-    A operator()(const A& a) const
-    {
-        return multiplicative_inverse(a);
-    }
-};
-
-template <AdditiveGroup T>
-std::negate<T> inverse_operation(std::plus<T>)
-{
-    return std::negate<T>();
-}
-
-template <MultiplicativeGroup T>
-Reciprocal<T> inverse_operation(std::multiplies<T>)
-{
-    return Reciprocal<T>();
-}
-
-template <MatrixLike A>
-struct MatMul : public std::binary_function<A, A, A>
-{
-    A operator()(const A& a1, const A& a2) const
+    M operator()(const M& a1, const M& a2) const
     {
         return a1 * a2;
     }
 };
 
-template <MatrixLike A>
-struct MatMulGenBool : public std::binary_function<A, A, A>
+template <SemiRingGeneral ElemT, MatrixLike M>
+struct MatMulGenBool : public std::binary_function<M, M, M>
 {
-    A operator()(const A& a1, const A& a2) const
+    M operator()(const M& a1, const M& a2) const
     {
-        return multiply(a1, a2, std::logical_or{}, std::logical_and{});
+        return multiply(a1, a2, std::logical_or<ElemT>{}, std::logical_and<ElemT>{});
     }
 };
 
@@ -170,29 +303,32 @@ struct Min : public std::binary_function<A, A, A>
 
 struct Tropical
 {
-    constexpr static auto inf{std::numeric_limits<double>::infinity()};
+    static constexpr auto inf{std::numeric_limits<double>::infinity()};
 
     constexpr Tropical() noexcept = default;
+
     constexpr /*implicit*/ Tropical(double d) noexcept
         : d_{d}
     {
     }
+
     constexpr /*implicit*/ operator double() const noexcept
     {
         return d_;
     }
+
     auto operator<=>(const Tropical&) const noexcept = default;
 
 private:
     double d_{inf};
 };
 
-template <SemiRing A, size_t m, size_t k, size_t n>
-struct MatMulGenTropical : public std::binary_function<Matrix<A, m, n>, Matrix<A, m, k>, Matrix<A, k, n>>
+template <SemiRingGeneral ElemT, size_t m, size_t k, size_t n>
+struct MatMulGenTropical : public std::binary_function<Matrix<ElemT, m, n>, Matrix<ElemT, m, k>, Matrix<ElemT, k, n>>
 {
-    Matrix<A, m, n> operator()(const Matrix<A, m, k>& a1, const Matrix<A, k, n>& a2) const
+    Matrix<ElemT, m, n> operator()(const Matrix<ElemT, m, k>& a1, const Matrix<ElemT, k, n>& a2) const
     {
-        return multiply(a1, a2, Min<A>{}, std::plus{});
+        return multiply(a1, a2, Min<ElemT>{}, std::plus<ElemT>{});
     }
 };
 } // namespace math

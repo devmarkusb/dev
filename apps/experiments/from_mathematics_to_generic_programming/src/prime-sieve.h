@@ -11,11 +11,11 @@ template <typename>
 concept RandomAccessIterator = true;
 
 template <typename T>
-concept Integer = std::is_integral_v<T>;
+concept Integral = std::is_integral_v<T>;
 
 namespace impl
 {
-template <RandomAccessIterator I, Integer N>
+template <RandomAccessIterator I, Integral N>
 void mark_sieve(I first, I last, N factor)
 {
     UL_EXPECT(first != last);
@@ -72,7 +72,7 @@ void mark_sieve(I first, I last, N factor)
 //    }
 //}
 
-template <RandomAccessIterator I, Integer N>
+template <RandomAccessIterator I, Integral N>
 void sift2(I first, N n)
 {
     I last = first + n;

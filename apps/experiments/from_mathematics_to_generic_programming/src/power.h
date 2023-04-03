@@ -6,7 +6,7 @@
 
 namespace math
 {
-template <MultiplicativeSemigroup A, Integer N>
+template <MultiplicativeSemigroup A, Integral N>
 A power_accumulate_semigroup(A r, A a, N n)
 {
     UL_EXPECT(n >= 0);
@@ -25,7 +25,7 @@ A power_accumulate_semigroup(A r, A a, N n)
     }
 }
 
-template <MultiplicativeSemigroup A, Integer N>
+template <MultiplicativeSemigroup A, Integral N>
 A power_semigroup(A a, N n)
 {
     UL_EXPECT(n > 0);
@@ -39,7 +39,7 @@ A power_semigroup(A a, N n)
     return power_accumulate_semigroup(a, a * a, half(n - 1));
 }
 
-template <MultiplicativeMonoid A, Integer N>
+template <MultiplicativeMonoid A, Integral N>
 A power_monoid(A a, N n)
 {
     UL_EXPECT(n >= 0);
@@ -48,7 +48,7 @@ A power_monoid(A a, N n)
     return power_semigroup(a, n);
 }
 
-template <Regular A, Integer N, SemigroupOperation Op>
+template <Regular A, Integral N, SemigroupOperation<A> Op>
 A power_accumulate_semigroup(A r, A a, N n, Op op)
 {
     UL_EXPECT(n >= 0);
@@ -68,7 +68,7 @@ A power_accumulate_semigroup(A r, A a, N n, Op op)
 }
 
 /// For a multiply operation as op you achieve the canonical 'power'.
-template <Regular A, Integer N, SemigroupOperation Op>
+template <Regular A, Integral N, SemigroupOperation<A> Op>
 A power_semigroup(A a, N n, Op op)
 {
     UL_EXPECT(n > 0);
@@ -82,7 +82,7 @@ A power_semigroup(A a, N n, Op op)
     return power_accumulate_semigroup(a, op(a, a), half(n - 1), op);
 }
 
-template <Regular A, Integer N, MonoidOperation Op>
+template <Regular A, Integral N, MonoidOperation<A> Op>
 A power_monoid(A a, N n, Op op)
 {
     UL_EXPECT(n >= 0);
@@ -91,7 +91,7 @@ A power_monoid(A a, N n, Op op)
     return power_semigroup(a, n, op);
 }
 
-template <Regular A, Integer N, GroupOperation Op>
+template <Regular A, Integral N, GroupOperation<A> Op>
 A power_group(A a, N n, Op op)
 {
     if (n < 0)
