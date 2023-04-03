@@ -27,9 +27,10 @@ bool operator==(RegularEx, RegularEx)
 
 TEST(regular, tests)
 {
-    const auto copy{[](math::Regular auto r){
-            return r;
-        }};
+    const auto copy{[](math::Regular auto r)
+                    {
+                        return r;
+                    }};
     EXPECT_EQ(copy(someInt), someInt);
     EXPECT_EQ(copy(RegularEx{}), RegularEx{});
 }
@@ -51,9 +52,10 @@ SemiGroupEx operator+(SemiGroupEx, SemiGroupEx)
 
 TEST(semigroup, tests)
 {
-    const auto op{[](math::NoncommutativeAdditiveSemigroup auto a, math::NoncommutativeAdditiveSemigroup auto b){
-                        return a + b;
-                    }};
+    const auto op{[](math::NoncommutativeAdditiveSemigroup auto a, math::NoncommutativeAdditiveSemigroup auto b)
+                  {
+                      return a + b;
+                  }};
     EXPECT_EQ(op(str42, str43), "4243");
     EXPECT_EQ(op(str43, str42), "4342");
     EXPECT_NE(op(str42, str43), op(str43, str42));

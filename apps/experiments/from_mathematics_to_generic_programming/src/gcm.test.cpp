@@ -209,7 +209,7 @@ class QuotientRemainderTest : public testing::TestWithParam<std::function<std::p
 
 INSTANTIATE_TEST_SUITE_P(
     QuotientRemainderVariousImpl, QuotientRemainderTest,
-    testing::Values(math::quotient_remainder0, math::quotient_remainder1/*, math::quotient_remainder2*/));
+    testing::Values(math::quotient_remainder0, math::quotient_remainder1 /*, math::quotient_remainder2*/));
 
 TEST_P(QuotientRemainderTest, zero)
 {

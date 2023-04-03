@@ -35,16 +35,12 @@ TEST(power_semigroup, transitive_closure)
     }}};
     // NOLINTEND
 
-    EXPECT_EQ(
-        math::power_semigroup(adjacencyMatrix, 1, math::MatMulGenBool<ElemT, Matrix>{}),
-        adjacencyMatrix);
+    EXPECT_EQ(math::power_semigroup(adjacencyMatrix, 1, math::MatMulGenBool<ElemT, Matrix>{}), adjacencyMatrix);
 
     using math::operator<<;
-    std::cout << math::power_semigroup(adjacencyMatrix, 2, math::MatMulGenBool<ElemT, Matrix>{})
-              << "\n";
+    std::cout << math::power_semigroup(adjacencyMatrix, 2, math::MatMulGenBool<ElemT, Matrix>{}) << "\n";
 
-    std::cout << math::power_semigroup(adjacencyMatrix, dim - 1, math::MatMulGenBool<ElemT, Matrix>{})
-              << "\n";
+    std::cout << math::power_semigroup(adjacencyMatrix, dim - 1, math::MatMulGenBool<ElemT, Matrix>{}) << "\n";
 
     // NOLINTBEGIN
     // aka friends over max. paths
@@ -59,11 +55,7 @@ TEST(power_semigroup, transitive_closure)
     }}};
     // NOLINTEND
 
-    EXPECT_EQ(
-        math::power_semigroup(
-            adjacencyMatrix, dim - 1,
-            math::MatMulGenBool<ElemT, Matrix>{}),
-        transitiveClosure);
+    EXPECT_EQ(math::power_semigroup(adjacencyMatrix, dim - 1, math::MatMulGenBool<ElemT, Matrix>{}), transitiveClosure);
 }
 
 // aka shortest_length
@@ -84,20 +76,12 @@ TEST(power_semigroup, transitive_closure2)
         {inf, 9, inf, inf, inf, inf, 0},
     }}};
 
-    EXPECT_EQ(
-        math::power_semigroup(
-            weightedAdjacencyMatrix, 1,
-            mat_mul_gen_tropical{}),
-        weightedAdjacencyMatrix);
+    EXPECT_EQ(math::power_semigroup(weightedAdjacencyMatrix, 1, mat_mul_gen_tropical{}), weightedAdjacencyMatrix);
 
     using math::operator<<;
-    std::cout << math::power_semigroup(
-        weightedAdjacencyMatrix, 2,
-        mat_mul_gen_tropical{}) << "\n";
+    std::cout << math::power_semigroup(weightedAdjacencyMatrix, 2, mat_mul_gen_tropical{}) << "\n";
 
-    std::cout << math::power_semigroup(
-        weightedAdjacencyMatrix, dim - 1,
-        mat_mul_gen_tropical{}) << "\n";
+    std::cout << math::power_semigroup(weightedAdjacencyMatrix, dim - 1, mat_mul_gen_tropical{}) << "\n";
 
     // aka shortest paths to everywhere
     constexpr auto transitiveClosure{Matrix{{
@@ -110,11 +94,7 @@ TEST(power_semigroup, transitive_closure2)
         {32, 9, 25, 35, 11, 19, 0},
     }}};
 
-    EXPECT_EQ(
-        math::power_semigroup(
-            weightedAdjacencyMatrix, dim - 1,
-            mat_mul_gen_tropical{}),
-        transitiveClosure);
+    EXPECT_EQ(math::power_semigroup(weightedAdjacencyMatrix, dim - 1, mat_mul_gen_tropical{}), transitiveClosure);
 }
 
 TEST(power_monoid, tests)

@@ -55,7 +55,12 @@ concept Set = Regular<S>;
 template <typename Op, typename SetT>
 concept SemigroupOperation =
     Set<SetT> && std::convertible_to<Op, std::binary_function<SetT, SetT, SetT>>
-    && requires(Op op, SetT a, SetT b, SetT c) { UL_SEMANTICS { op(op(a, b), c) == op(a, op(b, c)); }; };
+    && requires(Op op, SetT a, SetT b, SetT c) {
+           UL_SEMANTICS
+           {
+               op(op(a, b), c) == op(a, op(b, c));
+           };
+       };
 
 template <typename SetT, typename Op>
 concept Semigroup = Set<SetT> && SemigroupOperation<Op, SetT>;
@@ -76,12 +81,13 @@ concept MonoidOperation = Set<SetT> && SemigroupOperation<Op, SetT> && requires(
                                                                        };
 
 template <typename Op, typename SetT>
-concept CommutativeMonoidOperation = Set<SetT> && MonoidOperation<Op, SetT> && requires(Op op, SetT a, SetT b) {
-    UL_SEMANTICS
-    {
-        op(a, b) == op(b, a);
-    };
-};
+concept CommutativeMonoidOperation =
+    Set<SetT> && MonoidOperation<Op, SetT> && requires(Op op, SetT a, SetT b) {
+                                                  UL_SEMANTICS
+                                                  {
+                                                      op(a, b) == op(b, a);
+                                                  };
+                                              };
 
 template <typename SetT, typename Op>
 concept Monoid = Set<SetT> && MonoidOperation<Op, SetT>;
@@ -123,11 +129,11 @@ concept NoncommutativeAdditiveGroup = Group<SetT, std::plus<SetT>, std::negate<S
 
 template <typename SetT>
 concept AdditiveGroup = NoncommutativeAdditiveGroup<SetT> && requires(SetT a, SetT b) {
-    UL_SEMANTICS
-    {
-        a + b == b + a;
-    };
-};
+                                                                 UL_SEMANTICS
+                                                                 {
+                                                                     a + b == b + a;
+                                                                 };
+                                                             };
 
 /** Borderline, works for arithmetic types but enforces general Regular to provide a constructor accepting integer 1
     to produce the multiplicative identity element.*/
@@ -178,7 +184,7 @@ concept SemiRing =
        };
 
 /// for bwds. compatibility
-template<typename>
+template <typename>
 concept SemiRingGeneral = true;
 
 template <typename T>
@@ -228,7 +234,8 @@ template <
     typename OpElemCommutativeMonoid /*add*/, typename OpElemMonoid /*multiply*/>
 concept MatrixLike =
     SemiRing<MatrixT, OpMatrixCommutativeMonoid, OpMatrixMonoid>
-    && SemiRing<ElemT, OpElemCommutativeMonoid, OpElemMonoid> && requires(MatrixT m, size_t r, size_t c) {
+    && SemiRing<ElemT, OpElemCommutativeMonoid, OpElemMonoid>
+    && requires(MatrixT m, size_t r, size_t c) {
            m[r];
            // clang-format off
            { m[r][c] } -> std::same_as<ElemT>;
@@ -236,7 +243,7 @@ concept MatrixLike =
            // same, but let's practice some syntax
            requires std::is_same_v<decltype(m[r][c]), ElemT>;
        };
-}
+} // namespace wip
 
 template <SemiRingGeneral T, size_t m, size_t n>
 using Matrix = std::array<std::array<T, n>, m>;
@@ -258,7 +265,9 @@ std::ostream& operator<<(std::ostream& os, const Matrix<T, m, n>& matrix)
 }
 
 template <SemiRingGeneral ElemType, size_t m, size_t k, size_t n>
-Matrix<ElemType, m, n> multiply(Matrix<ElemType, m, k> l, Matrix<ElemType, k, n> r, SemigroupOperation<ElemType> auto&& innerAdd, SemigroupOperation<ElemType> auto&& innerMul)
+Matrix<ElemType, m, n> multiply(
+    Matrix<ElemType, m, k> l, Matrix<ElemType, k, n> r, SemigroupOperation<ElemType> auto&& innerAdd,
+    SemigroupOperation<ElemType> auto&& innerMul)
 {
     Matrix<ElemType, m, n> res{};
     for (decltype(m) i{}; i < m; ++i)
