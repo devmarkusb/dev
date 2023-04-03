@@ -67,6 +67,8 @@ TEST(semigroup, tests)
     EXPECT_EQ(op(op(a, b), c), op(a, op(b, c)));
 }
 
+//todo add tests for monoid, group, (semi)ring
+
 TEST(multiply, tests)
 {
     using math::operator<<;

@@ -97,10 +97,12 @@ TEST(power_semigroup, transitive_closure2)
     EXPECT_EQ(math::power_semigroup(weightedAdjacencyMatrix, dim - 1, mat_mul_gen_tropical{}), transitiveClosure);
 }
 
+//todo
 TEST(power_monoid, tests)
 {
 }
 
+//todo
 TEST(power_group, tests)
 {
 }

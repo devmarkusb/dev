@@ -183,9 +183,8 @@ concept SemiRing =
            };
        };
 
-/// for bwds. compatibility
-template <typename>
-concept SemiRingGeneral = true;
+template <typename SetT>
+concept SemiRingAddMult = SemiRing<SetT, std::plus<SetT>, std::multiplies<SetT>>;
 
 template <typename T>
 concept Integral = std::integral<T>;
@@ -220,12 +219,14 @@ Reciprocal<T> inverse_operation(std::multiplies<T>)
     return Reciprocal<T>{};
 }
 
+//todo define MatrixMultOperation as concept, but flanging too much into the general type or concept might
+// be not general enough, perhaps there is room for a concept including dimensions
 namespace wip
 {
 /// m x n matrix, m rows, n cols, [row][col], over general semiring elements
 template <
-    Set ElemT, CommutativeMonoidOperation<ElemT> OpCommutativeMonoid /*add*/,
-    MonoidOperation<ElemT> OpMonoid /*multiply*/, size_t m, size_t n>
+    Set ElemT, size_t m, size_t n, CommutativeMonoidOperation<ElemT> OpCommutativeMonoid /*add*/,
+    MonoidOperation<ElemT> OpMonoid /*multiply*/>
     requires SemiRing<ElemT, OpCommutativeMonoid, OpMonoid>
 using Matrix = std::array<std::array<ElemT, n>, m>;
 
@@ -237,22 +238,23 @@ concept MatrixLike =
     && SemiRing<ElemT, OpElemCommutativeMonoid, OpElemMonoid>
     && requires(MatrixT m, size_t r, size_t c) {
            m[r];
-           // clang-format off
-           { m[r][c] } -> std::same_as<ElemT>;
-           // clang-format on
-           // same, but let's practice some syntax
-           requires std::is_same_v<decltype(m[r][c]), ElemT>;
+           m[r][c];
+           requires std::is_same_v<std::remove_cvref_t<decltype(m[r][c])>, ElemT>;
        };
 } // namespace wip
 
-template <SemiRingGeneral T, size_t m, size_t n>
-using Matrix = std::array<std::array<T, n>, m>;
+template <Regular ElemT, size_t m, size_t n>
+using Matrix = std::array<std::array<ElemT, n>, m>;
 
-template <typename>
-concept MatrixLike = true;
+template <typename MatrixT, typename ElemT>
+concept MatrixLike = requires(MatrixT m, size_t r, size_t c) {
+                         m[r];
+                         m[r][c];
+                         requires std::is_same_v<std::remove_cvref_t<decltype(m[r][c])>, ElemT>;
+                     };
 
-template <SemiRingGeneral T, size_t m, size_t n>
-std::ostream& operator<<(std::ostream& os, const Matrix<T, m, n>& matrix)
+template <Regular ElemT, size_t m, size_t n>
+std::ostream& operator<<(std::ostream& os, const Matrix<ElemT, m, n>& matrix)
 {
     for (decltype(m) i{}; i < m; ++i)
     {
@@ -264,12 +266,14 @@ std::ostream& operator<<(std::ostream& os, const Matrix<T, m, n>& matrix)
     return os;
 }
 
-template <SemiRingGeneral ElemType, size_t m, size_t k, size_t n>
-Matrix<ElemType, m, n> multiply(
-    Matrix<ElemType, m, k> l, Matrix<ElemType, k, n> r, SemigroupOperation<ElemType> auto&& innerAdd,
-    SemigroupOperation<ElemType> auto&& innerMul)
+template <
+    Set ElemT, CommutativeMonoidOperation<ElemT> OpElemCommutativeMonoid /*add*/,
+    MonoidOperation<ElemT> OpElemMonoid /*multiply*/, size_t m, size_t k, size_t n>
+    requires SemiRing<ElemT, OpElemCommutativeMonoid, OpElemMonoid>
+Matrix<ElemT, m, n> multiply(
+    Matrix<ElemT, m, k> l, Matrix<ElemT, k, n> r, OpElemCommutativeMonoid&& innerAdd, OpElemMonoid&& innerMul)
 {
-    Matrix<ElemType, m, n> res{};
+    Matrix<ElemT, m, n> res{};
     for (decltype(m) i{}; i < m; ++i)
         for (decltype(k) h{}; h < k; ++h)
             for (decltype(n) j{}; j < n; ++j)
@@ -277,13 +281,13 @@ Matrix<ElemType, m, n> multiply(
     return res;
 }
 
-template <SemiRingGeneral ElemT, size_t m, size_t k, size_t n>
+template <SemiRingAddMult ElemT, size_t m, size_t k, size_t n>
 Matrix<ElemT, m, n> operator*(Matrix<ElemT, m, k> l, Matrix<ElemT, k, n> r)
 {
     return multiply(l, r, std::plus<ElemT>{}, std::multiplies<ElemT>{});
 }
 
-template <SemiRingGeneral ElemT, MatrixLike M>
+template <SemiRingAddMult ElemT, MatrixLike<ElemT> M>
 struct MatMul : public std::binary_function<M, M, M>
 {
     M operator()(const M& a1, const M& a2) const
@@ -292,7 +296,7 @@ struct MatMul : public std::binary_function<M, M, M>
     }
 };
 
-template <SemiRingGeneral ElemT, MatrixLike M>
+template <SemiRingAddMult ElemT, MatrixLike<ElemT> M>
 struct MatMulGenBool : public std::binary_function<M, M, M>
 {
     M operator()(const M& a1, const M& a2) const
@@ -301,12 +305,21 @@ struct MatMulGenBool : public std::binary_function<M, M, M>
     }
 };
 
-template <MultiplicativeSemigroup A>
+template <NoncommutativeAdditiveMonoid A>
 struct Min : public std::binary_function<A, A, A>
 {
     A operator()(const A& a1, const A& a2) const
     {
         return std::min(a1, a2);
+    }
+};
+
+template <SemiRingAddMult ElemT, size_t m, size_t k, size_t n>
+struct MatMulGenTropical : public std::binary_function<Matrix<ElemT, m, n>, Matrix<ElemT, m, k>, Matrix<ElemT, k, n>>
+{
+    Matrix<ElemT, m, n> operator()(const Matrix<ElemT, m, k>& a1, const Matrix<ElemT, k, n>& a2) const
+    {
+        return multiply(a1, a2, Min<ElemT>{}, std::plus<ElemT>{});
     }
 };
 
@@ -330,15 +343,6 @@ struct Tropical
 
 private:
     double d_{inf};
-};
-
-template <SemiRingGeneral ElemT, size_t m, size_t k, size_t n>
-struct MatMulGenTropical : public std::binary_function<Matrix<ElemT, m, n>, Matrix<ElemT, m, k>, Matrix<ElemT, k, n>>
-{
-    Matrix<ElemT, m, n> operator()(const Matrix<ElemT, m, k>& a1, const Matrix<ElemT, k, n>& a2) const
-    {
-        return multiply(a1, a2, Min<ElemT>{}, std::plus<ElemT>{});
-    }
 };
 } // namespace math
 
