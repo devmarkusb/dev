@@ -28,6 +28,9 @@ inline namespace most_generic_regular
  */
 template <typename R>
 concept Regular = std::copyable<R> && std::equality_comparable<R>;
+
+template <typename R>
+concept SemiRegular = std::copyable<R>;
 } // namespace most_generic_regular
 
 namespace generic_regular
@@ -38,6 +41,9 @@ namespace generic_regular
  */
 template <typename R>
 concept Regular = std::regular<R>;
+
+template <typename R>
+concept SemiRegular = std::semiregular<R>;
 } // namespace generic_regular
 
 /**
@@ -54,7 +60,7 @@ concept Set = Regular<S>;
 
 template <typename Op, typename SetT>
 concept SemigroupOperation =
-    Set<SetT> && std::convertible_to<Op, std::binary_function<SetT, SetT, SetT>>
+    Set<SetT> && std::regular_invocable<Op, SetT, SetT> && std::is_same_v<SetT, std::invoke_result_t<Op, SetT, SetT>>
     && requires(Op op, SetT a, SetT b, SetT c) {
            UL_SEMANTICS
            {
@@ -219,7 +225,7 @@ Reciprocal<T> inverse_operation(std::multiplies<T>)
     return Reciprocal<T>{};
 }
 
-//todo define MatrixMultOperation as concept, but flanging too much into the general type or concept might
+//todo define MatrixMultOperation as concept, but putting too much into the general type or concept might
 // be not general enough, perhaps there is room for a concept including dimensions
 namespace wip
 {

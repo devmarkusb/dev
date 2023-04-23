@@ -34,12 +34,26 @@ A multiply_accumulate_semigroup(A r, N n, A a)
     }
 }
 
+template <NoncommutativeAdditiveSemigroup A, Integer N>
+A multiply_semigroup(N n, A a)
+{
+    UL_EXPECT(n > 0);
+    while (!odd(n))
+    {
+        a += a;
+        n = half(n);
+    }
+    if (n == 1)
+        return a;
+    return multiply_accumulate_semigroup(a, half(n - 1), a + a);
+}
+
 template <NoncommutativeAdditiveMonoid A, Integral N>
 A multiply_monoid(N n, A a)
 {
     UL_EXPECT(n >= 0);
     if (n == 0)
-        return A{0};
+        return A{};
     return multiply_semigroup(n, a);
 }
 

@@ -1,7 +1,6 @@
 #include "power.h"
 #include "gtest/gtest.h"
 #include <functional>
-#include <limits>
 
 TEST(power_accumulate_semigroup, tests)
 {
@@ -83,7 +82,7 @@ TEST(power_semigroup, transitive_closure2)
 
     std::cout << math::power_semigroup(weightedAdjacencyMatrix, dim - 1, mat_mul_gen_tropical{}) << "\n";
 
-    // aka shortest paths to everywhere
+    // aka the shortest paths to everywhere
     constexpr auto transitiveClosure{Matrix{{
         {0, 6, 8, 3, 8, 7, 11},
         {23, 0, 16, 26, 2, 10, 5},
@@ -97,9 +96,32 @@ TEST(power_semigroup, transitive_closure2)
     EXPECT_EQ(math::power_semigroup(weightedAdjacencyMatrix, dim - 1, mat_mul_gen_tropical{}), transitiveClosure);
 }
 
-//todo
+using MultiplicativeMonoidEx = unsigned int;
+using MonoidEx = std::string;
+
+//auto monoidOpEx{[](const MonoidEx& a, const MonoidEx& b){return a + b;}};
+//
+//namespace math
+//{
+//MonoidEx identity_element(decltype(monoidOpEx))
+//{
+//    return {};
+//}
+//} // namespace math
+
 TEST(power_monoid, tests)
 {
+    EXPECT_EQ(math::power_monoid(MultiplicativeMonoidEx{1}, 3), MultiplicativeMonoidEx{1});
+    EXPECT_EQ(math::power_monoid(MultiplicativeMonoidEx{2}, 3), MultiplicativeMonoidEx{8});
+    EXPECT_EQ(math::power_monoid(MultiplicativeMonoidEx{3}, 1), MultiplicativeMonoidEx{3});
+    EXPECT_EQ(math::power_monoid(MultiplicativeMonoidEx{3}, 2), MultiplicativeMonoidEx{9});
+
+
+    EXPECT_EQ(math::power_monoid(MonoidEx{"a"}, 3, std::plus<MonoidEx>{}), MonoidEx{"aaa"});
+    //todo
+//    using math::identity_element;
+//    math::power_monoid(MonoidEx{"a"}, 3, monoidOpEx);
+//    EXPECT_EQ(math::power_monoid(MonoidEx{"a"}, 3, [](MonoidEx a, MonoidEx b){return a + b;}), MonoidEx{"aaa"});
 }
 
 //todo
