@@ -99,16 +99,6 @@ TEST(power_semigroup, transitive_closure2)
 using MultiplicativeMonoidEx = unsigned int;
 using MonoidEx = std::string;
 
-//auto monoidOpEx{[](const MonoidEx& a, const MonoidEx& b){return a + b;}};
-//
-//namespace math
-//{
-//MonoidEx identity_element(decltype(monoidOpEx))
-//{
-//    return {};
-//}
-//} // namespace math
-
 TEST(power_monoid, tests)
 {
     EXPECT_EQ(math::power_monoid(MultiplicativeMonoidEx{1}, 3), MultiplicativeMonoidEx{1});
@@ -116,15 +106,40 @@ TEST(power_monoid, tests)
     EXPECT_EQ(math::power_monoid(MultiplicativeMonoidEx{3}, 1), MultiplicativeMonoidEx{3});
     EXPECT_EQ(math::power_monoid(MultiplicativeMonoidEx{3}, 2), MultiplicativeMonoidEx{9});
 
-
-    EXPECT_EQ(math::power_monoid(MonoidEx{"a"}, 3, std::plus<MonoidEx>{}), MonoidEx{"aaa"});
-    //todo
-//    using math::identity_element;
-//    math::power_monoid(MonoidEx{"a"}, 3, monoidOpEx);
-//    EXPECT_EQ(math::power_monoid(MonoidEx{"a"}, 3, [](MonoidEx a, MonoidEx b){return a + b;}), MonoidEx{"aaa"});
+    EXPECT_EQ(math::power_monoid(MonoidEx{"a"}, 3, std::plus<MonoidEx>{}, MonoidEx{""}), MonoidEx{"aaa"});
+    EXPECT_EQ(
+        math::power_monoid(
+            MonoidEx{"a"}, 3,
+            [](const MonoidEx& a, const MonoidEx& b)
+            {
+                return a + b;
+            },
+            MonoidEx{""}),
+        MonoidEx{"aaa"});
 }
 
-//todo
+using CommutativeAdditiveGroupEx = int;
+
 TEST(power_group, tests)
 {
+    EXPECT_EQ(
+        math::power_group(
+            CommutativeAdditiveGroupEx{1}, 3, std::plus<CommutativeAdditiveGroupEx>{},
+            std::negate<CommutativeAdditiveGroupEx>{}, CommutativeAdditiveGroupEx{}),
+        CommutativeAdditiveGroupEx{3});
+    EXPECT_EQ(
+            math::power_group(
+                    CommutativeAdditiveGroupEx{2}, 3, std::plus<CommutativeAdditiveGroupEx>{},
+                    std::negate<CommutativeAdditiveGroupEx>{}, CommutativeAdditiveGroupEx{}),
+            CommutativeAdditiveGroupEx{6});
+    EXPECT_EQ(
+            math::power_group(
+                    CommutativeAdditiveGroupEx{3}, 1, std::plus<CommutativeAdditiveGroupEx>{},
+                    std::negate<CommutativeAdditiveGroupEx>{}, CommutativeAdditiveGroupEx{}),
+            CommutativeAdditiveGroupEx{3});
+    EXPECT_EQ(
+            math::power_group(
+                    CommutativeAdditiveGroupEx{3}, 2, std::plus<CommutativeAdditiveGroupEx>{},
+                    std::negate<CommutativeAdditiveGroupEx>{}, CommutativeAdditiveGroupEx{}),
+            CommutativeAdditiveGroupEx{6});
 }

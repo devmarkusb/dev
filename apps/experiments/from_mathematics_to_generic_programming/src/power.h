@@ -83,23 +83,23 @@ A power_semigroup(A a, N n, Op op)
 }
 
 template <Regular A, Integral N, MonoidOperation<A> Op>
-A power_monoid(A a, N n, Op op)
+A power_monoid(A a, N n, Op op, A identity)
 {
     UL_EXPECT(n >= 0);
     if (n == 0)
-        return identity_element(op);
+        return identity;
     return power_semigroup(a, n, op);
 }
 
-template <Regular A, Integral N, GroupOperation<A> Op>
-A power_group(A a, N n, Op op)
+template <Regular A, Integral N, GroupOperation<A> Op, GroupInverseOperation<A> InvOp>
+A power_group(A a, N n, Op op, InvOp invop, A identity)
 {
     if (n < 0)
     {
         n = -n;
-        a = inverse_operation(op)(a);
+        a = invop(a);
     }
-    return power_monoid(a, n, op);
+    return power_monoid(a, n, op, identity);
 }
 } // namespace math
 

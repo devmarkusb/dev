@@ -112,7 +112,7 @@ concept GroupOperation = Set<SetT> && MonoidOperation<Op, SetT>;
 
 template <typename Op, typename SetT>
 concept GroupInverseOperation =
-    Set<SetT> && std::convertible_to<Op, std::unary_function<SetT, SetT>>
+    Set<SetT> && std::regular_invocable<Op, SetT> && std::is_same_v<SetT, std::invoke_result_t<Op, SetT>>
     && requires(Op op, SetT a) {
            UL_SEMANTICS
            {
@@ -164,7 +164,7 @@ T multiplicative_inverse(T a)
 }
 
 template <Regular T>
-struct Reciprocal : public std::unary_function<T, T>
+struct Reciprocal
 {
     T operator()(const T& a) const
     {
@@ -294,7 +294,7 @@ Matrix<ElemT, m, n> operator*(Matrix<ElemT, m, k> l, Matrix<ElemT, k, n> r)
 }
 
 template <SemiRingAddMult ElemT, MatrixLike<ElemT> M>
-struct MatMul : public std::binary_function<M, M, M>
+struct MatMul
 {
     M operator()(const M& a1, const M& a2) const
     {
@@ -303,7 +303,7 @@ struct MatMul : public std::binary_function<M, M, M>
 };
 
 template <SemiRingAddMult ElemT, MatrixLike<ElemT> M>
-struct MatMulGenBool : public std::binary_function<M, M, M>
+struct MatMulGenBool
 {
     M operator()(const M& a1, const M& a2) const
     {
@@ -312,7 +312,7 @@ struct MatMulGenBool : public std::binary_function<M, M, M>
 };
 
 template <NoncommutativeAdditiveMonoid A>
-struct Min : public std::binary_function<A, A, A>
+struct Min
 {
     A operator()(const A& a1, const A& a2) const
     {
@@ -321,7 +321,7 @@ struct Min : public std::binary_function<A, A, A>
 };
 
 template <SemiRingAddMult ElemT, size_t m, size_t k, size_t n>
-struct MatMulGenTropical : public std::binary_function<Matrix<ElemT, m, n>, Matrix<ElemT, m, k>, Matrix<ElemT, k, n>>
+struct MatMulGenTropical
 {
     Matrix<ElemT, m, n> operator()(const Matrix<ElemT, m, k>& a1, const Matrix<ElemT, k, n>& a2) const
     {
