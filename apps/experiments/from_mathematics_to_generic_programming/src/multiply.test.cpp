@@ -1,43 +1,12 @@
 #include "multiply.h"
+#include "ex-for-test.h"
+
 #include "gtest/gtest.h"
 
 TEST(multiply_accumulate_semigroup, tests_with_int)
 {
     EXPECT_EQ(math::multiply_accumulate_semigroup(0, 3, 4), 12);
     EXPECT_EQ(math::multiply_accumulate_semigroup(1, 3, 4), 13);
-}
-
-struct NoncommutativeAdditiveSemigroupEx
-{
-    explicit NoncommutativeAdditiveSemigroupEx(std::string nonEmptyStr)
-        : nonEmptyStr_{std::move(nonEmptyStr)}
-    {
-        UL_EXPECT(!nonEmptyStr_.empty());
-    }
-
-    NoncommutativeAdditiveSemigroupEx operator+=(const NoncommutativeAdditiveSemigroupEx& other)
-    {
-        nonEmptyStr_ += other.nonEmptyStr_;
-        return *this;
-    }
-
-    friend bool operator==(const NoncommutativeAdditiveSemigroupEx& lhs, const NoncommutativeAdditiveSemigroupEx& rhs);
-    friend NoncommutativeAdditiveSemigroupEx operator+(const NoncommutativeAdditiveSemigroupEx& a, const NoncommutativeAdditiveSemigroupEx& b);
-
-private:
-    std::string nonEmptyStr_{"a"};
-};
-
-bool operator==(const NoncommutativeAdditiveSemigroupEx& lhs, const NoncommutativeAdditiveSemigroupEx& rhs)
-{
-    return lhs.nonEmptyStr_ == rhs.nonEmptyStr_;
-}
-
-NoncommutativeAdditiveSemigroupEx operator+(const NoncommutativeAdditiveSemigroupEx& a, const NoncommutativeAdditiveSemigroupEx& b)
-{
-    NoncommutativeAdditiveSemigroupEx res{a};
-    res += b;
-    return res;
 }
 
 TEST(multiply_accumulate_semigroup, tests_with_just_semigroup)
@@ -52,8 +21,6 @@ TEST(multiply_accumulate_semigroup, tests_with_just_semigroup)
     EXPECT_DEBUG_DEATH(math::multiply_semigroup(0, NoncommutativeAdditiveSemigroupEx{"b"}), ".*");
 }
 
-using NoncommutativeAdditiveMonoidEx = std::string;
-
 TEST(multiply_monoid, tests_with_just_monoid)
 {
     // Unfortunately this might work, although we don't have a monoid because of no identity element. Example of
@@ -66,8 +33,6 @@ TEST(multiply_monoid, tests_with_just_monoid)
     EXPECT_EQ(math::multiply_monoid(1, NoncommutativeAdditiveMonoidEx{"b"}), NoncommutativeAdditiveMonoidEx{"b"});
     EXPECT_EQ(math::multiply_monoid(0, NoncommutativeAdditiveMonoidEx{"b"}), NoncommutativeAdditiveMonoidEx{});
 }
-
-using NoncommutativeAdditiveGroupEx = int;
 
 TEST(multiply_group, tests_with_just_group)
 {

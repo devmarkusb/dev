@@ -192,6 +192,37 @@ concept SemiRing =
 template <typename SetT>
 concept SemiRingAddMult = SemiRing<SetT, std::plus<SetT>, std::multiplies<SetT>>;
 
+template <typename SetT, typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/, typename OpMonoid /*multiply*/>
+concept Ring =
+Set<SetT> && SemiRing<SetT, OpCommutativeGroup, OpMonoid> && Group<SetT, OpCommutativeGroup, OpInvCommutativeGroup>;
+
+template <typename SetT, typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/, typename OpCommutativeMonoid /*multiply*/>
+concept CommutativeRing =
+Set<SetT> && Ring<SetT, OpCommutativeGroup, OpInvCommutativeGroup, OpCommutativeMonoid> && CommutativeMonoid<SetT, OpCommutativeMonoid>;
+
+template <
+    typename SetT, typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/,
+    typename OpCommutativeMonoid /*multiply*/>
+concept IntegralDomain =
+    Set<SetT> && CommutativeRing<SetT, OpCommutativeGroup, OpInvCommutativeGroup, OpCommutativeMonoid>
+    && requires(
+        OpCommutativeMonoid opCommutativeMonoid, SetT a, SetT b, SetT commutativeGroupIdentity) {
+           UL_SEMANTICS
+           {
+               // a * b = 0  => a = 0 || b = 0 (no other zero divisor besides 0)
+               // 0: commutativeGroupIdentity, *: opCommutativeMonoid
+               opCommutativeMonoid(a, b) != commutativeGroupIdentity
+                   || (a == commutativeGroupIdentity || b == commutativeGroupIdentity);
+           };
+       };
+
+template <
+        typename SetT, typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/,
+        typename OpCommutativeGroupMul /*multiply*/, typename OpInvCommutativeGroupMul /*multiply*/>
+concept Field =
+Set<SetT> && IntegralDomain<SetT, OpCommutativeGroup, OpInvCommutativeGroup, OpCommutativeGroupMul>
+        && Group<SetT, OpCommutativeGroupMul, OpInvCommutativeGroupMul>;
+
 template <typename T>
 concept Integral = std::integral<T>;
 
