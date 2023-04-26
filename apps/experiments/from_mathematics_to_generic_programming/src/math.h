@@ -256,30 +256,6 @@ Reciprocal<T> inverse_operation(std::multiplies<T>)
     return Reciprocal<T>{};
 }
 
-//todo define MatrixMultOperation as concept, but putting too much into the general type or concept might
-// be not general enough, perhaps there is room for a concept including dimensions
-namespace wip
-{
-/// m x n matrix, m rows, n cols, [row][col], over general semiring elements
-template <
-    Set ElemT, size_t m, size_t n, CommutativeMonoidOperation<ElemT> OpCommutativeMonoid /*add*/,
-    MonoidOperation<ElemT> OpMonoid /*multiply*/>
-    requires SemiRing<ElemT, OpCommutativeMonoid, OpMonoid>
-using Matrix = std::array<std::array<ElemT, n>, m>;
-
-template <
-    typename MatrixT, typename ElemT, typename OpMatrixCommutativeMonoid /*add*/, typename OpMatrixMonoid /*multiply*/,
-    typename OpElemCommutativeMonoid /*add*/, typename OpElemMonoid /*multiply*/>
-concept MatrixLike =
-    SemiRing<MatrixT, OpMatrixCommutativeMonoid, OpMatrixMonoid>
-    && SemiRing<ElemT, OpElemCommutativeMonoid, OpElemMonoid>
-    && requires(MatrixT m, size_t r, size_t c) {
-           m[r];
-           m[r][c];
-           requires std::is_same_v<std::remove_cvref_t<decltype(m[r][c])>, ElemT>;
-       };
-} // namespace wip
-
 template <Regular ElemT, size_t m, size_t n>
 using Matrix = std::array<std::array<ElemT, n>, m>;
 
@@ -289,6 +265,17 @@ concept MatrixLike = requires(MatrixT m, size_t r, size_t c) {
                          m[r][c];
                          requires std::is_same_v<std::remove_cvref_t<decltype(m[r][c])>, ElemT>;
                      };
+
+// Not yet useful. Even problematic in the difficulty of inferring template parameters.
+//template <typename MatrixT, typename ElemT, size_t m, size_t n>
+//concept MatrixMNLike = MatrixLike<MatrixT, ElemT> && requires(MatrixT mat, size_t r, size_t c) {
+//    mat[0];
+//    mat[m - 1];
+//    mat[0][0];
+//    mat[0][n - 1];
+//    mat[m - 1][0];
+//    mat[m - 1][n - 1];
+//};
 
 template <Regular ElemT, size_t m, size_t n>
 std::ostream& operator<<(std::ostream& os, const Matrix<ElemT, m, n>& matrix)
@@ -304,11 +291,10 @@ std::ostream& operator<<(std::ostream& os, const Matrix<ElemT, m, n>& matrix)
 }
 
 template <
-    Set ElemT, CommutativeMonoidOperation<ElemT> OpElemCommutativeMonoid /*add*/,
-    MonoidOperation<ElemT> OpElemMonoid /*multiply*/, size_t m, size_t k, size_t n>
+    Set ElemT, size_t m, size_t k, size_t n, CommutativeMonoidOperation<ElemT> OpElemCommutativeMonoid /*add*/,
+    MonoidOperation<ElemT> OpElemMonoid /*multiply*/>
     requires SemiRing<ElemT, OpElemCommutativeMonoid, OpElemMonoid>
-Matrix<ElemT, m, n> multiply(
-    Matrix<ElemT, m, k> l, Matrix<ElemT, k, n> r, OpElemCommutativeMonoid&& innerAdd, OpElemMonoid&& innerMul)
+auto multiply(Matrix<ElemT, m, k> l, Matrix<ElemT, k, n> r, OpElemCommutativeMonoid&& innerAdd, OpElemMonoid&& innerMul)
 {
     Matrix<ElemT, m, n> res{};
     for (decltype(m) i{}; i < m; ++i)
