@@ -4,12 +4,10 @@
 #include "ul/ul.h"
 #include <algorithm>
 
-namespace math
-{
+namespace math {
 using LineSegment = int;
 
-inline LineSegment gcm0(LineSegment a, LineSegment b)
-{
+inline LineSegment gcm0(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     UL_EXPECT(a > 0);
     if (a == b)
@@ -20,12 +18,10 @@ inline LineSegment gcm0(LineSegment a, LineSegment b)
         return gcm0(a - b, b);
 }
 
-inline LineSegment gcm1(LineSegment a, LineSegment b)
-{
+inline LineSegment gcm1(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     UL_EXPECT(a > 0);
-    while (a != b)
-    {
+    while (a != b) {
         if (a < b)
             b -= a;
         else
@@ -34,12 +30,10 @@ inline LineSegment gcm1(LineSegment a, LineSegment b)
     return a;
 }
 
-inline LineSegment gcm2(LineSegment a, LineSegment b)
-{
+inline LineSegment gcm2(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     UL_EXPECT(a > 0);
-    while (a != b)
-    {
+    while (a != b) {
         while (a > b)
             a -= b;
         std::swap(a, b);
@@ -47,8 +41,7 @@ inline LineSegment gcm2(LineSegment a, LineSegment b)
     return a;
 }
 
-inline LineSegment segment_remainder0(LineSegment a, LineSegment b)
-{
+inline LineSegment segment_remainder0(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     UL_EXPECT(a > 0);
     while (a > b)
@@ -56,8 +49,7 @@ inline LineSegment segment_remainder0(LineSegment a, LineSegment b)
     return a;
 }
 
-inline LineSegment segment_remainder1(LineSegment a, LineSegment b)
-{
+inline LineSegment segment_remainder1(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     UL_EXPECT(a > 0);
     if (a <= b)
@@ -70,8 +62,7 @@ inline LineSegment segment_remainder1(LineSegment a, LineSegment b)
     return a - b;
 }
 
-inline LineSegment remainder0(LineSegment a, LineSegment b)
-{
+inline LineSegment remainder0(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     if (a < b)
         return a;
@@ -83,23 +74,20 @@ inline LineSegment remainder0(LineSegment a, LineSegment b)
     return a - b;
 }
 
-inline LineSegment largest_doubling(LineSegment a, LineSegment b)
-{
+inline LineSegment largest_doubling(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     while (a - b >= b)
         b += b;
     return b;
 }
 
-inline LineSegment remainder1(LineSegment a, LineSegment b)
-{
+inline LineSegment remainder1(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     if (a < b)
         return a;
     auto c = largest_doubling(a, b);
     a -= c;
-    while (c != b)
-    {
+    while (c != b) {
         c /= 2;
         if (c <= a)
             a -= c;
@@ -107,12 +95,10 @@ inline LineSegment remainder1(LineSegment a, LineSegment b)
     return a;
 }
 
-inline LineSegment gcm3(LineSegment a, LineSegment b)
-{
+inline LineSegment gcm3(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     UL_EXPECT(a > 0);
-    while (a != b)
-    {
+    while (a != b) {
         a = segment_remainder0(a, b);
         std::swap(a, b);
     }
@@ -120,12 +106,10 @@ inline LineSegment gcm3(LineSegment a, LineSegment b)
 }
 
 /// Faster segment remainder.
-inline LineSegment gcm4(LineSegment a, LineSegment b)
-{
+inline LineSegment gcm4(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     UL_EXPECT(a > 0);
-    while (a != b)
-    {
+    while (a != b) {
         a = segment_remainder1(a, b);
         std::swap(a, b);
     }
@@ -133,11 +117,9 @@ inline LineSegment gcm4(LineSegment a, LineSegment b)
 }
 
 /// Remainder instead of segment remainder.
-inline LineSegment gcm5(LineSegment a, LineSegment b)
-{
+inline LineSegment gcm5(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
-    while (b)
-    {
+    while (b) {
         a = remainder0(a, b);
         std::swap(a, b);
     }
@@ -145,31 +127,26 @@ inline LineSegment gcm5(LineSegment a, LineSegment b)
 }
 
 /// Faster remainder.
-inline LineSegment gcm6(LineSegment a, LineSegment b)
-{
+inline LineSegment gcm6(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
-    while (b)
-    {
+    while (b) {
         a = remainder1(a, b);
         std::swap(a, b);
     }
     return a;
 }
 
-inline int quotient0(LineSegment a, LineSegment b)
-{
+inline int quotient0(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     if (a < b)
         return 0;
     auto c = largest_doubling(a, b);
     auto n(1);
     a = a - c;
-    while (c != b)
-    {
+    while (c != b) {
         c /= 2;
         n = n + n;
-        if (c <= a)
-        {
+        if (c <= a) {
             a = a - c;
             n = n + 1;
         }
@@ -177,20 +154,17 @@ inline int quotient0(LineSegment a, LineSegment b)
     return n;
 }
 
-inline std::pair<int, LineSegment> quotient_remainder0(LineSegment a, LineSegment b)
-{
+inline std::pair<int, LineSegment> quotient_remainder0(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     if (a < b)
         return {0, a};
     auto c = largest_doubling(a, b);
     auto n(1);
     a = a - c;
-    while (c != b)
-    {
+    while (c != b) {
         c /= 2;
         n = n + n;
-        if (c <= a)
-        {
+        if (c <= a) {
             a = a - c;
             n = n + 1;
         }
@@ -199,27 +173,23 @@ inline std::pair<int, LineSegment> quotient_remainder0(LineSegment a, LineSegmen
 }
 
 /// Ordinary /, %.
-inline std::pair<int, LineSegment> quotient_remainder1(LineSegment a, LineSegment b)
-{
+inline std::pair<int, LineSegment> quotient_remainder1(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     return {a / b, a % b};
 }
 
 /// Fibonacci.
-inline LineSegment remainder2(LineSegment a, LineSegment b)
-{
+inline LineSegment remainder2(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     if (a < b)
         return a;
     auto c = b;
-    do
-    {
+    do {
         auto tmp = c;
         c = b + c;
         b = tmp;
     } while (a >= c);
-    do
-    {
+    do {
         if (a >= b)
             a = a - b;
         auto tmp = c - b;
@@ -230,25 +200,21 @@ inline LineSegment remainder2(LineSegment a, LineSegment b)
 }
 
 /// Fibonacci.
-inline std::pair<int, LineSegment> quotient_remainder2(LineSegment a, LineSegment b)
-{
+inline std::pair<int, LineSegment> quotient_remainder2(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     if (a < b)
         return {0, a};
     auto c{b};
-    do
-    {
+    do {
         auto tmp = c;
         c += b;
         b = tmp;
     } while (a >= c);
     auto n{1};
     //auto m{n};
-    do
-    {
+    do {
         ++n;
-        if (a >= b)
-        {
+        if (a >= b) {
             a -= b;
             //auto tmp2{n};
             //n += m;

@@ -3,12 +3,9 @@
 
 #include "benchmark/benchmark.h"
 
-namespace
-{
-void quotient_remainder0(benchmark::State& state)
-{
-    for (auto _ : state)
-    {
+namespace {
+void quotient_remainder0(benchmark::State& state) {
+    for (auto _ : state) {
         auto [q, r]{
             math::quotient_remainder0(ul::narrow_cast<int>(state.range(0)), ul::narrow_cast<int>(state.range(1)))};
         benchmark::DoNotOptimize(q);
@@ -16,10 +13,8 @@ void quotient_remainder0(benchmark::State& state)
     }
 }
 
-void quotient_remainder1(benchmark::State& state)
-{
-    for (auto _ : state)
-    {
+void quotient_remainder1(benchmark::State& state) {
+    for (auto _ : state) {
         auto [q, r]{
             math::quotient_remainder1(ul::narrow_cast<int>(state.range(0)), ul::narrow_cast<int>(state.range(1)))};
         benchmark::DoNotOptimize(q);

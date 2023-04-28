@@ -5,8 +5,7 @@
 #include "variant_decl.h"
 #include <variant>
 
-inline int doSthSpecific(const TypeA&, const Var&)
-{
+inline int doSthSpecific(const TypeA&, const Var&) {
     return 1;
 }
 

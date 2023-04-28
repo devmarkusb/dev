@@ -10,10 +10,8 @@
 /** Idea is to simulate a multi-process szenario as realistically as possible in this allinone app.
     todo: wip
  */
-namespace client_server
-{
-class App : public Application
-{
+namespace client_server {
+class App : public Application {
 public:
     static constexpr auto inputInterval{std::chrono::milliseconds(1)};
     static constexpr auto measurementInterval{inputInterval};
@@ -21,85 +19,66 @@ public:
     static constexpr auto simulatedAdditionalProcessingTime{inputInterval};
     static const auto processingThreadCount{5};
 
-    ~App() override
-    {
+    ~App() override {
         if (isRunning_)
             terminate();
         std::cout << "Application destructed" << std::endl;
     }
 
-    consumer::Product sendToProcessor(const producer::Product& product)
-    {
+    consumer::Product sendToProcessor(const producer::Product& product) {
         consumer::Product processed;
         processed.reserve(product.size());
 
         std::this_thread::sleep_for(simulatedAdditionalProcessingTime);
-        std::transform(
-            std::cbegin(product), std::cend(product), std::back_inserter(processed),
-            [](const auto string)
-            {
-                return string.size();
-            });
+        std::transform(std::cbegin(product), std::cend(product), std::back_inserter(processed), [](const auto string) {
+            return string.size();
+        });
 
         return processed;
     }
 
-    void run() override
-    {
+    void run() override {
         isRunning_ = true;
 
-        clientProducerThread_ = std::thread{
-            [this]()
-            {
-                asio::steady_timer timer{ioContext_};
-                while (isRunning_)
-                {
-                    timer.expires_from_now(inputInterval);
-                    auto futureRes{std::async(&App::sendToProcessor, this, producer::produce())};
-                    auto status{futureRes.wait_for(inputInterval)};
-                    if (status != std::future_status::ready)
-                    {
-                        std::cout << "result did not return in time\n";
+        clientProducerThread_ = std::thread{[this]() {
+            asio::steady_timer timer{ioContext_};
+            while (isRunning_) {
+                timer.expires_from_now(inputInterval);
+                auto futureRes{std::async(&App::sendToProcessor, this, producer::produce())};
+                auto status{futureRes.wait_for(inputInterval)};
+                if (status != std::future_status::ready) {
+                    std::cout << "result did not return in time\n";
+                } else {
+                    if (!processedProducts_.push(futureRes.get())) {
+                        std::cout << "queue of transformed elements full\n";
                     }
-                    else
-                    {
-                        if (!processedProducts_.push(futureRes.get()))
-                        {
-                            std::cout << "queue of transformed elements full\n";
-                        }
-                    }
-                    timer.wait();
                 }
-            }};
+                timer.wait();
+            }
+        }};
 
-        consumerThread_ = std::thread{[this]()
-                                      {
-                                          while (isRunning_)
-                                          {
-                                              consumer::Product product;
-                                              if (!processedProducts_.waitAndPop(product))
-                                                  break;
-                                              consumer::consume(product);
-                                          }
-                                      }};
+        consumerThread_ = std::thread{[this]() {
+            while (isRunning_) {
+                consumer::Product product;
+                if (!processedProducts_.waitAndPop(product))
+                    break;
+                consumer::consume(product);
+            }
+        }};
 
         onMeasurementTimer({});
         onPrintTimer({});
         ioContext_.run();
     }
 
-    void terminate() override
-    {
+    void terminate() override {
         isRunning_ = false;
         products_.stop();
         processedProducts_.stop();
         clientProducerThread_.join();
-        std::for_each(
-            std::begin(processingThreads_), std::end(processingThreads_),
-            [](auto& t)
-            {
-                t.join();
-            });
+        std::for_each(std::begin(processingThreads_), std::end(processingThreads_), [](auto& t) {
+            t.join();
+        });
         consumerThread_.join();
         measurementTimer_.cancel();
         printTimer_.cancel();
@@ -122,13 +101,11 @@ private:
     size_t measurementProductQueueSizeMax_{};
     size_t measurementTransformedProductQueueSizeMax_{};
 
-    void onMeasurementTimer(const asio::error_code& ec)
-    {
+    void onMeasurementTimer(const asio::error_code& ec) {
         if (!isRunning_)
             return;
 
-        if (ec)
-        {
+        if (ec) {
             std::cout << "asio error code: " << ec << std::endl;
             return;
         }
@@ -146,13 +123,11 @@ private:
         measurementTimer_.async_wait(std::bind(&App::onMeasurementTimer, this, _1));
     }
 
-    void onPrintTimer(const asio::error_code& ec)
-    {
+    void onPrintTimer(const asio::error_code& ec) {
         if (!isRunning_)
             return;
 
-        if (ec)
-        {
+        if (ec) {
             std::cout << "asio error code: " << ec << std::endl;
             return;
         }

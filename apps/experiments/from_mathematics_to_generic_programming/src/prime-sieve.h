@@ -5,23 +5,19 @@
 #include <algorithm>
 #include <type_traits>
 
-namespace math
-{
+namespace math {
 template <typename>
 concept RandomAccessIterator = true;
 
 template <typename T>
 concept Integral = std::is_integral_v<T>;
 
-namespace impl
-{
+namespace impl {
 template <RandomAccessIterator I, Integral N>
-void mark_sieve(I first, I last, N factor)
-{
+void mark_sieve(I first, I last, N factor) {
     UL_EXPECT(first != last);
     *first = false;
-    while (last - first > factor)
-    {
+    while (last - first > factor) {
         first = first + factor;
         *first = false;
     }
@@ -73,19 +69,16 @@ void mark_sieve(I first, I last, N factor)
 //}
 
 template <RandomAccessIterator I, Integral N>
-void sift2(I first, N n)
-{
+void sift2(I first, N n) {
     I last = first + n;
     std::fill(first, last, true);
     N i(0);
     N index_square(3);
     N factor(3);
-    while (index_square < n)
-    {
+    while (index_square < n) {
         // invariant: index_square = 2i^2 + 6i + 3,
         // factor = 2i + 3
-        if (first[i])
-        {
+        if (first[i]) {
             impl::mark_sieve(first + index_square, last, factor);
         }
         ++i;

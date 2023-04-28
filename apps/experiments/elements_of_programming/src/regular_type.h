@@ -3,18 +3,14 @@
 
 #include "util/allthethings.h"
 
-struct RegularEx1
-{
-};
+struct RegularEx1 {};
 
-inline bool operator==(const RegularEx1&, const RegularEx1&)
-{
+inline bool operator==(const RegularEx1&, const RegularEx1&) {
     return true;
 }
 
 template <typename Regular>
-void checkRegularity(const Regular& r)
-{
+void checkRegularity(const Regular& r) {
     Regular rOther;
     bool _{r == rOther};
     ul::ignore_unused(_);
@@ -25,8 +21,7 @@ void checkRegularity(const Regular& r)
     // underlying type?
 }
 
-inline void checkRegularity()
-{
+inline void checkRegularity() {
     RegularEx1 r;
     checkRegularity(r);
 }

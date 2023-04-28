@@ -3,8 +3,7 @@
 
 #include <vector>
 
-namespace consumer
-{
+namespace consumer {
 using Product = std::vector<int>;
 
 void consume(const Product& pro);

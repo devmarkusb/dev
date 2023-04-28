@@ -10,21 +10,18 @@
 // An entity belongs to a single species, which also provides rules for its construction or existence.
 
 // abstract species
-enum class Color
-{
+enum class Color {
     unknown,
     blue, // abstract entity
 };
 
 // abstract species
 // value type; properly partial, as not all natural numbers can be represented; uniquely represented; unambiguous
-struct NaturalNumber
-{
+struct NaturalNumber {
     // 13 is a well-formed datum, as it represents the interpretation 13 as abstract entity
     int data{}; // datum, representation
 
-    static constexpr NaturalNumber _13() noexcept
-    {
+    static constexpr NaturalNumber _13() noexcept {
         // abstract entity, despite of a technical lifetime
         // value
         constexpr NaturalNumber _13{13};
@@ -36,45 +33,37 @@ struct NaturalNumber
 using Integer = int; // interpretion represented by some fixed number of bits using 2's complement big endian format
 
 // abstract species
-struct WholeNumber
-{
-};
+struct WholeNumber {};
 
 // abstract genus, the last two species would share
 // concept number
 
 // concrete species
-enum class Country
-{
+enum class Country {
     unknown,
     germany, // concrete entity
 };
 
 // concrete species
-struct Person
-{
+struct Person {
     // attribute eyeColor
     Color eyeColor{Color::unknown};
     NaturalNumber age{};
 
-    static constexpr Person socrates() noexcept
-    {
+    static constexpr Person socrates() noexcept {
         constexpr Person socrates; // concrete entity
         return socrates;
     }
 };
 
 // concrete species
-struct Cat
-{
-};
+struct Cat {};
 
 // concrete genus, the last two species would share
 // concept creature
 
 // function
-inline NaturalNumber minAge(Person, Person)
-{
+inline NaturalNumber minAge(Person, Person) {
     throw ul::not_implemented{UL_LOCATION};
 }
 

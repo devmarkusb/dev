@@ -3,26 +3,29 @@
 
 #include "gtest/gtest.h"
 
-TEST(multiply_accumulate_semigroup, tests_with_int)
-{
+TEST(multiply_accumulate_semigroup, tests_with_int) {
     EXPECT_EQ(math::multiply_accumulate_semigroup(0, 3, 4), 12);
     EXPECT_EQ(math::multiply_accumulate_semigroup(1, 3, 4), 13);
 }
 
-TEST(multiply_accumulate_semigroup, tests_with_just_semigroup)
-{
+TEST(multiply_accumulate_semigroup, tests_with_just_semigroup) {
     NoncommutativeAdditiveSemigroupEx a{"a"};
     NoncommutativeAdditiveSemigroupEx aa{"aa"};
-    EXPECT_EQ(math::multiply_accumulate_semigroup(a, 3, NoncommutativeAdditiveSemigroupEx{"b"}), NoncommutativeAdditiveSemigroupEx{"abbb"});
-    EXPECT_EQ(math::multiply_accumulate_semigroup(aa, 3, NoncommutativeAdditiveSemigroupEx{"b"}), NoncommutativeAdditiveSemigroupEx{"aabbb"});
+    EXPECT_EQ(
+        math::multiply_accumulate_semigroup(a, 3, NoncommutativeAdditiveSemigroupEx{"b"}),
+        NoncommutativeAdditiveSemigroupEx{"abbb"});
+    EXPECT_EQ(
+        math::multiply_accumulate_semigroup(aa, 3, NoncommutativeAdditiveSemigroupEx{"b"}),
+        NoncommutativeAdditiveSemigroupEx{"aabbb"});
 
-    EXPECT_EQ(math::multiply_semigroup(2, NoncommutativeAdditiveSemigroupEx{"b"}), NoncommutativeAdditiveSemigroupEx{"bb"});
-    EXPECT_EQ(math::multiply_semigroup(1, NoncommutativeAdditiveSemigroupEx{"b"}), NoncommutativeAdditiveSemigroupEx{"b"});
+    EXPECT_EQ(
+        math::multiply_semigroup(2, NoncommutativeAdditiveSemigroupEx{"b"}), NoncommutativeAdditiveSemigroupEx{"bb"});
+    EXPECT_EQ(
+        math::multiply_semigroup(1, NoncommutativeAdditiveSemigroupEx{"b"}), NoncommutativeAdditiveSemigroupEx{"b"});
     EXPECT_DEBUG_DEATH(math::multiply_semigroup(0, NoncommutativeAdditiveSemigroupEx{"b"}), ".*");
 }
 
-TEST(multiply_monoid, tests_with_just_monoid)
-{
+TEST(multiply_monoid, tests_with_just_monoid) {
     // Unfortunately this might work, although we don't have a monoid because of no identity element. Example of
     // concepts not being able to enforce full semantics.
     // In this case it doesn't compile because of the absence of a default constructor (but there could be one, just
@@ -34,8 +37,7 @@ TEST(multiply_monoid, tests_with_just_monoid)
     EXPECT_EQ(math::multiply_monoid(0, NoncommutativeAdditiveMonoidEx{"b"}), NoncommutativeAdditiveMonoidEx{});
 }
 
-TEST(multiply_group, tests_with_just_group)
-{
+TEST(multiply_group, tests_with_just_group) {
     // Correctly, not compiling, no inverse.
     //EXPECT_EQ(math::multiply_group(3, NoncommutativeAdditiveMonoidEx{"b"}), NoncommutativeAdditiveMonoidEx{"bbb"});
 

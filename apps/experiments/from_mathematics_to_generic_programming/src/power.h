@@ -4,18 +4,14 @@
 #include "math.h"
 #include "ul/ul.h"
 
-namespace math
-{
+namespace math {
 template <MultiplicativeSemigroup A, Integral N>
-A power_accumulate_semigroup(A r, A a, N n)
-{
+A power_accumulate_semigroup(A r, A a, N n) {
     UL_EXPECT(n >= 0);
     if (n == 0)
         return r;
-    while (true)
-    {
-        if (odd(n))
-        {
+    while (true) {
+        if (odd(n)) {
             r *= a;
             if (n == 1)
                 return r;
@@ -26,11 +22,9 @@ A power_accumulate_semigroup(A r, A a, N n)
 }
 
 template <MultiplicativeSemigroup A, Integral N>
-A power_semigroup(A a, N n)
-{
+A power_semigroup(A a, N n) {
     UL_EXPECT(n > 0);
-    while (!odd(n))
-    {
+    while (!odd(n)) {
         a *= a;
         n = half(n);
     }
@@ -40,8 +34,7 @@ A power_semigroup(A a, N n)
 }
 
 template <MultiplicativeMonoid A, Integral N>
-A power_monoid(A a, N n)
-{
+A power_monoid(A a, N n) {
     UL_EXPECT(n >= 0);
     if (n == 0)
         return A{1};
@@ -49,15 +42,12 @@ A power_monoid(A a, N n)
 }
 
 template <Regular A, Integral N, SemigroupOperation<A> Op>
-A power_accumulate_semigroup(A r, A a, N n, Op op)
-{
+A power_accumulate_semigroup(A r, A a, N n, Op op) {
     UL_EXPECT(n >= 0);
     if (n == 0)
         return r;
-    while (true)
-    {
-        if (odd(n))
-        {
+    while (true) {
+        if (odd(n)) {
             r = op(r, a);
             if (n == 1)
                 return r;
@@ -69,11 +59,9 @@ A power_accumulate_semigroup(A r, A a, N n, Op op)
 
 /// For a multiply operation as op you achieve the canonical 'power'.
 template <Regular A, Integral N, SemigroupOperation<A> Op>
-A power_semigroup(A a, N n, Op op)
-{
+A power_semigroup(A a, N n, Op op) {
     UL_EXPECT(n > 0);
-    while (!odd(n))
-    {
+    while (!odd(n)) {
         a = op(a, a);
         n = half(n);
     }
@@ -83,8 +71,7 @@ A power_semigroup(A a, N n, Op op)
 }
 
 template <Regular A, Integral N, MonoidOperation<A> Op>
-A power_monoid(A a, N n, Op op, A identity)
-{
+A power_monoid(A a, N n, Op op, A identity) {
     UL_EXPECT(n >= 0);
     if (n == 0)
         return identity;
@@ -92,10 +79,8 @@ A power_monoid(A a, N n, Op op, A identity)
 }
 
 template <Regular A, Integral N, GroupOperation<A> Op, GroupInverseOperation<A> InvOp>
-A power_group(A a, N n, Op op, InvOp invop, A identity)
-{
-    if (n < 0)
-    {
+A power_group(A a, N n, Op op, InvOp invop, A identity) {
+    if (n < 0) {
         n = -n;
         a = invop(a);
     }

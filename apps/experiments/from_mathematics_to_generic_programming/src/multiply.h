@@ -4,8 +4,7 @@
 #include "math.h"
 #include "ul/ul.h"
 
-namespace math
-{
+namespace math {
 int multiply0(int n, int a);
 int multiply1(int n, int a);
 int multiply2(int n, int a);
@@ -16,15 +15,12 @@ int multiply5(int n, int a);
 int multiply6_by_15(int a);
 
 template <NoncommutativeAdditiveSemigroup A, std::integral N>
-A multiply_accumulate_semigroup(A r, N n, A a)
-{
+A multiply_accumulate_semigroup(A r, N n, A a) {
     UL_EXPECT(n >= 0);
     if (n == 0)
         return r;
-    while (true)
-    {
-        if (odd(n))
-        {
+    while (true) {
+        if (odd(n)) {
             r += a;
             if (n == 1)
                 return r;
@@ -35,11 +31,9 @@ A multiply_accumulate_semigroup(A r, N n, A a)
 }
 
 template <NoncommutativeAdditiveSemigroup A, Integer N>
-A multiply_semigroup(N n, A a)
-{
+A multiply_semigroup(N n, A a) {
     UL_EXPECT(n > 0);
-    while (!odd(n))
-    {
+    while (!odd(n)) {
         a += a;
         n = half(n);
     }
@@ -49,8 +43,7 @@ A multiply_semigroup(N n, A a)
 }
 
 template <NoncommutativeAdditiveMonoid A, Integral N>
-A multiply_monoid(N n, A a)
-{
+A multiply_monoid(N n, A a) {
     UL_EXPECT(n >= 0);
     if (n == 0)
         return A{};
@@ -58,10 +51,8 @@ A multiply_monoid(N n, A a)
 }
 
 template <NoncommutativeAdditiveGroup A, Integral N>
-A multiply_group(N n, A a)
-{
-    if (n < 0)
-    {
+A multiply_group(N n, A a) {
+    if (n < 0) {
         n = -n;
         a = -a;
     }

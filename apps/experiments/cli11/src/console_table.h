@@ -5,8 +5,7 @@
 
 #include "ConsoleTable.h"
 
-inline void printTableOfArgs(const Args& args)
-{
+inline void printTableOfArgs(const Args& args) {
     ConsoleTable argsTable{"arg", "content"};
     argsTable.setStyle(0);
 

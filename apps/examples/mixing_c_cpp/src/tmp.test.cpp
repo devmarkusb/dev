@@ -2,7 +2,6 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 
-TEST(Dummy, test)
-{
+TEST(Dummy, test) {
     EXPECT_TRUE(true);
 }

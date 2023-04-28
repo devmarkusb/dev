@@ -1,12 +1,10 @@
 #include "args.h"
 #include "console_table.h"
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
     const auto [args, exitCode]{Args::parseCommandLine(argc, argv)};
 
-    if (!args)
-    {
+    if (!args) {
         return exitCode;
     }
 

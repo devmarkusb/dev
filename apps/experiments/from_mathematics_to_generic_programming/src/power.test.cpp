@@ -2,22 +2,19 @@
 #include "gtest/gtest.h"
 #include <functional>
 
-TEST(power_accumulate_semigroup, tests)
-{
+TEST(power_accumulate_semigroup, tests) {
     EXPECT_EQ(math::power_accumulate_semigroup(1, 2, 3), 8);
     EXPECT_EQ(math::power_accumulate_semigroup(2, 2, 3), 16);
 }
 
-TEST(power_semigroup, tests)
-{
+TEST(power_semigroup, tests) {
     // abuse as multiply
     EXPECT_EQ(math::power_semigroup(2, 4, std::plus<int>{}), 8);
     EXPECT_EQ(math::power_semigroup(2, 4, std::multiplies<int>{}), 16);
 }
 
 // aka social_net_paths
-TEST(power_semigroup, transitive_closure)
-{
+TEST(power_semigroup, transitive_closure) {
     constexpr auto dim{7};
     using ElemT = bool;
     using Matrix = math::Matrix<ElemT, dim, dim>;
@@ -58,8 +55,7 @@ TEST(power_semigroup, transitive_closure)
 }
 
 // aka shortest_length
-TEST(power_semigroup, transitive_closure2)
-{
+TEST(power_semigroup, transitive_closure2) {
     constexpr auto dim{7};
     constexpr auto inf{math::Tropical::inf};
     using Matrix = math::Matrix<math::Tropical, dim, dim>;
@@ -99,8 +95,7 @@ TEST(power_semigroup, transitive_closure2)
 using MultiplicativeMonoidEx = unsigned int;
 using MonoidEx = std::string;
 
-TEST(power_monoid, tests)
-{
+TEST(power_monoid, tests) {
     EXPECT_EQ(math::power_monoid(MultiplicativeMonoidEx{1}, 3), MultiplicativeMonoidEx{1});
     EXPECT_EQ(math::power_monoid(MultiplicativeMonoidEx{2}, 3), MultiplicativeMonoidEx{8});
     EXPECT_EQ(math::power_monoid(MultiplicativeMonoidEx{3}, 1), MultiplicativeMonoidEx{3});
@@ -110,8 +105,7 @@ TEST(power_monoid, tests)
     EXPECT_EQ(
         math::power_monoid(
             MonoidEx{"a"}, 3,
-            [](const MonoidEx& a, const MonoidEx& b)
-            {
+            [](const MonoidEx& a, const MonoidEx& b) {
                 return a + b;
             },
             MonoidEx{""}),
@@ -120,26 +114,25 @@ TEST(power_monoid, tests)
 
 using CommutativeAdditiveGroupEx = int;
 
-TEST(power_group, tests)
-{
+TEST(power_group, tests) {
     EXPECT_EQ(
         math::power_group(
             CommutativeAdditiveGroupEx{1}, 3, std::plus<CommutativeAdditiveGroupEx>{},
             std::negate<CommutativeAdditiveGroupEx>{}, CommutativeAdditiveGroupEx{}),
         CommutativeAdditiveGroupEx{3});
     EXPECT_EQ(
-            math::power_group(
-                    CommutativeAdditiveGroupEx{2}, 3, std::plus<CommutativeAdditiveGroupEx>{},
-                    std::negate<CommutativeAdditiveGroupEx>{}, CommutativeAdditiveGroupEx{}),
-            CommutativeAdditiveGroupEx{6});
+        math::power_group(
+            CommutativeAdditiveGroupEx{2}, 3, std::plus<CommutativeAdditiveGroupEx>{},
+            std::negate<CommutativeAdditiveGroupEx>{}, CommutativeAdditiveGroupEx{}),
+        CommutativeAdditiveGroupEx{6});
     EXPECT_EQ(
-            math::power_group(
-                    CommutativeAdditiveGroupEx{3}, 1, std::plus<CommutativeAdditiveGroupEx>{},
-                    std::negate<CommutativeAdditiveGroupEx>{}, CommutativeAdditiveGroupEx{}),
-            CommutativeAdditiveGroupEx{3});
+        math::power_group(
+            CommutativeAdditiveGroupEx{3}, 1, std::plus<CommutativeAdditiveGroupEx>{},
+            std::negate<CommutativeAdditiveGroupEx>{}, CommutativeAdditiveGroupEx{}),
+        CommutativeAdditiveGroupEx{3});
     EXPECT_EQ(
-            math::power_group(
-                    CommutativeAdditiveGroupEx{3}, 2, std::plus<CommutativeAdditiveGroupEx>{},
-                    std::negate<CommutativeAdditiveGroupEx>{}, CommutativeAdditiveGroupEx{}),
-            CommutativeAdditiveGroupEx{6});
+        math::power_group(
+            CommutativeAdditiveGroupEx{3}, 2, std::plus<CommutativeAdditiveGroupEx>{},
+            std::negate<CommutativeAdditiveGroupEx>{}, CommutativeAdditiveGroupEx{}),
+        CommutativeAdditiveGroupEx{6});
 }

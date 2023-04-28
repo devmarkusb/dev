@@ -13,8 +13,7 @@
 #include <thread>
 #include <vector>
 
-namespace
-{
+namespace {
 /** producer: pushes into product queue
     processor: pulls from queue, processes, pushes into processed products (result) queue
     consumer: pulls from processed products queue
@@ -22,8 +21,7 @@ namespace
     Alternative:
     set product queue size as tiny as there are processors; this seems to suffice most of
     the time*/
-class App : public Application
-{
+class App : public Application {
 public:
     static constexpr auto inputInterval{std::chrono::milliseconds(1)};
     static constexpr auto measurementInterval{inputInterval};
@@ -31,89 +29,71 @@ public:
     static constexpr auto simulatedAdditionalProcessingTime{inputInterval * 5};
     static const auto processingThreadCount{5};
 
-    ~App() override
-    {
+    ~App() override {
         if (isRunning_)
             terminate();
         std::cout << "Application destructed" << std::endl;
     }
 
-    void run() override
-    {
+    void run() override {
         isRunning_ = true;
 
-        producerThread_ = std::thread{[this]()
-                                      {
-                                          asio::steady_timer timer{ioContext_};
-                                          while (isRunning_)
-                                          {
-                                              timer.expires_from_now(inputInterval);
-                                              timer.wait();
-                                              if (!products_.push(producer::produce()))
-                                              {
-                                                  std::cout << "queue of produced elements full\n";
-                                              }
-                                          }
-                                      }};
+        producerThread_ = std::thread{[this]() {
+            asio::steady_timer timer{ioContext_};
+            while (isRunning_) {
+                timer.expires_from_now(inputInterval);
+                timer.wait();
+                if (!products_.push(producer::produce())) {
+                    std::cout << "queue of produced elements full\n";
+                }
+            }
+        }};
 
-        for (auto& processingThread : processingThreads_)
-        {
-            processingThread = std::thread{
-                [this]()
-                {
-                    while (isRunning_)
-                    {
-                        producer::Product product;
-                        if (!products_.waitAndPop(product))
-                            break;
+        for (auto& processingThread : processingThreads_) {
+            processingThread = std::thread{[this]() {
+                while (isRunning_) {
+                    producer::Product product;
+                    if (!products_.waitAndPop(product))
+                        break;
 
-                        consumer::Product processed;
-                        processed.reserve(product.size());
+                    consumer::Product processed;
+                    processed.reserve(product.size());
 
-                        std::this_thread::sleep_for(simulatedAdditionalProcessingTime);
-                        std::transform(
-                            std::cbegin(product), std::cend(product), std::back_inserter(processed),
-                            [](const auto string)
-                            {
-                                return string.size();
-                            });
+                    std::this_thread::sleep_for(simulatedAdditionalProcessingTime);
+                    std::transform(
+                        std::cbegin(product), std::cend(product), std::back_inserter(processed), [](const auto string) {
+                            return string.size();
+                        });
 
-                        if (!processedProducts_.push(processed))
-                        {
-                            std::cout << "queue of transformed elements full\n";
-                        }
+                    if (!processedProducts_.push(processed)) {
+                        std::cout << "queue of transformed elements full\n";
                     }
-                }};
+                }
+            }};
         }
 
-        consumerThread_ = std::thread{[this]()
-                                      {
-                                          while (isRunning_)
-                                          {
-                                              consumer::Product product;
-                                              if (!processedProducts_.waitAndPop(product))
-                                                  break;
-                                              consumer::consume(product);
-                                          }
-                                      }};
+        consumerThread_ = std::thread{[this]() {
+            while (isRunning_) {
+                consumer::Product product;
+                if (!processedProducts_.waitAndPop(product))
+                    break;
+                consumer::consume(product);
+            }
+        }};
 
         onMeasurementTimer({});
         onPrintTimer({});
         ioContext_.run();
     }
 
-    void terminate() override
-    {
+    void terminate() override {
         isRunning_ = false;
         products_.stop();
         processedProducts_.stop();
         producerThread_.join();
-        std::for_each(
-            std::begin(processingThreads_), std::end(processingThreads_),
-            [](auto& t)
-            {
-                t.join();
-            });
+        std::for_each(std::begin(processingThreads_), std::end(processingThreads_), [](auto& t) {
+            t.join();
+        });
         consumerThread_.join();
         measurementTimer_.cancel();
         printTimer_.cancel();
@@ -136,13 +116,11 @@ private:
     size_t measurementProductQueueSizeMax_{};
     size_t measurementTransformedProductQueueSizeMax_{};
 
-    void onMeasurementTimer(const asio::error_code& ec)
-    {
+    void onMeasurementTimer(const asio::error_code& ec) {
         if (!isRunning_)
             return;
 
-        if (ec)
-        {
+        if (ec) {
             std::cout << "asio error code: " << ec << std::endl;
             return;
         }
@@ -160,13 +138,11 @@ private:
         measurementTimer_.async_wait(std::bind(&App::onMeasurementTimer, this, _1));
     }
 
-    void onPrintTimer(const asio::error_code& ec)
-    {
+    void onPrintTimer(const asio::error_code& ec) {
         if (!isRunning_)
             return;
 
-        if (ec)
-        {
+        if (ec) {
             std::cout << "asio error code: " << ec << std::endl;
             return;
         }
@@ -198,16 +174,14 @@ private:
 // volatile std::sig_atomic_t g_signal{};
 Application* g_application{};
 
-void signal_handler(int)
-{
+void signal_handler(int) {
     // g_signal = signal;
     if (g_application)
         g_application->terminate();
 }
 } // namespace
 
-int main()
-{
+int main() {
     std::signal(SIGINT, signal_handler);
     std::signal(SIGTERM, signal_handler);
 

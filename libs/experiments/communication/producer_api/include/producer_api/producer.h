@@ -4,8 +4,7 @@
 #include <string>
 #include <vector>
 
-namespace producer
-{
+namespace producer {
 using Product = std::vector<std::string>;
 
 Product produce();

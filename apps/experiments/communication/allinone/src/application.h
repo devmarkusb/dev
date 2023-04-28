@@ -1,8 +1,7 @@
 #ifndef APPLICATION_H_9847tzj238t73y87
 #define APPLICATION_H_9847tzj238t73y87
 
-class Application
-{
+class Application {
 public:
     virtual ~Application() = default;
 

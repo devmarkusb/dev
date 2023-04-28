@@ -2,8 +2,7 @@
 
 #include "gtest/gtest.h"
 
-TEST(gries_mills_rotate, tests)
-{
+TEST(gries_mills_rotate, tests) {
     constexpr auto arr_orig{std::array{0, 1, 2, 3, 4}};
     auto arr{arr_orig};
     math::gries_mills_rotate(std::begin(arr), std::begin(arr), std::end(arr));
@@ -19,8 +18,7 @@ TEST(gries_mills_rotate, tests)
     EXPECT_EQ(arr, arr_expected);
 }
 
-TEST(gries_mills_rotate_n, tests)
-{
+TEST(gries_mills_rotate_n, tests) {
     constexpr auto arr_orig{std::array{0, 1, 2, 3, 4}};
     auto arr{arr_orig};
     math::gries_mills_rotate_n(std::begin(arr), std::begin(arr), std::end(arr));

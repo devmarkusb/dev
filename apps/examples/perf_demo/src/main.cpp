@@ -1,16 +1,13 @@
 #include "util/allthethings.h"
 
-namespace
-{
-double crunsh_n(int n)
-{
+namespace {
+double crunsh_n(int n) {
     ul::PerformanceProfiler perfscope0("gen", 2);
     double res{1.0};
     ++n;
     double sec{};
     auto sloop = ul::profiler_now();
-    for (int i = n; --i;)
-    {
+    for (int i = n; --i;) {
         auto s = ul::profiler_now();
         ul::PerformanceProfiler perfscope1("single_gen", 3);
         auto r = ul::math::randomFrac();
@@ -22,8 +19,7 @@ double crunsh_n(int n)
     return res;
 }
 
-void demo_tooperf_measurement()
-{
+void demo_tooperf_measurement() {
     {
         ul::PerformanceProfiler perfscope0("all", 0);
         ul::math::randomFrac();
@@ -39,8 +35,7 @@ void demo_tooperf_measurement()
 }
 } // namespace
 
-int main()
-{
+int main() {
     demo_tooperf_measurement();
 
     return ul::prog_exit_success;

@@ -3,18 +3,15 @@
 
 #include "matplotlibcpp.h"
 
-namespace
-{
+namespace {
 template <typename T>
-constexpr T index(T value)
-{
+constexpr T index(T value) {
     UL_EXPECT(value >= 3);
     return (value - 3) / 2;
 }
 } // namespace
 
-int main()
-{
+int main() {
     constexpr auto m{10'000'000};
     constexpr auto mi{index(m)};
     std::vector<uint8_t> primes;
@@ -31,10 +28,8 @@ int main()
     y[1] = 0;
     y[2] = 1;
     int pi{1};
-    for (int i{3}; i < m; ++i)
-    {
-        if ((i & 0x1) && primes[static_cast<size_t>(index(i))])
-        {
+    for (int i{3}; i < m; ++i) {
+        if ((i & 0x1) && primes[static_cast<size_t>(index(i))]) {
             ++pi;
         }
         x[static_cast<size_t>(i)] = i;

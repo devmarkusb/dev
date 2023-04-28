@@ -5,13 +5,11 @@
 #include <optional>
 #include <string>
 
-struct Args
-{
+struct Args {
     std::string text_{"some text"};
     int int_{42};
 
-    static std::pair<std::optional<Args>, int> parseCommandLine(int argc, char** argv)
-    {
+    static std::pair<std::optional<Args>, int> parseCommandLine(int argc, char** argv) {
         Args args;
         CLI::App app{"CLI11 lib experimental app"};
 
@@ -20,13 +18,10 @@ struct Args
 
         std::optional<Args> resArgs;
         int exitCode{};
-        try
-        {
+        try {
             app.parse(argc, argv);
             resArgs = args;
-        }
-        catch (const CLI::ParseError& e)
-        {
+        } catch (const CLI::ParseError& e) {
             exitCode = app.exit(e);
         }
 

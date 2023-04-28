@@ -20,31 +20,24 @@ constexpr auto matrix2x2_2{math::Matrix<Int, 2, 2>{{{5, 10}, {10, 20}}}};
 constexpr auto colVec2{math::Matrix<Int, 2, 1>{{{5}, {10}}}};
 constexpr auto rowVec2{math::Matrix<Int, 1, 2>{{{5, 10}}}};
 
-struct RegularEx
-{
-};
+struct RegularEx {};
 
-bool operator==(RegularEx, RegularEx)
-{
+bool operator==(RegularEx, RegularEx) {
     return true;
 }
 
-TEST(regular, tests)
-{
-    const auto copy{[](math::Regular auto r)
-                    {
-                        return r;
-                    }};
+TEST(regular, tests) {
+    const auto copy{[](math::Regular auto r) {
+        return r;
+    }};
     EXPECT_EQ(copy(someInt), someInt);
     EXPECT_EQ(copy(RegularEx{}), RegularEx{});
 }
 
-TEST(semigroup, tests)
-{
-    const auto op{[](math::NoncommutativeAdditiveSemigroup auto a, math::NoncommutativeAdditiveSemigroup auto b)
-                  {
-                      return a + b;
-                  }};
+TEST(semigroup, tests) {
+    const auto op{[](math::NoncommutativeAdditiveSemigroup auto a, math::NoncommutativeAdditiveSemigroup auto b) {
+        return a + b;
+    }};
     EXPECT_EQ(op(str42, str43), "4243");
     EXPECT_EQ(op(str43, str42), "4342");
     EXPECT_NE(op(str42, str43), op(str43, str42));
@@ -56,12 +49,10 @@ TEST(semigroup, tests)
     EXPECT_EQ(op(op(a, b), c), op(a, op(b, c)));
 }
 
-TEST(monoid, tests)
-{
-    const auto op{[](math::NoncommutativeAdditiveMonoid auto a, math::NoncommutativeAdditiveMonoid auto b)
-                  {
-                      return a + b;
-                  }};
+TEST(monoid, tests) {
+    const auto op{[](math::NoncommutativeAdditiveMonoid auto a, math::NoncommutativeAdditiveMonoid auto b) {
+        return a + b;
+    }};
     EXPECT_EQ(op(str42, str43), "4243");
     EXPECT_EQ(op(str43, str42), "4342");
     EXPECT_NE(op(str42, str43), op(str43, str42));
@@ -75,12 +66,10 @@ TEST(monoid, tests)
     EXPECT_EQ(op(id, c), c);
 }
 
-TEST(group, tests)
-{
-    const auto op{[](math::NoncommutativeAdditiveGroup auto a, math::NoncommutativeAdditiveGroup auto b)
-                  {
-                      return a + b;
-                  }};
+TEST(group, tests) {
+    const auto op{[](math::NoncommutativeAdditiveGroup auto a, math::NoncommutativeAdditiveGroup auto b) {
+        return a + b;
+    }};
     EXPECT_EQ(op(str42, str43), "4243");
     EXPECT_EQ(op(str43, str42), "4342");
     EXPECT_NE(op(str42, str43), op(str43, str42));
@@ -97,12 +86,10 @@ TEST(group, tests)
     EXPECT_EQ(op(inv_b, b), id);
 }
 
-TEST(semiring, tests)
-{
-    const auto exampleOp{[](math::SemiRingAddMult auto a, math::SemiRingAddMult auto b, math::SemiRingAddMult auto c)
-                  {
-                      return (a + b) * c;
-                  }};
+TEST(semiring, tests) {
+    const auto exampleOp{[](math::SemiRingAddMult auto a, math::SemiRingAddMult auto b, math::SemiRingAddMult auto c) {
+        return (a + b) * c;
+    }};
 
     SemiRingOpCommMonoidEx semiRingOpCommMonoidEx{};
     SemiRingOpMonoidEx semiRingOpMonoidEx{};
@@ -116,8 +103,8 @@ TEST(semiring, tests)
 
     EXPECT_EQ(semiRingOpMonoidEx(2, 3), 6);
     EXPECT_EQ(
-            semiRingOpMonoidEx(semiRingOpMonoidEx(uint42, 2), uint43),
-            semiRingOpMonoidEx(uint42, semiRingOpMonoidEx(2, uint43)));
+        semiRingOpMonoidEx(semiRingOpMonoidEx(uint42, 2), uint43),
+        semiRingOpMonoidEx(uint42, semiRingOpMonoidEx(2, uint43)));
 
     const SemiRingEx idCommMonoid{};
     const SemiRingEx idMonoid{1};
@@ -127,8 +114,7 @@ TEST(semiring, tests)
     EXPECT_EQ(exampleOp(2, 3, 2), 10);
 }
 
-TEST(multiply, tests)
-{
+TEST(multiply, tests) {
     using math::operator<<;
     std::cout << colVec1 << "\n";
     std::cout << rowVec1 << "\n";
