@@ -212,6 +212,10 @@ concept Field = Set<SetT> && IntegralDomain<SetT, OpCommutativeGroup, OpInvCommu
 template <typename T>
 concept Integral = std::integral<T>;
 
+/// Fast mul/div by 2 and even/odd testing.
+template <typename T>
+concept BinaryInteger = Integral<T>;
+
 /// Broader than Integral, which is restricted to built-in integer types.
 /** Would be interesting to construct. Won't like to built it upon algebraic structure like ring, but perhaps more
     likely upon Peano axioms.*/
@@ -221,6 +225,11 @@ concept Integer = true;
 template <Integral N>
 bool odd(N n) {
     return static_cast<bool>(n & 0x1);
+}
+
+template <Integral N>
+bool even(N n) {
+    return !odd(n);
 }
 
 template <Integral N>

@@ -1,6 +1,7 @@
 #ifndef GCM_H_xm5guih8349hx3894h891hg
 #define GCM_H_xm5guih8349hx3894h891hg
 
+#include "math.h"
 #include "ul/ul.h"
 #include <algorithm>
 
@@ -225,6 +226,49 @@ inline std::pair<int, LineSegment> quotient_remainder2(LineSegment a, LineSegmen
         b = tmp;
     } while (b < c);
     return {n, a};
+}
+
+template <Integer N>
+N gcd(N a, N b) {
+    while (b != N(0)) {
+        a = a % b;
+        std::swap(a, b);
+    }
+    return a;
+}
+
+template <BinaryInteger N>
+N gcd_stein(N m, N n) {
+    if (m < N(0))
+        m = -m;
+    if (n < N(0))
+        n = -n;
+    if (m == N(0))
+        return n;
+    if (n == N(0))
+        return m;
+    UL_ASSERT(m > 0 && n > 0);
+    int d_m = 0;
+    while (even(m)) {
+        m >>= 1;
+        ++d_m;
+    }
+    int d_n = 0;
+    while (even(n)) {
+        n >>= 1;
+        ++d_n;
+    }
+    UL_ASSERT(odd(m) && odd(n));
+    while (m != n) {
+        if (n > m)
+            std::swap(n, m);
+        m -= n;
+        do
+            m >>= 1;
+        while (even(m));
+    }
+    UL_ASSERT(m == n);
+    return static_cast<N>(m << std::min(d_m, d_n));
 }
 } // namespace math
 
