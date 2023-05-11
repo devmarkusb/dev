@@ -228,7 +228,7 @@ inline std::pair<int, LineSegment> quotient_remainder2(LineSegment a, LineSegmen
     return {n, a};
 }
 
-template <Integer N>
+template <EuclideanDomainAddMult N>
 N gcd(N a, N b) {
     while (b != N(0)) {
         a = a % b;

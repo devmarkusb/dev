@@ -36,7 +36,10 @@ class GcmTest : public testing::TestWithParam<std::function<int(int, int)>> {};
 
 INSTANTIATE_TEST_SUITE_P(
     GcmVariousImpl, GcmTest,
-    testing::Values(math::gcm0, math::gcm1, math::gcm2, math::gcm3, math::gcm4, math::gcm5, math::gcm6));
+    testing::Values(
+        math::gcm0, math::gcm1, math::gcm2, math::gcm3, math::gcm4, math::gcm5, math::gcm6,
+        math::gcd<math::LineSegment>,
+        math::gcd_stein<math::LineSegment>));
 
 // NOLINTBEGIN
 TEST_P(GcmTest, one) {

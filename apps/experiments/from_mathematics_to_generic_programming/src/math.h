@@ -3,6 +3,7 @@
 
 #include "ul/ul.h"
 #include <array>
+#include <cmath>
 #include <compare>
 #include <concepts>
 #include <ostream>
@@ -59,6 +60,7 @@ template <typename Op, typename SetT>
 concept SemigroupOperation =
     Set<SetT> && std::regular_invocable<Op, SetT, SetT> && std::is_same_v<SetT, std::invoke_result_t<Op, SetT, SetT>>
     && requires(Op op, SetT a, SetT b, SetT c) {
+//           {op(a, b)} -> SetT;
            UL_SEMANTICS {
                op(op(a, b), c) == op(a, op(b, c));
            };
@@ -108,6 +110,7 @@ template <typename Op, typename SetT>
 concept GroupInverseOperation =
     Set<SetT> && std::regular_invocable<Op, SetT> && std::is_same_v<SetT, std::invoke_result_t<Op, SetT>>
     && requires(Op op, SetT a) {
+//           op(a) -> SetT;
            UL_SEMANTICS {
                op(op(a)) == a;
            };
@@ -203,12 +206,6 @@ concept IntegralDomain =
            };
        };
 
-template <
-    typename SetT, typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/,
-    typename OpCommutativeGroupMul /*multiply*/, typename OpInvCommutativeGroupMul /*multiply*/>
-concept Field = Set<SetT> && IntegralDomain<SetT, OpCommutativeGroup, OpInvCommutativeGroup, OpCommutativeGroupMul>
-                && Group<SetT, OpCommutativeGroupMul, OpInvCommutativeGroupMul>;
-
 template <typename T>
 concept Integral = std::integral<T>;
 
@@ -221,6 +218,57 @@ concept BinaryInteger = Integral<T>;
     likely upon Peano axioms.*/
 template <typename>
 concept Integer = true;
+
+template <typename>
+concept UnsignedInteger = true;
+
+template <typename T>
+concept NaturalNumber = UnsignedInteger<T>;
+
+template <
+    typename SetT, typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/,
+    typename OpCommutativeMonoid /*multiply*/, typename OpQuotient, typename OpRemainder,
+    typename OpNorm>
+concept EuclideanDomain =
+    IntegralDomain<SetT, OpCommutativeGroup, OpInvCommutativeGroup, OpCommutativeMonoid>
+    && std::regular_invocable<OpQuotient, SetT, SetT> && std::is_same_v<SetT, std::invoke_result_t<OpQuotient, SetT, SetT>>
+    && std::regular_invocable<OpRemainder, SetT, SetT> && std::is_same_v<SetT, std::invoke_result_t<OpRemainder, SetT, SetT>>
+    && std::regular_invocable<OpNorm, SetT> && NaturalNumber<std::invoke_result_t<OpNorm, SetT>>
+    && requires(SetT a, SetT b, SetT commutativeGroupIdentity, OpQuotient opQuotient,
+                OpRemainder opRemainder, OpCommutativeMonoid opCommutativeMonoid,
+                OpCommutativeGroup opCommutativeGroup, OpNorm opNorm) {
+//           opQuotient(a, b) -> SetT;
+//           opRemainder(a, b) -> SetT;
+//           opNorm(a);
+           UL_SEMANTICS {
+               b != commutativeGroupIdentity;
+               a == opCommutativeGroup(opCommutativeMonoid(opQuotient(a, b), b), opRemainder(a, b));
+               (opNorm(a) == commutativeGroupIdentity) == (a == commutativeGroupIdentity);
+               opNorm(opCommutativeMonoid(a, b)) >= opNorm(a);
+               opNorm(opRemainder(a, b)) <= opNorm(b);
+           };
+       };
+
+template <Set S>
+struct Abs {
+    auto operator()(const S& elem) const {
+        if constexpr (!std::is_unsigned_v<S>) {
+            return std::abs(elem);
+        } else {
+            return elem;
+        }
+    }
+};
+
+template <typename SetT>
+concept EuclideanDomainAddMult = EuclideanDomain<
+    SetT, std::plus<SetT>, std::negate<SetT>, std::multiplies<SetT>, std::divides<SetT>, std::modulus<SetT>, Abs<SetT>>;
+
+template <
+    typename SetT, typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/,
+    typename OpCommutativeGroupMul /*multiply*/, typename OpInvCommutativeGroupMul /*multiply*/>
+concept Field = Set<SetT> && IntegralDomain<SetT, OpCommutativeGroup, OpInvCommutativeGroup, OpCommutativeGroupMul>
+                && Group<SetT, OpCommutativeGroupMul, OpInvCommutativeGroupMul>;
 
 template <Integral N>
 bool odd(N n) {
@@ -294,8 +342,13 @@ auto multiply(
 }
 
 template <SemiRingAddMult ElemT, size_t m, size_t k, size_t n>
-Matrix<ElemT, m, n> operator*(Matrix<ElemT, m, k> l, Matrix<ElemT, k, n> r) {
+auto multiply(Matrix<ElemT, m, k> l, Matrix<ElemT, k, n> r) {
     return multiply(l, r, std::plus<ElemT>{}, std::multiplies<ElemT>{});
+}
+
+template <SemiRingAddMult ElemT, size_t m, size_t k, size_t n>
+auto operator*(Matrix<ElemT, m, k> l, Matrix<ElemT, k, n> r) {
+    return multiply(l, r);
 }
 
 template <SemiRingAddMult ElemT, MatrixLike<ElemT> M>

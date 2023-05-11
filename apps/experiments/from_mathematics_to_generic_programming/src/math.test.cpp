@@ -116,6 +116,7 @@ TEST(semiring, tests) {
 
 TEST(multiply, tests) {
     using math::operator<<;
+    using math::operator*;
     std::cout << colVec1 << "\n";
     std::cout << rowVec1 << "\n";
     std::cout << scalar1 << "\n";
@@ -128,4 +129,6 @@ TEST(multiply, tests) {
     EXPECT_EQ(math::multiply(matrix2x2_1, colVec1, std::plus<Int>{}, std::multiplies<Int>{}), colVec2);
     EXPECT_EQ(math::multiply(rowVec1, matrix2x2_1, std::plus<Int>{}, std::multiplies<Int>{}), rowVec2);
     EXPECT_EQ(math::multiply(matrix2x2_1, matrix2x2_1, std::plus<Int>{}, std::multiplies<Int>{}), matrix2x2_2);
+    EXPECT_EQ(math::multiply(matrix2x2_1, matrix2x2_1), matrix2x2_2);
+    EXPECT_EQ(matrix2x2_1 * matrix2x2_1, matrix2x2_2);
 }
