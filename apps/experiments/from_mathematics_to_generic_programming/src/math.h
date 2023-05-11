@@ -60,7 +60,7 @@ template <typename Op, typename SetT>
 concept SemigroupOperation =
     Set<SetT> && std::regular_invocable<Op, SetT, SetT> && std::is_same_v<SetT, std::invoke_result_t<Op, SetT, SetT>>
     && requires(Op op, SetT a, SetT b, SetT c) {
-//           {op(a, b)} -> SetT;
+           { op(a, b) } -> std::convertible_to<SetT>;
            UL_SEMANTICS {
                op(op(a, b), c) == op(a, op(b, c));
            };
@@ -110,7 +110,7 @@ template <typename Op, typename SetT>
 concept GroupInverseOperation =
     Set<SetT> && std::regular_invocable<Op, SetT> && std::is_same_v<SetT, std::invoke_result_t<Op, SetT>>
     && requires(Op op, SetT a) {
-//           op(a) -> SetT;
+           { op(a) } -> std::convertible_to<SetT>;
            UL_SEMANTICS {
                op(op(a)) == a;
            };
@@ -237,9 +237,9 @@ concept EuclideanDomain =
     && requires(SetT a, SetT b, SetT commutativeGroupIdentity, OpQuotient opQuotient,
                 OpRemainder opRemainder, OpCommutativeMonoid opCommutativeMonoid,
                 OpCommutativeGroup opCommutativeGroup, OpNorm opNorm) {
-//           opQuotient(a, b) -> SetT;
-//           opRemainder(a, b) -> SetT;
-//           opNorm(a);
+           { opQuotient(a, b) } -> std::convertible_to<SetT>;
+           { opRemainder(a, b) } -> std::convertible_to<SetT>;
+           { opNorm(a) } -> NaturalNumber;
            UL_SEMANTICS {
                b != commutativeGroupIdentity;
                a == opCommutativeGroup(opCommutativeMonoid(opQuotient(a, b), b), opRemainder(a, b));
