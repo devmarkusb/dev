@@ -15,10 +15,10 @@ void listPalindromesDec(const std::vector<uint8_t>& primes) {
             continue;
 
         const auto val{value(i)};
-        const auto digitCountDec{ul::math::getDigitCount(value(i))};
+        const auto digitCountDec{ul::math::get_digit_count(value(i))};
         bool palindromeDec{true};
         for (std::remove_const_t<decltype(digitCountDec)> d{}; d < digitCountDec / 2; ++d) {
-            if (ul::math::getDigit(val, d) != ul::math::getDigit(val, digitCountDec - d - 1)) {
+            if (ul::math::get_digit(val, d) != ul::math::get_digit(val, digitCountDec - d - 1)) {
                 palindromeDec = false;
                 break;
             }
@@ -31,7 +31,7 @@ void listPalindromesDec(const std::vector<uint8_t>& primes) {
         // And there are strange gaps lacking numbers between 200 and 300, 400 and 700, 800 and 900,
         // continuing over and over when adding two 0's each.
         if (palindromeDec)
-            std::cout << ul::fmt::groupThousands(value(i)) << " ";
+            std::cout << ul::fmt::group_thousands(value(i)) << " ";
     }
 }
 
@@ -41,11 +41,11 @@ void listPalindromesHex(const std::vector<uint8_t>& primes) {
             continue;
 
         const auto val{value(i)};
-        const auto digitCountHex{ul::math::getDigitCount(value(i), ul::math::NumBase::HEX)};
+        const auto digitCountHex{ul::math::get_digit_count(value(i), ul::math::NumBase::hex)};
         bool palindromeHex{true};
         for (std::remove_const_t<decltype(digitCountHex)> d{}; d < digitCountHex / 2; ++d) {
-            if (ul::math::getDigit(val, d, ul::math::NumBase::HEX)
-                != ul::math::getDigit(val, digitCountHex - d - 1, ul::math::NumBase::HEX)) {
+            if (ul::math::get_digit(val, d, ul::math::NumBase::hex)
+                != ul::math::get_digit(val, digitCountHex - d - 1, ul::math::NumBase::hex)) {
                 palindromeHex = false;
                 break;
             }
@@ -62,11 +62,11 @@ void listPalindromesBin(const std::vector<uint8_t>& primes) {
             continue;
 
         const auto val{value(i)};
-        const auto digitCountBin{ul::math::getDigitCount(value(i), ul::math::NumBase::BIN)};
+        const auto digitCountBin{ul::math::get_digit_count(value(i), ul::math::NumBase::bin)};
         bool palindromeBin{true};
         for (std::remove_const_t<decltype(digitCountBin)> d{}; d < digitCountBin / 2; ++d) {
-            if (ul::math::getDigit(val, d, ul::math::NumBase::BIN)
-                != ul::math::getDigit(val, digitCountBin - d - 1, ul::math::NumBase::BIN)) {
+            if (ul::math::get_digit(val, d, ul::math::NumBase::bin)
+                != ul::math::get_digit(val, digitCountBin - d - 1, ul::math::NumBase::bin)) {
                 palindromeBin = false;
                 break;
             }

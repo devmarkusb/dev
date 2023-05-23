@@ -10,7 +10,7 @@ double crunsh_n(int n) {
     for (int i = n; --i;) {
         auto s = ul::profiler_now();
         ul::PerformanceProfiler perfscope1("single_gen", 3);
-        auto r = ul::math::randomFrac();
+        auto r = ul::math::random_frac();
         res += r;
         sec += std::chrono::duration<double>(ul::profiler_diff(s, ul::profiler_now())).count();
     }
@@ -22,16 +22,16 @@ double crunsh_n(int n) {
 void demo_tooperf_measurement() {
     {
         ul::PerformanceProfiler perfscope0("all", 0);
-        ul::math::randomFrac();
+        ul::math::random_frac();
         {
             ul::PerformanceProfiler perfscope1("crunsh_n", 1);
             const auto res = crunsh_n(100000);
-            perfscope1.startNewItem("output");
+            perfscope1.start_new_item("output");
             std::cout << "calc result: " << res << "\n";
         }
     }
 
-    std::cout << ul::PerformanceProfiler::dumpAllItems();
+    std::cout << ul::PerformanceProfiler::dump_all_items();
 }
 } // namespace
 

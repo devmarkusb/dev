@@ -60,7 +60,7 @@ public:
         consumerThread_ = std::thread{[this]() {
             while (isRunning_) {
                 consumer::Product product;
-                if (!processedProducts_.waitAndPop(product))
+                if (!processedProducts_.wait_and_pop(product))
                     break;
                 consumer::consume(product);
             }

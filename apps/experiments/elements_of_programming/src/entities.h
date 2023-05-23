@@ -64,7 +64,7 @@ struct Cat {};
 
 // function
 inline NaturalNumber minAge(Person, Person) {
-    throw ul::not_implemented{UL_LOCATION};
+    throw ul::NotImplemented{UL_LOCATION};
 }
 
 #endif

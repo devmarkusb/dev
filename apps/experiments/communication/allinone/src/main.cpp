@@ -53,7 +53,7 @@ public:
             processingThread = std::thread{[this]() {
                 while (isRunning_) {
                     producer::Product product;
-                    if (!products_.waitAndPop(product))
+                    if (!products_.wait_and_pop(product))
                         break;
 
                     consumer::Product processed;
@@ -75,7 +75,7 @@ public:
         consumerThread_ = std::thread{[this]() {
             while (isRunning_) {
                 consumer::Product product;
-                if (!processedProducts_.waitAndPop(product))
+                if (!processedProducts_.wait_and_pop(product))
                     break;
                 consumer::consume(product);
             }
