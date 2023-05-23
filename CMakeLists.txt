@@ -12,3 +12,7 @@ add_subdirectory(apps)
 
 ul_include(clang-format.cmake)
 ul_include(githooks.cmake)
+
+set(UL_USE_DEFAULT_CLANG_TIDY_CONFIG OFF)
+set(UL_CLANG_TIDY_DIRS "libs")
+ul_include(clang-tidy.cmake)
