@@ -3,13 +3,13 @@
 #include <string>
 
 struct NoncommutativeAdditiveSemigroupEx {
-    explicit NoncommutativeAdditiveSemigroupEx(std::string nonEmptyStr)
-        : nonEmptyStr_{std::move(nonEmptyStr)} {
-        UL_EXPECT(!nonEmptyStr_.empty());
+    explicit NoncommutativeAdditiveSemigroupEx(std::string non_empty_str)
+        : non_empty_str_{std::move(non_empty_str)} {
+        UL_EXPECT(!non_empty_str_.empty());
     }
 
     NoncommutativeAdditiveSemigroupEx operator+=(const NoncommutativeAdditiveSemigroupEx& other) {
-        nonEmptyStr_ += other.nonEmptyStr_;
+        non_empty_str_ += other.non_empty_str_;
         return *this;
     }
 
@@ -18,11 +18,11 @@ struct NoncommutativeAdditiveSemigroupEx {
         const NoncommutativeAdditiveSemigroupEx& a, const NoncommutativeAdditiveSemigroupEx& b);
 
 private:
-    std::string nonEmptyStr_{"a"};
+    std::string non_empty_str_{"a"};
 };
 
 inline bool operator==(const NoncommutativeAdditiveSemigroupEx& lhs, const NoncommutativeAdditiveSemigroupEx& rhs) {
-    return lhs.nonEmptyStr_ == rhs.nonEmptyStr_;
+    return lhs.non_empty_str_ == rhs.non_empty_str_;
 }
 
 inline NoncommutativeAdditiveSemigroupEx operator+(

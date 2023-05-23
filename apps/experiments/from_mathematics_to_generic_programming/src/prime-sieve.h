@@ -1,5 +1,5 @@
-#ifndef PRIME_SIEVE_H_sfib53gb2493gx5
-#define PRIME_SIEVE_H_sfib53gb2493gx5
+#ifndef PRIME_SIEVE_H_SFIB53GB2493GX5
+#define PRIME_SIEVE_H_SFIB53GB2493GX5
 
 #include "ul/ul.h"
 #include <algorithm>

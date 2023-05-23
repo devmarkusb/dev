@@ -1,31 +1,31 @@
-#ifndef ARGS_H_oiufh3478txb7394b4g
-#define ARGS_H_oiufh3478txb7394b4g
+#ifndef ARGS_H_OIUFH3478TXB7394B4G
+#define ARGS_H_OIUFH3478TXB7394B4G
 
 #include "CLI/CLI.hpp"
 #include <optional>
 #include <string>
 
 struct Args {
-    std::string text_{"some text"};
+    std::string text{"some text"};
     int int_{42};
 
-    static std::pair<std::optional<Args>, int> parseCommandLine(int argc, char** argv) {
+    static std::pair<std::optional<Args>, int> parse_command_line(int argc, char** argv) {
         Args args;
         CLI::App app{"CLI11 lib experimental app"};
 
-        app.add_option("-t,--text", args.text_, "some text");
+        app.add_option("-t,--text", args.text, "some text");
         app.add_option("-i,--int", args.int_, "some integer");
 
-        std::optional<Args> resArgs;
-        int exitCode{};
+        std::optional<Args> res_args;
+        int exit_code{};
         try {
             app.parse(argc, argv);
-            resArgs = args;
+            res_args = args;
         } catch (const CLI::ParseError& e) {
-            exitCode = app.exit(e);
+            exit_code = app.exit(e);
         }
 
-        return std::make_pair(resArgs, exitCode);
+        return std::make_pair(res_args, exit_code);
     }
 };
 

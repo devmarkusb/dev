@@ -45,39 +45,39 @@ BENCHMARK(quotient_remainder1)
     ->Args({1'000'000, 1'000'000})
     ->Args({1'000'003, 2});
 
-constexpr auto randRangeMin{0};
+constexpr auto rand_range_min{0};
 // not exactly 2^16, but...
-constexpr auto randRangeMax16{std::numeric_limits<uint16_t>::max()};
-constexpr auto randRangeMax32{std::numeric_limits<uint32_t>::max()};
-constexpr auto randRangeMax64{std::numeric_limits<uint64_t>::max()};
-constexpr auto randReps{100};
+constexpr auto rand_range_max16{std::numeric_limits<uint16_t>::max()};
+constexpr auto rand_range_max32{std::numeric_limits<uint32_t>::max()};
+constexpr auto rand_range_max64{std::numeric_limits<uint64_t>::max()};
+constexpr auto rand_reps{100};
 
 struct Rand {
-    static inline std::random_device dev_;
-    static inline std::mt19937 gen_{dev_()};
-    static inline std::uniform_int_distribution<uint16_t> distrib16_{randRangeMin, randRangeMax16};
-    static inline std::uniform_int_distribution<uint32_t> distrib32_{randRangeMin, randRangeMax32};
-    static inline std::uniform_int_distribution<uint64_t> distrib64_{randRangeMin, randRangeMax64};
+    static inline std::random_device dev;
+    static inline std::mt19937 gen{dev()};
+    static inline std::uniform_int_distribution<uint16_t> distrib16{rand_range_min, rand_range_max16};
+    static inline std::uniform_int_distribution<uint32_t> distrib32{rand_range_min, rand_range_max32};
+    static inline std::uniform_int_distribution<uint64_t> distrib64{rand_range_min, rand_range_max64};
 };
 
 template <class ...Args>
 void gcd(benchmark::State& state, Args&&... args) {
     auto args_tuple = std::make_tuple(std::move(args)...);
     for (auto _ : state) {
-        for (auto i{0}; i < randReps; ++i) {
+        for (auto i{0}; i < rand_reps; ++i) {
             state.PauseTiming();
-            const auto randnr1{std::get<1>(args_tuple)(Rand::gen_)};
-            const auto randnr2{std::get<1>(args_tuple)(Rand::gen_)};
+            const auto randnr1{std::get<1>(args_tuple)(Rand::gen)};
+            const auto randnr2{std::get<1>(args_tuple)(Rand::gen)};
             state.ResumeTiming();
             auto r{std::get<0>(args_tuple)(randnr1, randnr2)};
             benchmark::DoNotOptimize(r);
         }
     }
 }
-BENCHMARK_CAPTURE(gcd, gcd16, math::gcd<uint16_t>, Rand::distrib16_);
-BENCHMARK_CAPTURE(gcd, gcd_stein16, math::gcd_stein<uint16_t>, Rand::distrib16_);
-BENCHMARK_CAPTURE(gcd, gcd32, math::gcd<uint32_t>, Rand::distrib32_);
-BENCHMARK_CAPTURE(gcd, gcd_stein32, math::gcd_stein<uint32_t>, Rand::distrib32_);
-BENCHMARK_CAPTURE(gcd, gcd64, math::gcd<uint64_t>, Rand::distrib64_);
-BENCHMARK_CAPTURE(gcd, gcd_stein64, math::gcd_stein<uint64_t>, Rand::distrib64_);
+BENCHMARK_CAPTURE(gcd, gcd16, math::gcd<uint16_t>, Rand::distrib16);
+BENCHMARK_CAPTURE(gcd, gcd_stein16, math::gcd_stein<uint16_t>, Rand::distrib16);
+BENCHMARK_CAPTURE(gcd, gcd32, math::gcd<uint32_t>, Rand::distrib32);
+BENCHMARK_CAPTURE(gcd, gcd_stein32, math::gcd_stein<uint32_t>, Rand::distrib32);
+BENCHMARK_CAPTURE(gcd, gcd64, math::gcd<uint64_t>, Rand::distrib64);
+BENCHMARK_CAPTURE(gcd, gcd_stein64, math::gcd_stein<uint64_t>, Rand::distrib64);
 } // namespace

@@ -3,6 +3,6 @@
 
 int main(int, char*[]) {
     Var v{TypeB{}};
-    std::cout << doSth(v);
+    std::cout << do_sth(v);
     return 0;
 }

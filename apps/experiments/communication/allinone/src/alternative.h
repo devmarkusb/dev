@@ -1,5 +1,5 @@
-#ifndef ALTERNATIVE_H_45th24xusidisa
-#define ALTERNATIVE_H_45th24xusidisa
+#ifndef ALTERNATIVE_H_45TH24XUSIDISA
+#define ALTERNATIVE_H_45TH24XUSIDISA
 
 #include "application.h"
 #include "consumer_api/consumer.h"
@@ -13,23 +13,23 @@
 namespace client_server {
 class App : public Application {
 public:
-    static constexpr auto inputInterval{std::chrono::milliseconds(1)};
-    static constexpr auto measurementInterval{inputInterval};
-    static constexpr auto printInterval{std::chrono::seconds(3)};
-    static constexpr auto simulatedAdditionalProcessingTime{inputInterval};
-    static const auto processingThreadCount{5};
+    static constexpr auto input_interval{std::chrono::milliseconds(1)};
+    static constexpr auto measurement_interval{input_interval};
+    static constexpr auto print_interval{std::chrono::seconds(3)};
+    static constexpr auto simulated_additional_processing_time{input_interval};
+    static const auto processing_thread_count{5};
 
     ~App() override {
-        if (isRunning_)
+        if (is_running_)
             terminate();
         std::cout << "Application destructed" << std::endl;
     }
 
-    consumer::Product sendToProcessor(const producer::Product& product) {
+    consumer::Product send_to_processor(const producer::Product& product) {
         consumer::Product processed;
         processed.reserve(product.size());
 
-        std::this_thread::sleep_for(simulatedAdditionalProcessingTime);
+        std::this_thread::sleep_for(simulated_additional_processing_time);
         std::transform(std::cbegin(product), std::cend(product), std::back_inserter(processed), [](const auto string) {
             return string.size();
         });
@@ -38,18 +38,18 @@ public:
     }
 
     void run() override {
-        isRunning_ = true;
+        is_running_ = true;
 
-        clientProducerThread_ = std::thread{[this]() {
-            asio::steady_timer timer{ioContext_};
-            while (isRunning_) {
-                timer.expires_from_now(inputInterval);
-                auto futureRes{std::async(&App::sendToProcessor, this, producer::produce())};
-                auto status{futureRes.wait_for(inputInterval)};
+        client_producer_thread_ = std::thread{[this]() {
+            asio::steady_timer timer{io_context_};
+            while (is_running_) {
+                timer.expires_from_now(input_interval);
+                auto future_res{std::async(&App::send_to_processor, this, producer::produce())};
+                auto status{future_res.wait_for(input_interval)};
                 if (status != std::future_status::ready) {
                     std::cout << "result did not return in time\n";
                 } else {
-                    if (!processedProducts_.push(futureRes.get())) {
+                    if (!processed_products_.push(future_res.get())) {
                         std::cout << "queue of transformed elements full\n";
                     }
                 }
@@ -57,52 +57,52 @@ public:
             }
         }};
 
-        consumerThread_ = std::thread{[this]() {
-            while (isRunning_) {
+        consumer_thread_ = std::thread{[this]() {
+            while (is_running_) {
                 consumer::Product product;
-                if (!processedProducts_.wait_and_pop(product))
+                if (!processed_products_.wait_and_pop(product))
                     break;
                 consumer::consume(product);
             }
         }};
 
-        onMeasurementTimer({});
-        onPrintTimer({});
-        ioContext_.run();
+        on_measurement_timer({});
+        on_print_timer({});
+        io_context_.run();
     }
 
     void terminate() override {
-        isRunning_ = false;
+        is_running_ = false;
         products_.stop();
-        processedProducts_.stop();
-        clientProducerThread_.join();
-        std::for_each(std::begin(processingThreads_), std::end(processingThreads_), [](auto& t) {
+        processed_products_.stop();
+        client_producer_thread_.join();
+        std::for_each(std::begin(processing_threads_), std::end(processing_threads_), [](auto& t) {
             t.join();
         });
-        consumerThread_.join();
-        measurementTimer_.cancel();
-        printTimer_.cancel();
-        ioContext_.stop();
+        consumer_thread_.join();
+        measurement_timer_.cancel();
+        print_timer_.cancel();
+        io_context_.stop();
     }
 
 private:
-    bool isRunning_{};
-    asio::io_context ioContext_;
-    ul::thread::WaitQueue<producer::Product> products_{processingThreadCount};
-    ul::thread::WaitQueue<consumer::Product> processedProducts_{};
-    asio::steady_timer measurementTimer_{ioContext_};
-    asio::steady_timer printTimer_{ioContext_};
-    std::thread clientProducerThread_;
-    std::array<std::thread, processingThreadCount> processingThreads_;
-    std::thread consumerThread_;
-    size_t measurementCount_{};
-    size_t measurementProductQueueSize_{};
-    size_t measurementTransformedProductQueueSize_{};
-    size_t measurementProductQueueSizeMax_{};
-    size_t measurementTransformedProductQueueSizeMax_{};
+    bool is_running_{};
+    asio::io_context io_context_;
+    ul::thread::WaitQueue<producer::Product> products_{processing_thread_count};
+    ul::thread::WaitQueue<consumer::Product> processed_products_{};
+    asio::steady_timer measurement_timer_{io_context_};
+    asio::steady_timer print_timer_{io_context_};
+    std::thread client_producer_thread_;
+    std::array<std::thread, processing_thread_count> processing_threads_;
+    std::thread consumer_thread_;
+    size_t measurement_count_{};
+    size_t measurement_product_queue_size_{};
+    size_t measurement_transformed_product_queue_size_{};
+    size_t measurement_product_queue_size_max_{};
+    size_t measurement_transformed_product_queue_size_max_{};
 
-    void onMeasurementTimer(const asio::error_code& ec) {
-        if (!isRunning_)
+    void on_measurement_timer(const asio::error_code& ec) {
+        if (!is_running_)
             return;
 
         if (ec) {
@@ -110,21 +110,21 @@ private:
             return;
         }
 
-        ++measurementCount_;
-        measurementProductQueueSizeMax_ = std::max(measurementProductQueueSizeMax_, products_.size());
-        measurementProductQueueSize_ += products_.size();
-        measurementTransformedProductQueueSizeMax_ =
-            std::max(measurementTransformedProductQueueSizeMax_, processedProducts_.size());
-        measurementTransformedProductQueueSize_ += processedProducts_.size();
+        ++measurement_count_;
+        measurement_product_queue_size_max_ = std::max(measurement_product_queue_size_max_, products_.size());
+        measurement_product_queue_size_ += products_.size();
+        measurement_transformed_product_queue_size_max_ =
+            std::max(measurement_transformed_product_queue_size_max_, processed_products_.size());
+        measurement_transformed_product_queue_size_ += processed_products_.size();
 
-        measurementTimer_.expires_from_now(measurementInterval);
+        measurement_timer_.expires_from_now(measurement_interval);
 
         using namespace std::placeholders;
-        measurementTimer_.async_wait(std::bind(&App::onMeasurementTimer, this, _1));
+        measurement_timer_.async_wait(std::bind(&App::on_measurement_timer, this, _1));
     }
 
-    void onPrintTimer(const asio::error_code& ec) {
-        if (!isRunning_)
+    void on_print_timer(const asio::error_code& ec) {
+        if (!is_running_)
             return;
 
         if (ec) {
@@ -132,27 +132,27 @@ private:
             return;
         }
 
-        std::stringstream outP;
-        outP << "avg. products queue size: "
-             << static_cast<double>(measurementProductQueueSize_) / static_cast<double>(measurementCount_) << std::endl;
-        std::cout << outP.str();
-        std::stringstream outTP;
-        outTP << "avg. transformed products queue size: "
-              << static_cast<double>(measurementTransformedProductQueueSize_) / static_cast<double>(measurementCount_)
+        std::stringstream out_p;
+        out_p << "avg. products queue size: "
+             << static_cast<double>(measurement_product_queue_size_) / static_cast<double>(measurement_count_) << std::endl;
+        std::cout << out_p.str();
+        std::stringstream out_tp;
+        out_tp << "avg. transformed products queue size: "
+              << static_cast<double>(measurement_transformed_product_queue_size_) / static_cast<double>(measurement_count_)
               << std::endl;
-        std::cout << outTP.str();
+        std::cout << out_tp.str();
 
-        std::stringstream outPM;
-        outPM << "max. products queue size: " << measurementProductQueueSizeMax_ << std::endl;
-        std::cout << outPM.str();
-        std::stringstream outTPM;
-        outTPM << "max. transformed products queue size: " << measurementTransformedProductQueueSizeMax_ << std::endl;
-        std::cout << outTPM.str();
+        std::stringstream out_pm;
+        out_pm << "max. products queue size: " << measurement_product_queue_size_max_ << std::endl;
+        std::cout << out_pm.str();
+        std::stringstream out_tpm;
+        out_tpm << "max. transformed products queue size: " << measurement_transformed_product_queue_size_max_ << std::endl;
+        std::cout << out_tpm.str();
 
-        printTimer_.expires_from_now(printInterval);
+        print_timer_.expires_from_now(print_interval);
 
         using namespace std::placeholders;
-        printTimer_.async_wait(std::bind(&App::onPrintTimer, this, _1));
+        print_timer_.async_wait(std::bind(&App::on_print_timer, this, _1));
     }
 };
 } // namespace client_server

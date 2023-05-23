@@ -1,5 +1,5 @@
-#ifndef POWER_H_oerth2zh29hz5833hbdf
-#define POWER_H_oerth2zh29hz5833hbdf
+#ifndef POWER_H_OERTH2ZH29HZ5833HBDF
+#define POWER_H_OERTH2ZH29HZ5833HBDF
 
 #include "math.h"
 #include "ul/ul.h"

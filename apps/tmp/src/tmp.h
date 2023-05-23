@@ -1,5 +1,5 @@
-#ifndef TMP_H_mgxh958239h349ygh
-#define TMP_H_mgxh958239h349ygh
+#ifndef TMP_H_MGXH958239H349YGH
+#define TMP_H_MGXH958239H349YGH
 
 
 #endif

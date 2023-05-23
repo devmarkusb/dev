@@ -1,16 +1,16 @@
-#ifndef VARIANT_H_eiht3498
-#define VARIANT_H_eiht3498
+#ifndef VARIANT_H_EIHT3498
+#define VARIANT_H_EIHT3498
 
 #include "type_a.h"
 #include "type_b.h"
 #include "variant_decl.h"
 #include <variant>
 
-inline int doSth(const Var& v) {
-    Var aLocalOne{TypeB{}};
+inline int do_sth(const Var& v) {
+    Var a_local_one{TypeB{}};
     return std::visit(
-        [&aLocalOne](const auto& t) {
-            return doSthSpecific(t, aLocalOne);
+        [&a_local_one](const auto& t) {
+            return doSthSpecific(t, a_local_one);
         },
         v);
 }

@@ -1,5 +1,5 @@
-#ifndef PRODUCER_H_dlkjxgm24hmg
-#define PRODUCER_H_dlkjxgm24hmg
+#ifndef PRODUCER_H_DLKJXGM24HMG
+#define PRODUCER_H_DLKJXGM24HMG
 
 #include <string>
 #include <vector>

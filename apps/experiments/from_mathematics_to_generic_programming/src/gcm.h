@@ -1,5 +1,5 @@
-#ifndef GCM_H_xm5guih8349hx3894h891hg
-#define GCM_H_xm5guih8349hx3894h891hg
+#ifndef GCM_H_XM5GUIH8349HX3894H891HG
+#define GCM_H_XM5GUIH8349HX3894H891HG
 
 #include "math.h"
 #include "ul/ul.h"

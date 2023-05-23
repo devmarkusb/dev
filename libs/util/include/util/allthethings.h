@@ -1,5 +1,5 @@
-#ifndef ALLTHETHINGS_H_jkasghfuix3gt83gnz847xt2t
-#define ALLTHETHINGS_H_jkasghfuix3gt83gnz847xt2t
+#ifndef ALLTHETHINGS_H_JKASGHFUIX3GT83GNZ847XT2T
+#define ALLTHETHINGS_H_JKASGHFUIX3GT83GNZ847XT2T
 
 #include "ul/ul.h"
 #include <algorithm>

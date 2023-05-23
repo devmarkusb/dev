@@ -1,5 +1,5 @@
-#ifndef ENTITIES_H_ix23478gnfyx28gf8gf
-#define ENTITIES_H_ix23478gnfyx28gf8gf
+#ifndef ENTITIES_H_IX23478GNFYX28GF8GF
+#define ENTITIES_H_IX23478GNFYX28GF8GF
 
 #include "util/allthethings.h"
 
@@ -47,7 +47,7 @@ enum class Country {
 // concrete species
 struct Person {
     // attribute eyeColor
-    Color eyeColor{Color::unknown};
+    Color eye_color{Color::unknown};
     NaturalNumber age{};
 
     static constexpr Person socrates() noexcept {
@@ -63,7 +63,7 @@ struct Cat {};
 // concept creature
 
 // function
-inline NaturalNumber minAge(Person, Person) {
+inline NaturalNumber min_age(Person, Person) {
     throw ul::NotImplemented{UL_LOCATION};
 }
 

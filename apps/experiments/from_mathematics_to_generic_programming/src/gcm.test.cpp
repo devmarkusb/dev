@@ -16,19 +16,19 @@ static ostream& operator<<(ostream& os, const function<std::pair<int, int>(int, 
 } // namespace std
 
 namespace {
-constexpr auto arbitraryEven{42};
-constexpr auto arbitraryOdd{43};
-constexpr auto randRangeMin{1};
-constexpr auto randRangeMax{1'000'000};
-constexpr auto randReps{100};
+constexpr auto arbitrary_even{42};
+constexpr auto arbitrary_odd{43};
+constexpr auto rand_range_min{1};
+constexpr auto rand_range_max{1'000'000};
+constexpr auto rand_reps{100};
 
 struct Rand {
-    static inline std::random_device dev_;
-    static inline std::mt19937 gen_{dev_()};
-    static inline std::uniform_int_distribution<> distrib_{randRangeMin, randRangeMax};
+    static inline std::random_device dev;
+    static inline std::mt19937 gen{dev()};
+    static inline std::uniform_int_distribution<> distrib{rand_range_min, rand_range_max};
 };
 
-std::string printRandoms(int r1, int r2) {
+std::string print_randoms(int r1, int r2) {
     return "randoms: " + std::to_string(r1) + ", " + std::to_string(r2);
 }
 
@@ -48,8 +48,8 @@ TEST_P(GcmTest, one) {
     EXPECT_EQ(GetParam()(2, 1), 1);
     EXPECT_EQ(GetParam()(1, 3), 1);
     EXPECT_EQ(GetParam()(3, 1), 1);
-    EXPECT_EQ(GetParam()(1, arbitraryEven), 1);
-    EXPECT_EQ(GetParam()(arbitraryEven, 1), 1);
+    EXPECT_EQ(GetParam()(1, arbitrary_even), 1);
+    EXPECT_EQ(GetParam()(arbitrary_even, 1), 1);
 }
 
 TEST_P(GcmTest, two) {
@@ -58,10 +58,10 @@ TEST_P(GcmTest, two) {
     EXPECT_EQ(GetParam()(3, 2), 1);
     EXPECT_EQ(GetParam()(2, 4), 2);
     EXPECT_EQ(GetParam()(4, 2), 2);
-    EXPECT_EQ(GetParam()(2, arbitraryEven), 2);
-    EXPECT_EQ(GetParam()(arbitraryEven, 2), 2);
-    EXPECT_EQ(GetParam()(2, arbitraryOdd), 1);
-    EXPECT_EQ(GetParam()(arbitraryOdd, 2), 1);
+    EXPECT_EQ(GetParam()(2, arbitrary_even), 2);
+    EXPECT_EQ(GetParam()(arbitrary_even, 2), 2);
+    EXPECT_EQ(GetParam()(2, arbitrary_odd), 1);
+    EXPECT_EQ(GetParam()(arbitrary_odd, 2), 1);
 }
 
 TEST_P(GcmTest, three) {
@@ -72,15 +72,15 @@ TEST_P(GcmTest, three) {
     EXPECT_EQ(GetParam()(5, 3), 1);
     EXPECT_EQ(GetParam()(3, 6), 3);
     EXPECT_EQ(GetParam()(6, 3), 3);
-    EXPECT_EQ(GetParam()(3, arbitraryEven), arbitraryEven % 3 ? 1 : 3);
-    EXPECT_EQ(GetParam()(arbitraryEven, 3), arbitraryEven % 3 ? 1 : 3);
-    EXPECT_EQ(GetParam()(3, arbitraryOdd), arbitraryOdd % 3 ? 1 : 3);
-    EXPECT_EQ(GetParam()(arbitraryOdd, 3), arbitraryOdd % 3 ? 1 : 3);
+    EXPECT_EQ(GetParam()(3, arbitrary_even), arbitrary_even % 3 ? 1 : 3);
+    EXPECT_EQ(GetParam()(arbitrary_even, 3), arbitrary_even % 3 ? 1 : 3);
+    EXPECT_EQ(GetParam()(3, arbitrary_odd), arbitrary_odd % 3 ? 1 : 3);
+    EXPECT_EQ(GetParam()(arbitrary_odd, 3), arbitrary_odd % 3 ? 1 : 3);
 }
 
 TEST_P(GcmTest, various) {
-    EXPECT_EQ(GetParam()(arbitraryEven, arbitraryEven), arbitraryEven);
-    EXPECT_EQ(GetParam()(arbitraryOdd, arbitraryOdd), arbitraryOdd);
+    EXPECT_EQ(GetParam()(arbitrary_even, arbitrary_even), arbitrary_even);
+    EXPECT_EQ(GetParam()(arbitrary_odd, arbitrary_odd), arbitrary_odd);
     EXPECT_EQ(GetParam()(12, 6), 6);
     EXPECT_EQ(GetParam()(6, 12), 6);
     EXPECT_EQ(GetParam()(12, 9), 3);
@@ -102,32 +102,32 @@ TEST_P(GcmTest, various) {
 // NOLINTEND
 
 TEST_P(GcmTest, equal) {
-    for (auto i{1}; i <= randReps; ++i) {
-        const auto randnr{Rand::distrib_(Rand::gen_)};
+    for (auto i{1}; i <= rand_reps; ++i) {
+        const auto randnr{Rand::distrib(Rand::gen)};
         EXPECT_EQ(GetParam()(randnr, randnr), randnr);
     }
 }
 
 TEST_P(GcmTest, symmetric) {
-    for (auto i{1}; i <= randReps; ++i) {
-        const auto randnr1{Rand::distrib_(Rand::gen_)};
-        const auto randnr2{Rand::distrib_(Rand::gen_)};
+    for (auto i{1}; i <= rand_reps; ++i) {
+        const auto randnr1{Rand::distrib(Rand::gen)};
+        const auto randnr2{Rand::distrib(Rand::gen)};
         EXPECT_EQ(GetParam()(randnr1, randnr2), GetParam()(randnr2, randnr1));
     }
 }
 
 TEST_P(GcmTest, sumprop) {
-    for (auto i{1}; i <= randReps; ++i) {
-        const auto randnr1{Rand::distrib_(Rand::gen_)};
-        const auto randnr2{Rand::distrib_(Rand::gen_)};
+    for (auto i{1}; i <= rand_reps; ++i) {
+        const auto randnr1{Rand::distrib(Rand::gen)};
+        const auto randnr2{Rand::distrib(Rand::gen)};
         EXPECT_EQ(GetParam()(randnr1, randnr2), GetParam()(randnr1, randnr1 + randnr2));
     }
 }
 
 TEST_P(GcmTest, diffprop) {
-    for (auto i{1}; i <= randReps; ++i) {
-        const auto randnr1{Rand::distrib_(Rand::gen_)};
-        const auto randnr2{Rand::distrib_(Rand::gen_)};
+    for (auto i{1}; i <= rand_reps; ++i) {
+        const auto randnr1{Rand::distrib(Rand::gen)};
+        const auto randnr2{Rand::distrib(Rand::gen)};
         if (randnr1 < randnr2)
             EXPECT_EQ(GetParam()(randnr1, randnr2), GetParam()(randnr1, randnr2 - randnr1));
         else if (randnr1 > randnr2)
@@ -145,14 +145,14 @@ INSTANTIATE_TEST_SUITE_P(
 TEST_P(RemainderTest, zero) {
     EXPECT_DEBUG_DEATH(GetParam()(1, 0), ".*");
     EXPECT_EQ(GetParam()(0, 1), 0);
-    EXPECT_EQ(GetParam()(0, arbitraryEven), 0);
-    EXPECT_EQ(GetParam()(0, arbitraryOdd), 0);
+    EXPECT_EQ(GetParam()(0, arbitrary_even), 0);
+    EXPECT_EQ(GetParam()(0, arbitrary_odd), 0);
 }
 
 TEST_P(RemainderTest, general) {
-    for (auto i{1}; i <= randReps; ++i) {
-        const auto randnr1{Rand::distrib_(Rand::gen_)};
-        const auto randnr2{Rand::distrib_(Rand::gen_)};
+    for (auto i{1}; i <= rand_reps; ++i) {
+        const auto randnr1{Rand::distrib(Rand::gen)};
+        const auto randnr2{Rand::distrib(Rand::gen)};
         EXPECT_EQ(GetParam()(randnr1, randnr2), randnr1 % randnr2);
     }
 }
@@ -164,14 +164,14 @@ INSTANTIATE_TEST_SUITE_P(QuotientVariousImpl, QuotientTest, testing::Values(math
 TEST_P(QuotientTest, zero) {
     EXPECT_DEBUG_DEATH(GetParam()(1, 0), ".*");
     EXPECT_EQ(GetParam()(0, 1), 0);
-    EXPECT_EQ(GetParam()(0, arbitraryEven), 0);
-    EXPECT_EQ(GetParam()(0, arbitraryOdd), 0);
+    EXPECT_EQ(GetParam()(0, arbitrary_even), 0);
+    EXPECT_EQ(GetParam()(0, arbitrary_odd), 0);
 }
 
 TEST_P(QuotientTest, general) {
-    for (auto i{1}; i <= randReps; ++i) {
-        const auto randnr1{Rand::distrib_(Rand::gen_)};
-        const auto randnr2{Rand::distrib_(Rand::gen_)};
+    for (auto i{1}; i <= rand_reps; ++i) {
+        const auto randnr1{Rand::distrib(Rand::gen)};
+        const auto randnr2{Rand::distrib(Rand::gen)};
         EXPECT_EQ(GetParam()(randnr1, randnr2), randnr1 / randnr2);
     }
 }
@@ -185,16 +185,16 @@ INSTANTIATE_TEST_SUITE_P(
 TEST_P(QuotientRemainderTest, zero) {
     EXPECT_DEBUG_DEATH(GetParam()(1, 0), ".*");
     EXPECT_EQ(GetParam()(0, 1), std::make_pair(0, 0));
-    EXPECT_EQ(GetParam()(0, arbitraryEven), std::make_pair(0, 0));
-    EXPECT_EQ(GetParam()(0, arbitraryOdd), std::make_pair(0, 0));
+    EXPECT_EQ(GetParam()(0, arbitrary_even), std::make_pair(0, 0));
+    EXPECT_EQ(GetParam()(0, arbitrary_odd), std::make_pair(0, 0));
 }
 
 TEST_P(QuotientRemainderTest, general) {
-    for (auto i{1}; i <= randReps; ++i) {
-        const auto randnr1{Rand::distrib_(Rand::gen_)};
-        const auto randnr2{Rand::distrib_(Rand::gen_)};
+    for (auto i{1}; i <= rand_reps; ++i) {
+        const auto randnr1{Rand::distrib(Rand::gen)};
+        const auto randnr2{Rand::distrib(Rand::gen)};
         EXPECT_EQ(GetParam()(randnr1, randnr2), std::make_pair(randnr1 / randnr2, randnr1 % randnr2))
-            << printRandoms(randnr1, randnr2);
+            << print_randoms(randnr1, randnr2);
     }
 }
 } // namespace

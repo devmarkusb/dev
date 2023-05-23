@@ -4,7 +4,7 @@
 # -readability-function-cognitive-complexity: goes bogus in gtests unfortunately
 
 Checks: >
-  -*,
+  *,
   -altera-id-dependent-backward-branch,
   -altera-struct-pack-align,
   -altera-unroll-loops,
@@ -73,6 +73,6 @@ CheckOptions:
   - { key: readability-identifier-naming.ValueTemplateParameterCase,      value: lower_case }
   - { key: readability-identifier-naming.VariableCase,                    value: lower_case }
 
-#HeaderFilterRegex: '^.*(?:_deps).*'
+HeaderFilterRegex: '^.*(?:_deps).*'
 # dangerous as this looks into 3rd party headers as well, but you might get better results (just use it occasionally)
-HeaderFilterRegex: '.*'
+#HeaderFilterRegex: '.*'

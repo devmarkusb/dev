@@ -1,5 +1,5 @@
-#ifndef MATH_H_reogh378904h27837h3
-#define MATH_H_reogh378904h27837h3
+#ifndef MATH_H_REOGH378904H27837H3
+#define MATH_H_REOGH378904H27837H3
 
 #include "ul/ul.h"
 #include <array>
@@ -118,10 +118,10 @@ concept GroupInverseOperation =
 
 template <typename SetT, typename Op, typename InverseOp>
 concept Group = Set<SetT> && GroupOperation<Op, SetT> && GroupInverseOperation<InverseOp, SetT>
-                && requires(Op op, InverseOp inverseOp, SetT a, SetT identity) {
+                && requires(Op op, InverseOp inverse_op, SetT a, SetT identity) {
                        UL_SEMANTICS {
-                           op(a, inverseOp(a)) == identity;
-                           op(inverseOp(a), a) == identity;
+                           op(a, inverse_op(a)) == identity;
+                           op(inverse_op(a), a) == identity;
                        };
                    };
 
@@ -168,12 +168,12 @@ template <typename SetT, typename OpCommutativeMonoid /*add*/, typename OpMonoid
 concept SemiRing =
     Set<SetT> && CommutativeMonoid<SetT, OpCommutativeMonoid> && Monoid<SetT, OpMonoid>
     && requires(
-        OpCommutativeMonoid opCommutativeMonoid, OpMonoid opMonoid, SetT a, SetT b, SetT c,
-        SetT commutativeMonoidIdentity, SetT monoidIdentity) {
+        OpCommutativeMonoid op_commutative_monoid, OpMonoid op_monoid, SetT a, SetT b, SetT c,
+        SetT commutative_monoid_identity, SetT monoid_identity) {
            UL_SEMANTICS {
-               commutativeMonoidIdentity != monoidIdentity;
-               opMonoid(commutativeMonoidIdentity, a) == commutativeMonoidIdentity;
-               opMonoid(a, opCommutativeMonoid(b, c)) == opCommutativeMonoid(opMonoid(a, b), opMonoid(a, c));
+               commutative_monoid_identity != monoid_identity;
+               op_monoid(commutative_monoid_identity, a) == commutative_monoid_identity;
+               op_monoid(a, op_commutative_monoid(b, c)) == op_commutative_monoid(op_monoid(a, b), op_monoid(a, c));
            };
        };
 
@@ -197,12 +197,12 @@ template <
     typename OpCommutativeMonoid /*multiply*/>
 concept IntegralDomain =
     Set<SetT> && CommutativeRing<SetT, OpCommutativeGroup, OpInvCommutativeGroup, OpCommutativeMonoid>
-    && requires(OpCommutativeMonoid opCommutativeMonoid, SetT a, SetT b, SetT commutativeGroupIdentity) {
+    && requires(OpCommutativeMonoid op_commutative_monoid, SetT a, SetT b, SetT commutative_group_identity) {
            UL_SEMANTICS {
                // a * b = 0  => a = 0 || b = 0 (no other zero divisor besides 0)
                // 0: commutativeGroupIdentity, *: opCommutativeMonoid
-               opCommutativeMonoid(a, b) != commutativeGroupIdentity
-                   || (a == commutativeGroupIdentity || b == commutativeGroupIdentity);
+               op_commutative_monoid(a, b) != commutative_group_identity
+                   || (a == commutative_group_identity || b == commutative_group_identity);
            };
        };
 
@@ -234,18 +234,18 @@ concept EuclideanDomain =
     && std::regular_invocable<OpQuotient, SetT, SetT> && std::is_same_v<SetT, std::invoke_result_t<OpQuotient, SetT, SetT>>
     && std::regular_invocable<OpRemainder, SetT, SetT> && std::is_same_v<SetT, std::invoke_result_t<OpRemainder, SetT, SetT>>
     && std::regular_invocable<OpNorm, SetT> && NaturalNumber<std::invoke_result_t<OpNorm, SetT>>
-    && requires(SetT a, SetT b, SetT commutativeGroupIdentity, OpQuotient opQuotient,
-                OpRemainder opRemainder, OpCommutativeMonoid opCommutativeMonoid,
-                OpCommutativeGroup opCommutativeGroup, OpNorm opNorm) {
-           { opQuotient(a, b) } -> std::convertible_to<SetT>;
-           { opRemainder(a, b) } -> std::convertible_to<SetT>;
-           { opNorm(a) } -> NaturalNumber;
+    && requires(SetT a, SetT b, SetT commutative_group_identity, OpQuotient op_quotient,
+                OpRemainder op_remainder, OpCommutativeMonoid op_commutative_monoid,
+                OpCommutativeGroup op_commutative_group, OpNorm op_norm) {
+           { op_quotient(a, b) } -> std::convertible_to<SetT>;
+           { op_remainder(a, b) } -> std::convertible_to<SetT>;
+           { op_norm(a) } -> NaturalNumber;
            UL_SEMANTICS {
-               b != commutativeGroupIdentity;
-               a == opCommutativeGroup(opCommutativeMonoid(opQuotient(a, b), b), opRemainder(a, b));
-               (opNorm(a) == commutativeGroupIdentity) == (a == commutativeGroupIdentity);
-               opNorm(opCommutativeMonoid(a, b)) >= opNorm(a);
-               opNorm(opRemainder(a, b)) <= opNorm(b);
+               b != commutative_group_identity;
+               a == op_commutative_group(op_commutative_monoid(op_quotient(a, b), b), op_remainder(a, b));
+               (op_norm(a) == commutative_group_identity) == (a == commutative_group_identity);
+               op_norm(op_commutative_monoid(a, b)) >= op_norm(a);
+               op_norm(op_remainder(a, b)) <= op_norm(b);
            };
        };
 
@@ -332,12 +332,12 @@ template <
     MonoidOperation<ElemT> OpElemMonoid /*multiply*/>
     requires SemiRing<ElemT, OpElemCommutativeMonoid, OpElemMonoid>
 auto multiply(
-    Matrix<ElemT, m, k> l, Matrix<ElemT, k, n> r, OpElemCommutativeMonoid&& innerAdd, OpElemMonoid&& innerMul) {
+    Matrix<ElemT, m, k> l, Matrix<ElemT, k, n> r, OpElemCommutativeMonoid&& inner_add, OpElemMonoid&& inner_mul) {
     Matrix<ElemT, m, n> res{};
     for (decltype(m) i{}; i < m; ++i)
         for (decltype(k) h{}; h < k; ++h)
             for (decltype(n) j{}; j < n; ++j)
-                res[i][j] = innerAdd(res[i][j], innerMul(l[i][h], r[h][j]));
+                res[i][j] = inner_add(res[i][j], inner_mul(l[i][h], r[h][j]));
     return res;
 }
 

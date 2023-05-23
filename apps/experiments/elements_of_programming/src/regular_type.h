@@ -1,5 +1,5 @@
-#ifndef REGULAR_TYPE_H_o3xtinh23478gty2347g
-#define REGULAR_TYPE_H_o3xtinh23478gty2347g
+#ifndef REGULAR_TYPE_H_O3XTINH23478GTY2347G
+#define REGULAR_TYPE_H_O3XTINH23478GTY2347G
 
 #include "util/allthethings.h"
 
@@ -10,20 +10,20 @@ inline bool operator==(const RegularEx1&, const RegularEx1&) {
 }
 
 template <typename Regular>
-void checkRegularity(const Regular& r) {
-    Regular rOther;
-    bool _{r == rOther};
+void check_regularity(const Regular& r) {
+    Regular r_other;
+    bool _{r == r_other};
     ul::ignore_unused(_);
-    Regular rCopiedFrom{r};
-    ul::ignore_unused(rCopiedFrom);
-    rOther = r;
+    Regular r_copied_from{r};
+    ul::ignore_unused(r_copied_from);
+    r_other = r;
     // total ordering?
     // underlying type?
 }
 
-inline void checkRegularity() {
+inline void check_regularity() {
     RegularEx1 r;
-    checkRegularity(r);
+    check_regularity(r);
 }
 
 #endif

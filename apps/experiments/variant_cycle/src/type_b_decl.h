@@ -1,5 +1,5 @@
-#ifndef TYPE_B_DECL_di4h892rj3
-#define TYPE_B_DECL_di4h892rj3
+#ifndef TYPE_B_DECL_H_DI4H892RJ3
+#define TYPE_B_DECL_H_DI4H892RJ3
 
 struct TypeB {};
 

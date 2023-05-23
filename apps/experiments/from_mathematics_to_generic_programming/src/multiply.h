@@ -1,5 +1,5 @@
-#ifndef MULTIPLY_H_oehgy49g294ygb34
-#define MULTIPLY_H_oehgy49g294ygb34
+#ifndef MULTIPLY_H_OEHGY49G294YGB34
+#define MULTIPLY_H_OEHGY49G294YGB34
 
 #include "math.h"
 #include "ul/ul.h"

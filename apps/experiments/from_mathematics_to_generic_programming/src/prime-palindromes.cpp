@@ -9,17 +9,17 @@ constexpr T value(T index) {
     return 2 * index + 3;
 }
 
-void listPalindromesDec(const std::vector<uint8_t>& primes) {
+void list_palindromes_dec(const std::vector<uint8_t>& primes) {
     for (size_t i{}; i < primes.size(); ++i) {
         if (!primes[i])
             continue;
 
         const auto val{value(i)};
-        const auto digitCountDec{ul::math::get_digit_count(value(i))};
-        bool palindromeDec{true};
-        for (std::remove_const_t<decltype(digitCountDec)> d{}; d < digitCountDec / 2; ++d) {
-            if (ul::math::get_digit(val, d) != ul::math::get_digit(val, digitCountDec - d - 1)) {
-                palindromeDec = false;
+        const auto digit_count_dec{ul::math::get_digit_count(value(i))};
+        bool palindrome_dec{true};
+        for (std::remove_const_t<decltype(digit_count_dec)> d{}; d < digit_count_dec / 2; ++d) {
+            if (ul::math::get_digit(val, d) != ul::math::get_digit(val, digit_count_dec - d - 1)) {
+                palindrome_dec = false;
                 break;
             }
         }
@@ -30,49 +30,49 @@ void listPalindromesDec(const std::vector<uint8_t>& primes) {
         // So except for 11 always an odd number of digits.
         // And there are strange gaps lacking numbers between 200 and 300, 400 and 700, 800 and 900,
         // continuing over and over when adding two 0's each.
-        if (palindromeDec)
+        if (palindrome_dec)
             std::cout << ul::fmt::group_thousands(value(i)) << " ";
     }
 }
 
-void listPalindromesHex(const std::vector<uint8_t>& primes) {
+void list_palindromes_hex(const std::vector<uint8_t>& primes) {
     for (size_t i{}; i < primes.size(); ++i) {
         if (!primes[i])
             continue;
 
         const auto val{value(i)};
-        const auto digitCountHex{ul::math::get_digit_count(value(i), ul::math::NumBase::hex)};
-        bool palindromeHex{true};
-        for (std::remove_const_t<decltype(digitCountHex)> d{}; d < digitCountHex / 2; ++d) {
+        const auto digit_count_hex{ul::math::get_digit_count(value(i), ul::math::NumBase::hex)};
+        bool palindrome_hex{true};
+        for (std::remove_const_t<decltype(digit_count_hex)> d{}; d < digit_count_hex / 2; ++d) {
             if (ul::math::get_digit(val, d, ul::math::NumBase::hex)
-                != ul::math::get_digit(val, digitCountHex - d - 1, ul::math::NumBase::hex)) {
-                palindromeHex = false;
+                != ul::math::get_digit(val, digit_count_hex - d - 1, ul::math::NumBase::hex)) {
+                palindrome_hex = false;
                 break;
             }
         }
         // Similar to dec we have only odd digit counts, except for 11.
-        if (palindromeHex)
+        if (palindrome_hex)
             std::cout << std::hex << value(i) << " ";
     }
 }
 
-void listPalindromesBin(const std::vector<uint8_t>& primes) {
+void list_palindromes_bin(const std::vector<uint8_t>& primes) {
     for (size_t i{}; i < primes.size(); ++i) {
         if (!primes[i])
             continue;
 
         const auto val{value(i)};
-        const auto digitCountBin{ul::math::get_digit_count(value(i), ul::math::NumBase::bin)};
-        bool palindromeBin{true};
-        for (std::remove_const_t<decltype(digitCountBin)> d{}; d < digitCountBin / 2; ++d) {
+        const auto digit_count_bin{ul::math::get_digit_count(value(i), ul::math::NumBase::bin)};
+        bool palindrome_bin{true};
+        for (std::remove_const_t<decltype(digit_count_bin)> d{}; d < digit_count_bin / 2; ++d) {
             if (ul::math::get_digit(val, d, ul::math::NumBase::bin)
-                != ul::math::get_digit(val, digitCountBin - d - 1, ul::math::NumBase::bin)) {
-                palindromeBin = false;
+                != ul::math::get_digit(val, digit_count_bin - d - 1, ul::math::NumBase::bin)) {
+                palindrome_bin = false;
                 break;
             }
         }
         // Similar to dec and hex we have only odd digit counts, except for 3 (0b11).
-        if (palindromeBin) {
+        if (palindrome_bin) {
             std::bitset<32> b{value(i)};
             std::cout << b << " ";
         }
@@ -89,13 +89,13 @@ int main() {
     math::sift2(std::begin(primes), mi);
 
     std::cout << "palindrome primes in dec:\n";
-    listPalindromesDec(primes);
+    list_palindromes_dec(primes);
 
     std::cout << "\npalindrome primes in hex:\n";
-    listPalindromesHex(primes);
+    list_palindromes_hex(primes);
 
     std::cout << "\npalindrome primes in bin:\n";
-    listPalindromesBin(primes);
+    list_palindromes_bin(primes);
 
     return {};
 }

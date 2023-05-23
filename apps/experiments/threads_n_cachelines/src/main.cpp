@@ -14,48 +14,48 @@ constexpr std::size_t hardware_destructive_interference_size = 64;
 // !!! YOU MUST UPDATE THIS TO BE ACCURATE !!!
 constexpr std::size_t hardware_constructive_interference_size = 64;
 
-constexpr unsigned kTimingTrialsToComputeAverage = 100;
-constexpr unsigned kInnerLoopTrials = 1000000;
+constexpr unsigned k_timing_trials_to_compute_average = 100;
+constexpr unsigned k_inner_loop_trials = 1000000;
 
-typedef unsigned useless_result_t;
-typedef double elapsed_secs_t;
+typedef unsigned UselessResultT;
+typedef double ElapsedSecsT;
 
 //////// CODE TO BE SAMPLED:
 
 // wraps an int, default alignment allows false-sharing
-struct naive_int {
+struct NaiveInt {
     int value;
 };
 
-static_assert(alignof(naive_int) < hardware_destructive_interference_size, "");
+static_assert(alignof(NaiveInt) < hardware_destructive_interference_size, "");
 
 // wraps an int, cache alignment prevents false-sharing
-struct cache_int {
+struct CacheInt {
     alignas(hardware_destructive_interference_size) int value;
 };
 
-static_assert(alignof(cache_int) == hardware_destructive_interference_size, "");
+static_assert(alignof(CacheInt) == hardware_destructive_interference_size, "");
 
 // wraps a pair of int, purposefully pushes them too far apart for true-sharing
-struct bad_pair {
+struct BadPair {
     int first;
     char padding[hardware_constructive_interference_size];
     int second;
 };
 
-static_assert(sizeof(bad_pair) > hardware_constructive_interference_size, "");
+static_assert(sizeof(BadPair) > hardware_constructive_interference_size, "");
 
 // wraps a pair of int, ensures they fit nicely together for true-sharing
-struct good_pair {
+struct GoodPair {
     int first;
     int second;
 };
 
-static_assert(sizeof(good_pair) <= hardware_constructive_interference_size, "");
+static_assert(sizeof(GoodPair) <= hardware_constructive_interference_size, "");
 
 // accesses a specific array element many times
 template <typename T, typename Latch>
-useless_result_t sample_array_threadfunc(Latch& latch, unsigned thread_index, T& vec) {
+UselessResultT sample_array_threadfunc(Latch& latch, unsigned thread_index, T& vec) {
     // prepare for computation
     std::random_device rd;
     std::mt19937 mt{rd()};
@@ -66,16 +66,16 @@ useless_result_t sample_array_threadfunc(Latch& latch, unsigned thread_index, T&
     latch.count_down_and_wait();
 
     // compute
-    for (unsigned trial = 0; trial != kInnerLoopTrials; ++trial) {
+    for (unsigned trial = 0; trial != k_inner_loop_trials; ++trial) {
         element.value = dist(mt);
     }
 
-    return static_cast<useless_result_t>(element.value);
+    return static_cast<UselessResultT>(element.value);
 }
 
 // accesses a pair's elements many times
 template <typename T, typename Latch>
-useless_result_t sample_pair_threadfunc(Latch& latch, unsigned, T& pair) {
+UselessResultT sample_pair_threadfunc(Latch& latch, unsigned, T& pair) {
     // prepare for computation
     std::random_device rd;
     std::mt19937 mt{rd()};
@@ -84,20 +84,20 @@ useless_result_t sample_pair_threadfunc(Latch& latch, unsigned, T& pair) {
     latch.count_down_and_wait();
 
     // compute
-    for (unsigned trial = 0; trial != kInnerLoopTrials; ++trial) {
+    for (unsigned trial = 0; trial != k_inner_loop_trials; ++trial) {
         pair.first = dist(mt);
         pair.second = dist(mt);
     }
 
-    return static_cast<useless_result_t>(pair.first) + static_cast<useless_result_t>(pair.second);
+    return static_cast<UselessResultT>(pair.first) + static_cast<UselessResultT>(pair.second);
 }
 
 //////// UTILITIES:
 
 // utility: allow threads to wait until everyone is ready
-class threadlatch {
+class Threadlatch {
 public:
-    explicit threadlatch(const std::size_t count)
+    explicit Threadlatch(const std::size_t count)
         : count_{count} {
     }
 
@@ -120,14 +120,14 @@ private:
 
 namespace {
 // utility: runs a given function in N threads
-std::tuple<useless_result_t, elapsed_secs_t> run_threads(
-    const std::function<useless_result_t(threadlatch&, unsigned)>& func, const unsigned num_threads) {
-    threadlatch latch{num_threads + 1};
+std::tuple<UselessResultT, ElapsedSecsT> run_threads(
+    const std::function<UselessResultT(Threadlatch&, unsigned)>& func, const unsigned num_threads) {
+    Threadlatch latch{num_threads + 1};
 
     std::vector<std::future<unsigned>> futures;
     std::vector<std::thread> threads;
     for (unsigned thread_index = 0; thread_index != num_threads; ++thread_index) {
-        std::packaged_task<useless_result_t()> task{
+        std::packaged_task<UselessResultT()> task{
             std::bind(func, std::ref(latch), thread_index)
             //[&]() { return func(latch, thread_index); }
         };
@@ -155,13 +155,13 @@ std::tuple<useless_result_t, elapsed_secs_t> run_threads(
 }
 
 // utility: sample the time it takes to run func on N threads
-void run_tests(const std::function<useless_result_t(threadlatch&, unsigned)>& func, const unsigned num_threads) {
-    useless_result_t final_result = 0;
+void run_tests(const std::function<UselessResultT(Threadlatch&, unsigned)>& func, const unsigned num_threads) {
+    UselessResultT final_result = 0;
     double avgtime = 0.0;
-    for (unsigned trial = 0; trial != kTimingTrialsToComputeAverage; ++trial) {
+    for (unsigned trial = 0; trial != k_timing_trials_to_compute_average; ++trial) {
         const auto result_and_elapsed = run_threads(func, num_threads);
-        const auto result = std::get<useless_result_t>(result_and_elapsed);
-        const auto elapsed = std::get<elapsed_secs_t>(result_and_elapsed);
+        const auto result = std::get<UselessResultT>(result_and_elapsed);
+        const auto elapsed = std::get<ElapsedSecsT>(result_and_elapsed);
 
         final_result += result;
         avgtime = (avgtime * trial + elapsed) / (trial + 1);
@@ -175,23 +175,23 @@ int main() {
     const auto cores = std::thread::hardware_concurrency();
     std::cout << "Hardware concurrency: " << cores << std::endl;
 
-    std::cout << "sizeof(naive_int): " << sizeof(naive_int) << std::endl;
-    std::cout << "alignof(naive_int): " << alignof(naive_int) << std::endl;
-    std::cout << "sizeof(cache_int): " << sizeof(cache_int) << std::endl;
-    std::cout << "alignof(cache_int): " << alignof(cache_int) << std::endl;
-    std::cout << "sizeof(bad_pair): " << sizeof(bad_pair) << std::endl;
-    std::cout << "alignof(bad_pair): " << alignof(bad_pair) << std::endl;
-    std::cout << "sizeof(good_pair): " << sizeof(good_pair) << std::endl;
-    std::cout << "alignof(good_pair): " << alignof(good_pair) << std::endl;
+    std::cout << "sizeof(naive_int): " << sizeof(NaiveInt) << std::endl;
+    std::cout << "alignof(naive_int): " << alignof(NaiveInt) << std::endl;
+    std::cout << "sizeof(cache_int): " << sizeof(CacheInt) << std::endl;
+    std::cout << "alignof(cache_int): " << alignof(CacheInt) << std::endl;
+    std::cout << "sizeof(bad_pair): " << sizeof(BadPair) << std::endl;
+    std::cout << "alignof(bad_pair): " << alignof(BadPair) << std::endl;
+    std::cout << "sizeof(good_pair): " << sizeof(GoodPair) << std::endl;
+    std::cout << "alignof(good_pair): " << alignof(GoodPair) << std::endl;
 
     {
         std::cout << "Running naive_int test." << std::endl;
 
-        std::vector<naive_int> vec;
-        vec.resize((1u << 28) / sizeof(naive_int)); // allocate 256 mibibytes
+        std::vector<NaiveInt> vec;
+        vec.resize((1u << 28) / sizeof(NaiveInt)); // allocate 256 mibibytes
 
         run_tests(
-            [&](threadlatch& latch, unsigned thread_index) {
+            [&](Threadlatch& latch, unsigned thread_index) {
                 return sample_array_threadfunc(latch, thread_index, vec);
             },
             cores);
@@ -199,11 +199,11 @@ int main() {
     {
         std::cout << "Running cache_int test." << std::endl;
 
-        std::vector<cache_int> vec;
-        vec.resize((1u << 28) / sizeof(cache_int)); // allocate 256 mibibytes
+        std::vector<CacheInt> vec;
+        vec.resize((1u << 28) / sizeof(CacheInt)); // allocate 256 mibibytes
 
         run_tests(
-            [&](threadlatch& latch, unsigned thread_index) {
+            [&](Threadlatch& latch, unsigned thread_index) {
                 return sample_array_threadfunc(latch, thread_index, vec);
             },
             cores);
@@ -211,10 +211,10 @@ int main() {
     {
         std::cout << "Running bad_pair test." << std::endl;
 
-        bad_pair p;
+        BadPair p;
 
         run_tests(
-            [&](threadlatch& latch, unsigned thread_index) {
+            [&](Threadlatch& latch, unsigned thread_index) {
                 return sample_pair_threadfunc(latch, thread_index, p);
             },
             cores);
@@ -222,10 +222,10 @@ int main() {
     {
         std::cout << "Running good_pair test." << std::endl;
 
-        good_pair p;
+        GoodPair p;
 
         run_tests(
-            [&](threadlatch& latch, unsigned thread_index) {
+            [&](Threadlatch& latch, unsigned thread_index) {
                 return sample_pair_threadfunc(latch, thread_index, p);
             },
             cores);

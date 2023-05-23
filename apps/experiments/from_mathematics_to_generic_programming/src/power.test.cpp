@@ -59,9 +59,9 @@ TEST(power_semigroup, transitive_closure2) {
     constexpr auto dim{7};
     constexpr auto inf{math::Tropical::inf};
     using Matrix = math::Matrix<math::Tropical, dim, dim>;
-    using mat_mul_gen_tropical = math::MatMulGenTropical<math::Tropical, dim, dim, dim>;
+    using MatMulGenTropical = math::MatMulGenTropical<math::Tropical, dim, dim, dim>;
     // aka distances (directed)
-    constexpr auto weightedAdjacencyMatrix{Matrix{{
+    constexpr auto weighted_adjacency_matrix{Matrix{{
         {0, 6, inf, 3, inf, inf, inf},
         {inf, 0, inf, inf, 2, 10, inf},
         {7, inf, 0, inf, inf, inf, inf},
@@ -71,15 +71,15 @@ TEST(power_semigroup, transitive_closure2) {
         {inf, 9, inf, inf, inf, inf, 0},
     }}};
 
-    EXPECT_EQ(math::power_semigroup(weightedAdjacencyMatrix, 1, mat_mul_gen_tropical{}), weightedAdjacencyMatrix);
+    EXPECT_EQ(math::power_semigroup(weighted_adjacency_matrix, 1, MatMulGenTropical{}), weighted_adjacency_matrix);
 
     using math::operator<<;
-    std::cout << math::power_semigroup(weightedAdjacencyMatrix, 2, mat_mul_gen_tropical{}) << "\n";
+    std::cout << math::power_semigroup(weighted_adjacency_matrix, 2, MatMulGenTropical{}) << "\n";
 
-    std::cout << math::power_semigroup(weightedAdjacencyMatrix, dim - 1, mat_mul_gen_tropical{}) << "\n";
+    std::cout << math::power_semigroup(weighted_adjacency_matrix, dim - 1, MatMulGenTropical{}) << "\n";
 
     // aka the shortest paths to everywhere
-    constexpr auto transitiveClosure{Matrix{{
+    constexpr auto transitive_closure{Matrix{{
         {0, 6, 8, 3, 8, 7, 11},
         {23, 0, 16, 26, 2, 10, 5},
         {7, 13, 0, 10, 15, 14, 18},
@@ -89,7 +89,7 @@ TEST(power_semigroup, transitive_closure2) {
         {32, 9, 25, 35, 11, 19, 0},
     }}};
 
-    EXPECT_EQ(math::power_semigroup(weightedAdjacencyMatrix, dim - 1, mat_mul_gen_tropical{}), transitiveClosure);
+    EXPECT_EQ(math::power_semigroup(weighted_adjacency_matrix, dim - 1, MatMulGenTropical{}), transitive_closure);
 }
 
 using MultiplicativeMonoidEx = unsigned int;

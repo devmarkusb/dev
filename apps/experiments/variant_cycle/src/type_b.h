@@ -1,16 +1,16 @@
-#ifndef TYPE_B_fhun3478gh
-#define TYPE_B_fhun3478gh
+#ifndef TYPE_B_H_FHUN3478GH
+#define TYPE_B_H_FHUN3478GH
 
 #include "type_b_decl.h"
 #include "variant_decl.h"
 #include <variant>
 
 inline int doSthSpecific(const TypeB&, const Var& v) {
-    Var aLocalOne{TypeA{}};
+    Var a_local_one{TypeA{}};
     return 2
            + std::visit(
-               [&aLocalOne](const auto& t) {
-                   return doSthSpecific(t, aLocalOne);
+               [&a_local_one](const auto& t) {
+                   return doSthSpecific(t, a_local_one);
                },
                v);
 }

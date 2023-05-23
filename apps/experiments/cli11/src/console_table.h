@@ -1,18 +1,18 @@
-#ifndef CONSOLE_TABLE_H_ouixh3gn478ghy3479y
-#define CONSOLE_TABLE_H_ouixh3gn478ghy3479y
+#ifndef CONSOLE_TABLE_H_OUIXH3GN478GHY3479Y
+#define CONSOLE_TABLE_H_OUIXH3GN478GHY3479Y
 
 #include "args.h"
 
 #include "ConsoleTable.h"
 
-inline void printTableOfArgs(const Args& args) {
-    ConsoleTable argsTable{"arg", "content"};
-    argsTable.setStyle(0);
+inline void print_table_of_args(const Args& args) {
+    ConsoleTable args_table{"arg", "content"};
+    args_table.setStyle(0);
 
-    argsTable += {"text", args.text_};
-    argsTable += {"int", std::to_string(args.int_)};
+    args_table += {"text", args.text};
+    args_table += {"int", std::to_string(args.int_)};
 
-    std::cout << argsTable;
+    std::cout << args_table;
 }
 
 #endif
