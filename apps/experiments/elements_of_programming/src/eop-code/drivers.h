@@ -34,7 +34,7 @@
 
 
 template <typename F, typename P>
-    requires(Transformation(F) && T == Domain(F) && UnaryPredicate(P) && Domain(F) == Domain(P))
+    REQUIRES(Transformation(F) && T == Domain(F) && UnaryPredicate(P) && Domain(F) == Domain(P))
 void output_orbit_structure(Domain(F) x, F f, P p) {
     triple<DistanceType(F), DistanceType(F), Domain(F)> t = orbit_structure(x, f, p);
     if (!p(t.m2)) {
@@ -61,7 +61,7 @@ void output_orbit_structure(Domain(F) x, F f, P p) {
 }
 
 template <typename I>
-    requires(Integer(I))
+    REQUIRES(Integer(I))
 struct additive_congruential_transformation {
     I modulus;
     I index;
@@ -77,7 +77,7 @@ struct additive_congruential_transformation {
 };
 
 template <typename I>
-    requires(Integer(I))
+    REQUIRES(Integer(I))
 struct input_type<additive_congruential_transformation<I>, 0> {
     typedef I type;
 };
@@ -94,7 +94,7 @@ struct distance_type<additive_congruential_transformation<int>> {
     typedef unsigned int type;
 };
 
-void run_additive_congruential_transformation() {
+inline void run_additive_congruential_transformation() {
     print("Enter a positive integer modulus:\n");
     int modulus;
     read(modulus);
@@ -109,7 +109,7 @@ void run_additive_congruential_transformation() {
 }
 
 template <typename I>
-    requires(Readable(I) && IndexedIterator(I) && ValueType(I) == DistanceType(I))
+    REQUIRES(Readable(I) && IndexedIterator(I) && ValueType(I) == DistanceType(I))
 struct table_transformation {
     typedef DistanceType(I) N;
     const I p;
@@ -126,7 +126,7 @@ struct table_transformation {
 };
 
 template <typename I>
-    requires(Readable(I) && IndexedIterator(I) && ValueType(I) == DistanceType(I))
+    REQUIRES(Readable(I) && IndexedIterator(I) && ValueType(I) == DistanceType(I))
 struct table_transformation_definition_space_predicate {
     typedef table_transformation<I> T;
     typedef DistanceType(I) N;
@@ -142,18 +142,18 @@ struct table_transformation_definition_space_predicate {
 };
 
 template <typename I>
-    requires(Readable(I) && IndexedIterator(I) && ValueType(I) == DistanceType(I))
+    REQUIRES(Readable(I) && IndexedIterator(I) && ValueType(I) == DistanceType(I))
 struct input_type<table_transformation<I>, 0> {
     typedef ValueType(I) type;
 };
 
 template <typename I>
-    requires(Readable(I) && IndexedIterator(I) && ValueType(I) == DistanceType(I))
+    REQUIRES(Readable(I) && IndexedIterator(I) && ValueType(I) == DistanceType(I))
 struct distance_type<table_transformation<I>> {
     typedef DistanceType(I) type;
 };
 
-void run_table_transformation() {
+inline void run_table_transformation() {
     print("Enter sequence of integers terminated by negative integer;\n"
           "enter empty sequence (a single negative integer) to end:\n");
     while (true) {
@@ -161,7 +161,7 @@ void run_table_transformation() {
         typedef size_type<T_0>::type N_0;
         typedef array<N_0> T;
         typedef size_type<T>::type N; // hopefully N = N_0
-        typedef iterator_type<T>::type I; // i.e., pointer(int)
+        typedef iterator_type<T>::type I; // i.e., POINTER(int)
         T a;
         while (true) {
             N x;
@@ -181,7 +181,7 @@ void run_table_transformation() {
 struct srand_transformation // Transformation(srand_transformation)
 {
     int operator()(int x) {
-        srand(x);
+        srand(static_cast<unsigned int>(x));
         return rand();
     }
 };
@@ -196,7 +196,7 @@ struct distance_type<srand_transformation> {
     typedef unsigned int type;
 };
 
-void run_srand_transformation() {
+inline void run_srand_transformation() {
     print("Enter an integer or zero to end:\n");
     while (true) {
         int x;
@@ -208,7 +208,7 @@ void run_srand_transformation() {
 }
 
 template <typename T>
-    requires(Regular(T))
+    REQUIRES(Regular(T))
 void push(array<T>& x, const T& y) {
     insert(back<array<T>>(x), y);
 }
@@ -217,9 +217,9 @@ struct LCG // linear congruential generator
 {
     typedef long long T;
     T m, a, b, x0;
-    const pointer(char) name;
+    const POINTER(char) name;
 
-    LCG(T m, T a, T b, T x0, const pointer(char) name)
+    LCG(T m, T a, T b, T x0, const POINTER(char) name)
         : m(m)
         , a(a)
         , b(b)
@@ -242,7 +242,7 @@ struct distance_type<LCG> {
     typedef unsigned long long type;
 };
 
-void run_lcg_transformation() {
+inline void run_lcg_transformation() {
     array<LCG> lcg;
     // From:
     //   A collection of classical pseudorandom number generators with linear structures -
@@ -282,7 +282,7 @@ void run_lcg_transformation() {
     print("Enter an index (out of range to end)"
           " and a seed (negative to use default):\n");
     int i(0);
-    pointer(LCG) p = begin(lcg);
+    POINTER(LCG) p = begin(lcg);
     while (i < size(lcg)) {
         print("  ");
         print(i);
@@ -309,7 +309,7 @@ void run_lcg_transformation() {
     }
 }
 
-void run_any_lcg_transformation() {
+inline void run_any_lcg_transformation() {
     print("Enter m, a, b, and seed:\n");
     LCG::T m, a, b, x0;
     read(m);
@@ -331,7 +331,7 @@ void run_any_lcg_transformation() {
 // Chapter 3 - Ordered algebraic structures
 
 template <typename T>
-    requires(DiscreteEuclideanSemiring(T))
+    REQUIRES(DiscreteEuclideanSemiring(T))
 struct multiplies_modulo {
     T m;
 
@@ -345,12 +345,12 @@ struct multiplies_modulo {
 };
 
 template <typename T>
-    requires(DiscreteEuclideanSemiring(T))
+    REQUIRES(DiscreteEuclideanSemiring(T))
 struct input_type<multiplies_modulo<T>, 0> {
     typedef T type;
 };
 
-void run_idempotent_power() {
+inline void run_idempotent_power() {
     print("Enter a pair of integers (starting element and modulus)");
     print(" or two zeroes to end:\n");
     while (true) {
@@ -373,7 +373,7 @@ void run_idempotent_power() {
     }
 }
 
-void run_fibonacci() {
+inline void run_fibonacci() {
     print("Enter an integer or a negative integer to end:\n");
     while (true) {
         int n;
@@ -389,7 +389,7 @@ void run_fibonacci() {
 }
 
 template <typename T>
-    requires(AdditiveMonoid(T))
+    REQUIRES(AdditiveMonoid(T))
 struct annotated_plus {
     T operator()(const T& x, const T& y) {
         T tmp = x + y;
@@ -404,19 +404,19 @@ struct annotated_plus {
 };
 
 template <typename T>
-    requires(AdditiveMonoid(T))
+    REQUIRES(AdditiveMonoid(T))
 struct input_type<annotated_plus<T>, 0> {
     typedef T type;
 };
 
 template <typename T>
-    requires(AdditiveMonoid(T))
+    REQUIRES(AdditiveMonoid(T))
 struct codomain_type<annotated_plus<T>> {
     typedef T type;
 };
 
 template <typename T>
-    requires(AdditiveMonoid(T))
+    REQUIRES(AdditiveMonoid(T))
 struct annotated_negate {
     T operator()(const T& x) {
         T tmp = -x;
@@ -430,12 +430,12 @@ struct annotated_negate {
 };
 
 template <typename T>
-    requires(AdditiveGroup(T))
+    REQUIRES(AdditiveGroup(T))
 annotated_negate<T> inverse_operation(annotated_plus<T>& plus) {
     return annotated_negate<T>(source(plus.o));
 }
 
-void run_egyptian_multiplication() {
+inline void run_egyptian_multiplication() {
     print("Enter two integers or two zeros to end:\n");
     while (true) {
         int x, n;
@@ -456,7 +456,7 @@ void run_egyptian_multiplication() {
 // Chapter 5 - Combining concepts
 
 template <typename T>
-    requires(EuclideanSemiring(T))
+    REQUIRES(EuclideanSemiring(T))
 struct modulus {
     T operator()(const T& x, const T& y) const {
         return x % y;
@@ -464,13 +464,13 @@ struct modulus {
 };
 
 template <typename T>
-    requires(EuclideanSemiring(T))
+    REQUIRES(EuclideanSemiring(T))
 struct input_type<modulus<T>, 0> {
     typedef T type;
 };
 
 template <typename T>
-    requires(EuclideanSemiring(T))
+    REQUIRES(EuclideanSemiring(T))
 struct quo_rem {
     typedef QuotientType(T) I;
 
@@ -480,12 +480,12 @@ struct quo_rem {
 };
 
 template <typename T>
-    requires(EuclideanSemiring(T))
+    REQUIRES(EuclideanSemiring(T))
 struct input_type<quo_rem<T>, 0> {
     typedef T type;
 };
 
-void run_quotient_remainder() {
+inline void run_quotient_remainder() {
     print("Enter two integers, or two zeroes to terminate:\n");
     while (true) {
         int a;
@@ -522,7 +522,7 @@ void run_quotient_remainder() {
 // Default remainder for EuclideanSemiring
 
 template <typename T>
-    requires(EuclideanSemiring(T))
+    REQUIRES(EuclideanSemiring(T))
 T remainder(T a, T b) {
     return a % b;
 }
@@ -530,12 +530,12 @@ T remainder(T a, T b) {
 // Default remainder for EuclideanSemimodule
 
 template <typename T, typename S>
-    requires(EuclideanSemimodule(T, S))
+    REQUIRES(EuclideanSemimodule(T, S))
 T remainder(T a, T b) {
     return remainder_nonnegative(a, b);
 }
 
-void run_gcd() {
+inline void run_gcd() {
     print("Enter two integers, or two zeroes to terminate\n");
     while (true) {
         int a;
@@ -567,7 +567,7 @@ void run_gcd() {
 // Chapter 12 - Composite objects
 
 template <typename T>
-    requires(Regular(T))
+    REQUIRES(Regular(T))
 struct verify_conservation {
     const T* t;
     T t_0;
@@ -582,7 +582,7 @@ struct verify_conservation {
     }
 };
 
-void run_slist_tests() {
+inline void run_slist_tests() {
     verify_conservation<int> v(slist_node_count);
 
     int a1[] = {1, 3, 5};
@@ -631,7 +631,7 @@ void run_slist_tests() {
     print_eol();
 }
 
-void run_list_tests() {
+inline void run_list_tests() {
     verify_conservation<int> v(list_node_count);
 
     int a1[] = {1, 3, 5};
@@ -681,7 +681,7 @@ void run_list_tests() {
 }
 
 template <typename C>
-    requires(EmptyLinkedBifurcateCoordinate(C))
+    REQUIRES(EmptyLinkedBifurcateCoordinate(C))
 struct serializer {
     typedef WeightType(C) N;
     N n;
@@ -705,18 +705,18 @@ struct serializer {
 };
 
 template <typename C>
-    requires(EmptyLinkedBifurcateCoordinate(C))
+    REQUIRES(EmptyLinkedBifurcateCoordinate(C))
 void stree_serialize(C c) {
     traverse_rotating(c, serializer<C>());
 }
 
 template <typename C>
-    requires(EmptyLinkedBifurcateCoordinate(C))
+    REQUIRES(EmptyLinkedBifurcateCoordinate(C))
 void tree_serialize(C c) {
     traverse_rotating(c, serializer<C>());
 }
 
-void run_stree_tests() {
+inline void run_stree_tests() {
     typedef stree<int> T;
     typedef stree<char> TT;
     typedef stree_coordinate<int> I;
@@ -835,7 +835,7 @@ void run_stree_tests() {
     print_eol();
 }
 
-void run_tree_tests() {
+inline void run_tree_tests() {
     typedef tree<int> T;
     typedef tree<char> TT;
     typedef tree_coordinate<int> I;
@@ -955,7 +955,7 @@ void run_tree_tests() {
 }
 
 template <typename R, typename I>
-    requires(Relation(R) && Mutable(I) && Integer(ValueType(I)))
+    REQUIRES(Relation(R) && Mutable(I) && Integer(ValueType(I)))
 struct instrumented_less {
     R r;
     I p;
@@ -972,13 +972,13 @@ struct instrumented_less {
 };
 
 template <typename R, typename I>
-    requires(Relation(R) && Mutable(I) && Integer(ValueType(I)))
+    REQUIRES(Relation(R) && Mutable(I) && Integer(ValueType(I)))
 struct input_type<instrumented_less<R, I>, 0> {
     typedef Domain(R) type;
 };
 
 template <typename T>
-    requires(Regular(T))
+    REQUIRES(Regular(T))
 struct tracer {
     T t;
 
@@ -1034,7 +1034,7 @@ void run_array_tests() {
 
     array<int> v;
     int buf[] = {1, 2, 3, 4, 5, 6, 7, 8, 9};
-    insert_range(back<array<int>>(v), counted_range<pointer(int)>(buf, 9));
+    insert_range(back<array<int>>(v), counted_range<POINTER(int)>(buf, 9));
     print("v: ");
     print(v);
     print_eol();
@@ -1083,7 +1083,7 @@ void run_array_tests() {
     print("array: ");
     print_range(begin(a), end(a));
     print_eol();
-    typedef pointer(int) I;
+    typedef POINTER(int) I;
 
     print("merge: ");
     print_range(begin(a), end(a));

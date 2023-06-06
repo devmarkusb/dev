@@ -14,7 +14,7 @@
 
 // Definitions of type functions and global functions from concepts
 // Readable, Writeable, Mutable, Iterator, BidirectionalIterator
-// for types const T& and pointer(T) from
+// for types const T& and POINTER(T) from
 // Elements of Programming
 // by Alexander Stepanov and Paul McJones
 // Addison-Wesley Professional, 2009
@@ -30,70 +30,70 @@
 #include <cstddef> // ptrdiff_t
 
 template <typename T>
-    requires(Regular(T))
-struct value_type<pointer(T)> {
+    REQUIRES(Regular(T))
+struct value_type<POINTER(T)> {
     typedef T type;
 };
 
 template <typename T>
-    requires(Regular(T))
-const T& source(pointer(T) x) {
+    REQUIRES(Regular(T))
+const T& source(POINTER(T) x) {
     return *x;
 }
 
 template <typename T>
-    requires(Regular(T))
+    REQUIRES(Regular(T))
 const T& source(const T& x) {
     return x;
 }
 
 template <typename T>
-    requires(Regular(T))
-struct distance_type<pointer(T)> {
+    REQUIRES(Regular(T))
+struct distance_type<POINTER(T)> {
     typedef ptrdiff_t type;
 };
 
 template <typename T>
-    requires(Regular(T))
-pointer(T) successor(pointer(T) x) {
+    REQUIRES(Regular(T))
+POINTER(T) successor(POINTER(T) x) {
     return x + ptrdiff_t(1);
 }
 
 template <typename T>
-    requires(Regular(T))
-pointer(T) predecessor(pointer(T) x) {
+    REQUIRES(Regular(T))
+POINTER(T) predecessor(POINTER(T) x) {
     return x - ptrdiff_t(1);
 }
 
 template <typename T>
-    requires(Regular(T))
-T& sink(pointer(T) x) {
+    REQUIRES(Regular(T))
+T& sink(POINTER(T) x) {
     return *x;
 }
 
 template <typename T>
-    requires(Regular(T))
+    REQUIRES(Regular(T))
 T& sink(T& x) {
     return x;
 }
 
 template <typename T>
-    requires(Regular(T))
-T& deref(pointer(T) x) {
+    REQUIRES(Regular(T))
+T& deref(POINTER(T) x) {
     return *x;
 }
 
 //template<typename T>
-//    requires(Regular(T))
+//    REQUIRES(Regular(T))
 //T& deref(T& x)
 //{
 //    return x;
 //}
 
 template <typename T>
-    requires(Regular(T))
+    REQUIRES(Regular(T))
 struct iterator_concept<T*> {
-    typedef random_access_iterator_tag concept;
+    typedef random_access_iterator_tag the_concept;
 };
 
 #endif // EOP_POINTERS

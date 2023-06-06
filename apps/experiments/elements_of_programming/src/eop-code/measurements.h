@@ -36,12 +36,12 @@ struct measure_time {
     typedef long int N; // DistanceType(M)
     const int inverse_accuracy;
     const clock_t epsilon;
-    const pointer(char) legend;
-    const pointer(char) units;
+    const POINTER(char) legend;
+    const POINTER(char) units;
     N n;
     clock_t t;
 
-    measure_time(const pointer(char) legend)
+    measure_time(const POINTER(char) legend)
         : inverse_accuracy(100)
         , epsilon(CLOCKS_PER_SEC / clock_t(inverse_accuracy))
         , legend(legend)
@@ -72,7 +72,7 @@ inline double time_per_iter(const measure_time& m) {
 }
 
 template <typename M, typename F>
-    requires(Measure(M) && Measurement(F))
+    REQUIRES(Measure(M) && Measurement(F))
 M perform() {
     typedef DistanceType(M) N;
     F f;
@@ -93,7 +93,7 @@ M perform() {
 }
 
 struct measure_clock {
-    const pointer(char) legend;
+    const POINTER(char) legend;
     clock_t t;
 
     measure_clock()
@@ -106,7 +106,7 @@ struct measure_clock {
 };
 
 struct measure_gcd {
-    const pointer(char) legend;
+    const POINTER(char) legend;
     typedef rational<int> Q;
     Q t;
 
@@ -120,13 +120,13 @@ struct measure_gcd {
 };
 
 struct measure_reverse_bidirectional {
-    const pointer(char) legend;
+    const POINTER(char) legend;
     typedef int T;
     int N;
     int REPETITIONS;
     array<T> a;
-    pointer(T) f;
-    pointer(T) l;
+    POINTER(T) f;
+    POINTER(T) l;
 
     measure_reverse_bidirectional()
         : legend("10 repetitions of reverse_bidirectional(f, f+10000000)")
@@ -146,7 +146,7 @@ struct measure_reverse_bidirectional {
 
 // Adapted from SGI STL:
 template <class T>
-inline void __iter_swap(pointer(T) __a, pointer(T) __b) {
+inline void __iter_swap(POINTER(T) __a, POINTER(T) __b) {
     T __tmp = *__a;
     *__a = *__b;
     *__b = __tmp;
@@ -167,7 +167,7 @@ inline void __reverse(_RandomAccessIter __first, _RandomAccessIter __last, rando
 //		std::iter_swap(_First, --_Last);
 //	}
 
-const pointer(char) tab = "\t";
+const POINTER(char) tab = "\t";
 
 template <typename T>
 void print_labels() {
@@ -190,8 +190,8 @@ void print_labels() {
 }
 
 template <typename T>
-void print_result(const pointer(char) label, clock_t t0, clock_t t1, int N, int REPETITIONS) {
-    double seconds = (t1 - t0) * 1.0 / CLOCKS_PER_SEC;
+void print_result(const POINTER(char) label, clock_t t0, clock_t t1, int N, int REPETITIONS) {
+    double seconds = static_cast<double>(t1 - t0) * 1.0 / CLOCKS_PER_SEC;
     print(label);
     print(tab);
     print(seconds);
@@ -204,15 +204,15 @@ void print_result(const pointer(char) label, clock_t t0, clock_t t1, int N, int 
     print_eol();
 }
 
-void measure_reverse_algorithms() {
+inline void measure_reverse_algorithms() {
     typedef int T;
     print_labels<T>();
 
     for (int N = 10; N <= 100000000; N *= 10) {
         const int REPETITIONS = 100000000 / N;
         array<T> a(N, N, T(17));
-        pointer(T) f = begin(a);
-        pointer(T) l = end(a);
+        POINTER(T) f = begin(a);
+        POINTER(T) l = end(a);
         Assert(size(a) == N && find_not(f, l, T(17)) == l);
         reverse_bidirectional(f, l);
         clock_t t0, t1;
@@ -265,7 +265,7 @@ void measure_reverse_algorithms() {
 }
 
 struct measure_sort_linked {
-    const pointer(char) legend;
+    const POINTER(char) legend;
     typedef int T;
     int N;
     int REPETITIONS;
@@ -292,9 +292,9 @@ struct measure_sort_linked {
     }
 };
 
-void measure_sort_n_adaptive_compares() {
+inline void measure_sort_n_adaptive_compares() {
     for (int n = 64; n <= 32768; n *= 4) {
-        typedef pointer(int) I;
+        typedef POINTER(int) I;
         //        typedef DistanceType(IteratorType(array<T>)) N;
         typedef ptrdiff_t N;
         array<int> a = array<int>(N(n), N(n), 0);
@@ -315,13 +315,13 @@ void measure_sort_n_adaptive_compares() {
 }
 
 struct measure_sort_n_adaptive {
-    const pointer(char) legend;
+    const POINTER(char) legend;
     typedef int T;
     int N;
     int REPETITIONS;
     array<T> a;
-    pointer(T) f;
-    pointer(T) l;
+    POINTER(T) f;
+    POINTER(T) l;
     array<T> b;
 
     measure_sort_n_adaptive()
@@ -344,7 +344,7 @@ struct measure_sort_n_adaptive {
 };
 
 template <typename M>
-    requires(Measure(M))
+    REQUIRES(Measure(M))
 void report(M m) {
     print(m.legend);
     print(": ");
@@ -356,7 +356,7 @@ void report(M m) {
     print(" iterations\n");
 }
 
-void run_measurements() {
+inline void run_measurements() {
     typedef measure_time M;
     print("time_measurement::inverse_accuracy: ");
     print(M("test").inverse_accuracy);

@@ -26,7 +26,7 @@
 #include <cstdio> // fprintf, stderr
 #include <cstdlib> // abort
 
-void Assert(bool b) {
+inline void Assert(bool b) {
     assert(b); // if debug mode
     if (!b) { // if release mode
         fprintf(stderr, "Assert failed\n");

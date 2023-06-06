@@ -21,7 +21,7 @@
 
 #include "eop.h" // array
 #include "drivers.h" // push
-#include "intrinsics.h" // pointer
+#include "intrinsics.h" // POINTER
 #include "measurements.h"
 #include "pointers.h"
 #include "print.h"
@@ -31,13 +31,13 @@
 #include <cstddef> // ptrdiff_t
 
 struct cmd {
-    const pointer(char) name;
+    const POINTER(char) name;
     void (*action)();
 
     cmd() {
     }
 
-    cmd(const pointer(char) name, void (*action)())
+    cmd(const POINTER(char) name, void (*action)())
         : name(name)
         , action(action) {
     }

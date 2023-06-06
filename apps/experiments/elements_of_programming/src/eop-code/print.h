@@ -27,27 +27,27 @@
 
 #include <cstdio> // printf
 
-void print(const char* x) {
+inline void print(const char* x) {
     printf("%s", x);
 }
 
-void print(const char x) {
+inline void print(const char x) {
     printf("%c", x);
 }
 
-void print(const int x) {
+inline void print(const int x) {
     printf("%d", x);
 }
 
-void print(const unsigned int x) {
+inline void print(const unsigned int x) {
     printf("%u", x);
 }
 
-void print(const double x) {
+inline void print(const double x) {
     printf("%f", x);
 }
 
-void print(const long int x) {
+inline void print(const long int x) {
     printf("%ld", x);
 }
 
@@ -57,24 +57,24 @@ void print(const long int x) {
 //    printf("%lu", x);
 //}
 
-void print(const long unsigned x) {
+inline void print(const long unsigned x) {
     printf("%lu", x);
 }
 
-void print(const long long int x) {
+inline void print(const long long int x) {
     printf("%lld", x);
 }
 
-void print(const long long unsigned x) {
+inline void print(const long long unsigned x) {
     printf("%llu", x);
 }
 
-void print_eol() {
+inline void print_eol() {
     print("\n");
 }
 
 template <typename T0, typename T1>
-    requires(Regular(T0) && Regular(T1))
+    REQUIRES(Regular(T0) && Regular(T1))
 void print(const pair<T0, T1>& x) {
     print("pair(");
     print(x.m0);
@@ -84,7 +84,7 @@ void print(const pair<T0, T1>& x) {
 }
 
 template <typename I>
-    requires(Readable(I) && Iterator(I))
+    REQUIRES(Readable(I) && Iterator(I))
 void print_range(I f, I l) {
     // Precondition: $\property{readable\_bounded\_range}(f, l)$
     while (f != l) {
@@ -96,7 +96,7 @@ void print_range(I f, I l) {
 }
 
 template <typename T>
-    requires(Regular(T))
+    REQUIRES(Regular(T))
 void print(const slist<T>& x) {
     print("slist[");
     print(int(size(x)));
@@ -106,7 +106,7 @@ void print(const slist<T>& x) {
 }
 
 template <typename T>
-    requires(Regular(T))
+    REQUIRES(Regular(T))
 void print(const list<T>& x) {
     print("list[");
     print(int(size(x)));
@@ -116,7 +116,7 @@ void print(const list<T>& x) {
 }
 
 template <typename C>
-    requires(BifurcateCoordinate(C))
+    REQUIRES(BifurcateCoordinate(C))
 struct print_visit {
     bool b_pre, b_in, b_post;
 
@@ -127,7 +127,7 @@ struct print_visit {
     }
 
     void operator()(visit v, C c) {
-        if (v == pre && b_pre || v == in && b_in || v == post && b_post) {
+        if (((v == pre && b_pre) || (v == in && b_in) || (v == post && b_post))) {
             print(source(c));
             print(" ");
         }
@@ -135,7 +135,7 @@ struct print_visit {
 };
 
 template <typename C>
-    requires(BifurcateCoordinate(C))
+    REQUIRES(BifurcateCoordinate(C))
 void print_bifurcate(C c) {
     if (empty(c)) {
         print("/");
@@ -153,7 +153,7 @@ void print_bifurcate(C c) {
 }
 
 template <typename C>
-    requires(BifurcateCoordinate(C))
+    REQUIRES(BifurcateCoordinate(C))
 void print_node(C c) {
     if (empty(c))
         print("/");
@@ -162,7 +162,7 @@ void print_node(C c) {
 }
 
 template <typename C>
-    requires(BifurcateCoordinate(C))
+    REQUIRES(BifurcateCoordinate(C))
 void print_coordinate(C c) {
     if (empty(c))
         print("/");
@@ -173,19 +173,19 @@ void print_coordinate(C c) {
 }
 
 template <typename T>
-    requires(Regular(T))
+    REQUIRES(Regular(T))
 void print(const stree<T>& x) {
     print_bifurcate(begin(x));
 }
 
 template <typename T>
-    requires(Regular(T))
+    REQUIRES(Regular(T))
 void print(const tree<T>& x) {
     print_bifurcate(begin(x));
 }
 
 template <int k, typename T>
-    requires(Regular(T))
+    REQUIRES(Regular(T))
 void print(const array_k<k, T>& x) {
     print("array_k[");
     print(int(size(x)));
@@ -195,7 +195,7 @@ void print(const array_k<k, T>& x) {
 }
 
 template <typename T>
-    requires(Regular(T))
+    REQUIRES(Regular(T))
 void print(const array<T>& x) {
     print("array[");
     print(int(size(x)));
