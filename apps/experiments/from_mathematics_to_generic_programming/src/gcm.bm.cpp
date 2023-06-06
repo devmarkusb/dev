@@ -60,7 +60,7 @@ struct Rand {
     static inline std::uniform_int_distribution<uint64_t> distrib64{rand_range_min, rand_range_max64};
 };
 
-template <class ...Args>
+template <class... Args>
 void gcd(benchmark::State& state, Args&&... args) {
     auto args_tuple = std::make_tuple(std::move(args)...);
     for (auto _ : state) {
@@ -74,6 +74,7 @@ void gcd(benchmark::State& state, Args&&... args) {
         }
     }
 }
+
 BENCHMARK_CAPTURE(gcd, gcd16, math::gcd<uint16_t>, Rand::distrib16);
 BENCHMARK_CAPTURE(gcd, gcd_stein16, math::gcd_stein<uint16_t>, Rand::distrib16);
 BENCHMARK_CAPTURE(gcd, gcd32, math::gcd<uint32_t>, Rand::distrib32);

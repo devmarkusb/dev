@@ -227,16 +227,17 @@ concept NaturalNumber = UnsignedInteger<T>;
 
 template <
     typename SetT, typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/,
-    typename OpCommutativeMonoid /*multiply*/, typename OpQuotient, typename OpRemainder,
-    typename OpNorm>
+    typename OpCommutativeMonoid /*multiply*/, typename OpQuotient, typename OpRemainder, typename OpNorm>
 concept EuclideanDomain =
     IntegralDomain<SetT, OpCommutativeGroup, OpInvCommutativeGroup, OpCommutativeMonoid>
-    && std::regular_invocable<OpQuotient, SetT, SetT> && std::is_same_v<SetT, std::invoke_result_t<OpQuotient, SetT, SetT>>
-    && std::regular_invocable<OpRemainder, SetT, SetT> && std::is_same_v<SetT, std::invoke_result_t<OpRemainder, SetT, SetT>>
-    && std::regular_invocable<OpNorm, SetT> && NaturalNumber<std::invoke_result_t<OpNorm, SetT>>
-    && requires(SetT a, SetT b, SetT commutative_group_identity, OpQuotient op_quotient,
-                OpRemainder op_remainder, OpCommutativeMonoid op_commutative_monoid,
-                OpCommutativeGroup op_commutative_group, OpNorm op_norm) {
+    && std::regular_invocable<OpQuotient, SetT, SetT>
+    && std::is_same_v<SetT, std::invoke_result_t<OpQuotient, SetT, SetT>>
+    && std::regular_invocable<OpRemainder, SetT, SetT>
+    && std::is_same_v<SetT, std::invoke_result_t<OpRemainder, SetT, SetT>> && std::regular_invocable<OpNorm, SetT>
+    && NaturalNumber<std::invoke_result_t<OpNorm, SetT>>
+    && requires(
+        SetT a, SetT b, SetT commutative_group_identity, OpQuotient op_quotient, OpRemainder op_remainder,
+        OpCommutativeMonoid op_commutative_monoid, OpCommutativeGroup op_commutative_group, OpNorm op_norm) {
            { op_quotient(a, b) } -> std::convertible_to<SetT>;
            { op_remainder(a, b) } -> std::convertible_to<SetT>;
            { op_norm(a) } -> NaturalNumber;

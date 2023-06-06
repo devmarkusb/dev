@@ -20,27 +20,30 @@
 
 
 #include "eop.h" // array
+#include "drivers.h" // push
 #include "intrinsics.h" // pointer
+#include "measurements.h"
 #include "pointers.h"
 #include "print.h"
 #include "read.h"
-#include "drivers.h" // push
 #include "tests.h" // print, read
-#include "measurements.h"
 
 #include <cstddef> // ptrdiff_t
 
-
-struct cmd
-{
+struct cmd {
     const pointer(char) name;
     void (*action)();
-    cmd() { }
-    cmd(const pointer(char) name, void (*action)()) : name(name), action(action) { }
+
+    cmd() {
+    }
+
+    cmd(const pointer(char) name, void (*action)())
+        : name(name)
+        , action(action) {
+    }
 };
 
-int main()
-{
+int main() {
     array<cmd> c;
 
     // General
@@ -91,12 +94,19 @@ int main()
     while (true) {
         print("\nElements of Programming: enter an index (out of range to end):\n");
         for (ptrdiff_t j = int(0); j < size(c); ++j) {
-            print("  "); print(int(j)); print(" "); print(begin(c)[j].name); print_eol();
+            print("  ");
+            print(int(j));
+            print(" ");
+            print(begin(c)[j].name);
+            print_eol();
         }
         int i;
         read(i);
-        if (i < 0 || size(c) <= ptrdiff_t(i)) return 0;
-        print("Running "); print(begin(c)[ptrdiff_t(i)].name); print(".\n");
+        if (i < 0 || size(c) <= ptrdiff_t(i))
+            return 0;
+        print("Running ");
+        print(begin(c)[ptrdiff_t(i)].name);
+        print(".\n");
         begin(c)[ptrdiff_t(i)].action();
     }
 

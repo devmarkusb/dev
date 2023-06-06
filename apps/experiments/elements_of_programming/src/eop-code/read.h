@@ -24,19 +24,15 @@
 
 #include <cstdio> // scanf
 
-
-void read(int& x)
-{
+void read(int& x) {
     scanf("%d", &x);
 }
 
-void read(long int& x)
-{
+void read(long int& x) {
     scanf("%ld", &x);
 }
 
-void read(long long int& x)
-{
+void read(long long int& x) {
     scanf("%lld", &x);
 }
 

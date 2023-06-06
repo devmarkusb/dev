@@ -54,7 +54,7 @@
 
 // We refine the global definition for a particular type by
 // specializing:
-          
+
 // template<typename T>
 // struct value_type<pointer(T)>
 // {
@@ -67,20 +67,20 @@
 
 // Codomain : FunctionalProcedure -> Regular
 
-template<typename T>
+template <typename T>
     requires(FunctionalProcedure(T))
 struct codomain_type;
 
-#define Codomain(T) typename codomain_type< T >::type
+#define Codomain(T) typename codomain_type<T>::type
 
 
 // InputType : FunctionalProcedure x unsigned int -> Regular
 
-template<typename T, int i>
+template <typename T, int i>
     requires(FunctionalProcedure(T))
 struct input_type;
 
-#define InputType(T, i) typename input_type< T, i >::type
+#define InputType(T, i) typename input_type<T, i>::type
 
 
 // Domain : HomogeneousFunction -> Regular
@@ -95,7 +95,7 @@ struct input_type;
 
 // DistanceType : Transformation -> Integer
 
-template<typename F>
+template <typename F>
     requires(Transformation(F))
 struct distance_type;
 
@@ -105,135 +105,116 @@ struct distance_type;
 // For any fixed-size type T, there is an integral type of the same
 // size that is a valid distance type for T.
 
-template<>
-struct distance_type<int>
-{
+template <>
+struct distance_type<int> {
     typedef unsigned int type;
 };
 
-template<>
-struct distance_type<long long>
-{
+template <>
+struct distance_type<long long> {
     typedef unsigned long long type;
 };
 
-
-#define DistanceType(T) typename distance_type< T >::type
-
+#define DistanceType(T) typename distance_type<T>::type
 
 // Chapter 3 - Associative operations
 
-template<typename T> 
-    requires(Regular(T)) 
-struct input_type<T (*)(T x, T y), 0> 
-{ 
-    typedef T type; 
+template <typename T>
+    requires(Regular(T))
+struct input_type<T (*)(T x, T y), 0> {
+    typedef T type;
 };
 
-template<typename T> 
-    requires(Regular(T)) 
-struct codomain_type<T (*)(T x, T y)> 
-{ 
-    typedef T type; 
+template <typename T>
+    requires(Regular(T))
+struct codomain_type<T (*)(T x, T y)> {
+    typedef T type;
 };
 
-template<typename T> 
-    requires(Regular(T)) 
-struct input_type<T (*)(const T& x, const T& y), 0> 
-{ 
-    typedef T type; 
+template <typename T>
+    requires(Regular(T))
+struct input_type<T (*)(const T& x, const T& y), 0> {
+    typedef T type;
 };
 
-template<typename T> 
-    requires(Regular(T)) 
-struct codomain_type<T (*)(const T& x, const T& y)> 
-{ 
-    typedef T type; 
+template <typename T>
+    requires(Regular(T))
+struct codomain_type<T (*)(const T& x, const T& y)> {
+    typedef T type;
 };
-
 
 // Chapter 4 - Linear orderings
 
 
 // Domain type function for Predicate
 
-template<typename T> 
-    requires(Regular(T)) 
-struct input_type<bool (*)(T x), 0> 
-{ 
-    typedef T type; 
+template <typename T>
+    requires(Regular(T))
+struct input_type<bool (*)(T x), 0> {
+    typedef T type;
 };
 
-template<typename T> 
-    requires(Regular(T)) 
-struct input_type<bool (*)(const T& x), 0> 
-{ 
-    typedef T type; 
+template <typename T>
+    requires(Regular(T))
+struct input_type<bool (*)(const T& x), 0> {
+    typedef T type;
 };
-
 
 // Domain type function for Relation
 
-template<typename T> 
-    requires(Regular(T)) 
-struct input_type<bool (*)(T x, T y), 0> 
-{ 
-    typedef T type; 
+template <typename T>
+    requires(Regular(T))
+struct input_type<bool (*)(T x, T y), 0> {
+    typedef T type;
 };
 
-template<typename T> 
-    requires(Regular(T)) 
-struct input_type<bool (*)(const T& x, const T& y), 0> 
-{ 
-    typedef T type; 
+template <typename T>
+    requires(Regular(T))
+struct input_type<bool (*)(const T& x, const T& y), 0> {
+    typedef T type;
 };
 
 
 // Chapter 5 - Ordered algebraic structures
 
-template<typename T>
+template <typename T>
     requires(ArchimedeanMonoid(T))
 struct quotient_type;
-#define QuotientType(T) typename quotient_type< T >::type
-
+#define QuotientType(T) typename quotient_type<T>::type
 
 // Lemma: For an integral type T, QuotientType(T) has to be at least as large as T.
 
-template<>
-struct quotient_type<int>
-{
+template <>
+struct quotient_type<int> {
     typedef int type;
 };
 
-template<>
-struct quotient_type<long>
-{
+template <>
+struct quotient_type<long> {
     typedef long type;
 };
-
 
 // Chapter 6 - Iterators
 
 
 // ValueType : Readable -> Regular
 
-template<typename T>
+template <typename T>
     requires(Regular(T))
-struct value_type
-{
+struct value_type {
     typedef T type;
 };
 
-#define ValueType(T) typename value_type< T >::type
+#define ValueType(T) typename value_type<T>::type
 
 
 // DifferenceType : RandomAccessIterator -> Integer
 
-template<typename I>
+template <typename I>
     requires(RandomAccessIterator(I))
 struct difference_type;
 
-#define DifferenceType(T) typename difference_type< T >::type
+#define DifferenceType(T) typename difference_type<T>::type
 
 
 // Chapter 7 - Coordinate structures
@@ -241,11 +222,11 @@ struct difference_type;
 
 // WeightType : BifurcateCoordinate -> Integer
 
-template<typename T>
+template <typename T>
     requires(WeakBifurcateCoordinate(T))
 struct weight_type;
 
-#define WeightType(T) typename weight_type< T >::type
+#define WeightType(T) typename weight_type<T>::type
 
 
 // Chapter 8 - Coordinates with mutable successors
@@ -254,35 +235,36 @@ struct weight_type;
 // IteratorType : ForwardLinker -> ForwardIterator
 // IteratorType : BackwardLinker -> BidirectionalIterator
 
-template<typename T>
+template <typename T>
     requires(ImplementsIteratorType(T))
 struct iterator_type;
 
-#define IteratorType(T) typename iterator_type< T >::type
-
+#define IteratorType(T) typename iterator_type<T>::type
 
 // Chapter 10 - Rearrangements
 
 
 // The IteratorTag concept has the following models:
 
-struct iterator_tag               {};
-struct forward_iterator_tag       {};
-struct bidirectional_iterator_tag {};
-struct indexed_iterator_tag       {};
-struct random_access_iterator_tag {};
+struct iterator_tag {};
 
+struct forward_iterator_tag {};
+
+struct bidirectional_iterator_tag {};
+
+struct indexed_iterator_tag {};
+
+struct random_access_iterator_tag {};
 
 // IteratorConcept : Iterator -> IteratorTag
 
-template<typename T>
+template <typename T>
     requires(Iterator(T))
-struct iterator_concept
-{
+struct iterator_concept {
     typedef iterator_tag concept;
 };
 
-#define IteratorConcept(T) typename iterator_concept< T >::concept
+#define IteratorConcept(T) typename iterator_concept<T>::concept
 
 
 // Chapter 12 - Composite objects
@@ -290,7 +272,7 @@ struct iterator_concept
 
 // SizeType : Linearizeable -> Integer
 
-template<typename W>
+template <typename W>
     requires(Linearizable(W))
 struct size_type;
 
@@ -301,7 +283,7 @@ struct size_type;
 
 // Size is a type attribute
 
-template<typename S>
+template <typename S>
     requires(ConstantSizeSequence(S))
 struct size_value;
 
@@ -310,50 +292,46 @@ struct size_value;
 
 // BaseType : Position -> DynamicSequence
 
-template<typename S>
+template <typename S>
     requires(DynamicSequence(S))
 struct base_type;
 
 #define BaseType(T) typename base_type<T>::type
-
 
 // concept BooleanType(T) means T represents a boolean value within the type system
 
 // BooleanType has the following two models:
 
 struct true_type {};
+
 struct false_type {};
 
 // NeedsConstruction : Regular -> BooleanType
 // NeedsDestruction  : Regular -> BooleanType
 
-template<typename T>
+template <typename T>
     requires(Regular(T))
-struct needs_construction_type
-{
+struct needs_construction_type {
     typedef true_type type; // default
 };
 
 #define NeedsConstruction(T) typename needs_construction_type<T>::type
 
-template<typename T>
+template <typename T>
     requires(Regular(T))
-struct needs_destruction_type
-{
+struct needs_destruction_type {
     typedef true_type type; // default
 };
 
 #define NeedsDestruction(T) typename needs_destruction_type<T>::type
 
-template<>
-struct needs_construction_type<int>
-{
+template <>
+struct needs_construction_type<int> {
     typedef false_type type;
 };
 
-template<>
-struct needs_destruction_type<int>
-{
+template <>
+struct needs_destruction_type<int> {
     typedef false_type type;
 };
 
@@ -363,18 +341,17 @@ struct needs_destruction_type<int>
 
 // CoordinateType : Container -> Coordinate
 
-template<typename T>
+template <typename T>
     requires(Container(T))
 struct coordinate_type;
 
 #define CoordinateType(T) typename coordinate_type<T>::type
 
-
 // UnderlyingType : Regular -> Regular
 
-template<typename T> requires(Regular(T))
-struct underlying_type
-{
+template <typename T>
+    requires(Regular(T))
+struct underlying_type {
     typedef T type; // default
 };
 

@@ -46,55 +46,47 @@
 
 #define pointer(T) T*
 
-template<typename T>
-pointer(T) addressof(T& x)
-{
+template <typename T>
+pointer(T) addressof(T& x) {
     return &x;
 }
 
-
 // In-place construction and destruction (not in Appendix B.2)
 
-template<typename T>
+template <typename T>
     requires(Regular(T))
-void construct(T& p)
-{
+void construct(T& p) {
     // Precondition: $p$ refers to raw memory, not an object
     // Postcondition: $p$ is in a default-constructed state
     new (&p) T();
 }
 
-template<typename T, typename U>
+template <typename T, typename U>
     requires(Regular(T) && Constructible(T, U))
-void construct(T& p, const U& initializer)
-{
+void construct(T& p, const U& initializer) {
     // Precondition: $p$ refers to raw memory, not an object
     // Postcondition: Default makes $p = initializer$
-    // Override $\func{construct}$ to specialize construction of a part of a 
+    // Override $\func{construct}$ to specialize construction of a part of a
     new (&p) T(initializer);
-}    
+}
 
-template<typename T>
+template <typename T>
     requires(Regular(T))
-void destroy(T& p)
-{
+void destroy(T& p) {
     // Precondition: $p$ is in a partially-formed state
     // Postcondition: $p$ refers to raw memory, not an object
     p.~T();
 }
 
-template<typename T, typename U>
+template <typename T, typename U>
     requires(Regular(T))
-void destroy(T& p, U& finalizer)
-{
+void destroy(T& p, U& finalizer) {
     // Precondition: $p$ is in a partially-formed state
     // Postcondition: $p$ refers to raw memory, not an object
     // Override $\func{destroy}$ to specialize destruction of a part of a container
     destroy(p);
 }
 
-
 // Type functions: see type_functions.h
 
 #endif // EOP_INTRINSICS
-

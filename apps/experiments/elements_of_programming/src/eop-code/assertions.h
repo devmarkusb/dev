@@ -26,12 +26,11 @@
 #include <cstdio> // fprintf, stderr
 #include <cstdlib> // abort
 
-void Assert(bool b)
-{
+void Assert(bool b) {
     assert(b); // if debug mode
-    if (!b) {  // if release mode
+    if (!b) { // if release mode
         fprintf(stderr, "Assert failed\n");
-        abort(); 
+        abort();
     }
 }
 

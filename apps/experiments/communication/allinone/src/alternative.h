@@ -134,19 +134,22 @@ private:
 
         std::stringstream out_p;
         out_p << "avg. products queue size: "
-             << static_cast<double>(measurement_product_queue_size_) / static_cast<double>(measurement_count_) << std::endl;
+              << static_cast<double>(measurement_product_queue_size_) / static_cast<double>(measurement_count_)
+              << std::endl;
         std::cout << out_p.str();
         std::stringstream out_tp;
         out_tp << "avg. transformed products queue size: "
-              << static_cast<double>(measurement_transformed_product_queue_size_) / static_cast<double>(measurement_count_)
-              << std::endl;
+               << static_cast<double>(measurement_transformed_product_queue_size_)
+                      / static_cast<double>(measurement_count_)
+               << std::endl;
         std::cout << out_tp.str();
 
         std::stringstream out_pm;
         out_pm << "max. products queue size: " << measurement_product_queue_size_max_ << std::endl;
         std::cout << out_pm.str();
         std::stringstream out_tpm;
-        out_tpm << "max. transformed products queue size: " << measurement_transformed_product_queue_size_max_ << std::endl;
+        out_tpm << "max. transformed products queue size: " << measurement_transformed_product_queue_size_max_
+                << std::endl;
         std::cout << out_tpm.str();
 
         print_timer_.expires_from_now(print_interval);

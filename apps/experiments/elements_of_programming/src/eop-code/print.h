@@ -22,39 +22,32 @@
 #define EOP_PRINT
 
 
-#include "intrinsics.h"
 #include "eop.h"
+#include "intrinsics.h"
 
 #include <cstdio> // printf
 
-
-void print(const char* x)
-{
+void print(const char* x) {
     printf("%s", x);
 }
 
-void print(const char x)
-{
+void print(const char x) {
     printf("%c", x);
 }
 
-void print(const int x)
-{
+void print(const int x) {
     printf("%d", x);
 }
 
-void print(const unsigned int x)
-{
+void print(const unsigned int x) {
     printf("%u", x);
 }
 
-void print(const double x)
-{
+void print(const double x) {
     printf("%f", x);
 }
 
-void print(const long int x)
-{
+void print(const long int x) {
     printf("%ld", x);
 }
 
@@ -64,78 +57,76 @@ void print(const long int x)
 //    printf("%lu", x);
 //}
 
-void print(const long unsigned x)
-{
+void print(const long unsigned x) {
     printf("%lu", x);
 }
 
-void print(const long long int x)
-{
+void print(const long long int x) {
     printf("%lld", x);
 }
 
-void print(const long long unsigned x)
-{
+void print(const long long unsigned x) {
     printf("%llu", x);
 }
 
-void print_eol()
-{
+void print_eol() {
     print("\n");
 }
 
-template<typename T0, typename T1>
+template <typename T0, typename T1>
     requires(Regular(T0) && Regular(T1))
-void print(const pair<T0, T1>& x)
-{
+void print(const pair<T0, T1>& x) {
     print("pair(");
-        print(x.m0); print(", "); print(x.m1);
+    print(x.m0);
+    print(", ");
+    print(x.m1);
     print(")");
 }
 
-template<typename I>
+template <typename I>
     requires(Readable(I) && Iterator(I))
-void print_range(I f, I l)
-{
+void print_range(I f, I l) {
     // Precondition: $\property{readable\_bounded\_range}(f, l)$
     while (f != l) {
         print(source(f));
         f = successor(f);
-        if (f != l) print(" ");
+        if (f != l)
+            print(" ");
     }
 }
 
-template<typename T>
+template <typename T>
     requires(Regular(T))
-void print(const slist<T>& x)
-{
+void print(const slist<T>& x) {
     print("slist[");
-        print(int(size(x)));
+    print(int(size(x)));
     print("](");
-        print_range(begin(x), end(x));
+    print_range(begin(x), end(x));
     print(")");
 }
 
-template<typename T>
+template <typename T>
     requires(Regular(T))
-void print(const list<T>& x)
-{
+void print(const list<T>& x) {
     print("list[");
-        print(int(size(x)));
+    print(int(size(x)));
     print("](");
-        print_range(begin(x), end(x));
+    print_range(begin(x), end(x));
     print(")");
 }
 
-template<typename C>
+template <typename C>
     requires(BifurcateCoordinate(C))
-struct print_visit
-{
+struct print_visit {
     bool b_pre, b_in, b_post;
-    print_visit(bool b_pre, bool b_in, bool b_post) : 
-        b_pre(b_pre), b_in(b_in), b_post(b_post) { }
-    void operator()(visit v, C c)
-    {
+
+    print_visit(bool b_pre, bool b_in, bool b_post)
+        : b_pre(b_pre)
+        , b_in(b_in)
+        , b_post(b_post) {
+    }
+
+    void operator()(visit v, C c) {
         if (v == pre && b_pre || v == in && b_in || v == post && b_post) {
             print(source(c));
             print(" ");
@@ -143,74 +134,73 @@ struct print_visit
     }
 };
 
-template<typename C>
+template <typename C>
     requires(BifurcateCoordinate(C))
-void print_bifurcate(C c)
-{
+void print_bifurcate(C c) {
     if (empty(c)) {
         print("/");
         return;
     }
     print("(");
+    print(source(c));
+    if (has_left_successor(c) || has_right_successor(c)) {
+        print(".");
+        print_bifurcate(left_successor(c));
+        print(".");
+        print_bifurcate(right_successor(c));
+    }
+    print(")");
+}
+
+template <typename C>
+    requires(BifurcateCoordinate(C))
+void print_node(C c) {
+    if (empty(c))
+        print("/");
+    else
         print(source(c));
-        if (has_left_successor(c) || has_right_successor(c)) {
-            print(".");
-            print_bifurcate(left_successor(c));
-            print(".");
-            print_bifurcate(right_successor(c));
-        }
-    print(")");
 }
 
-template<typename C>
+template <typename C>
     requires(BifurcateCoordinate(C))
-void print_node(C c)
-{
-    if (empty(c)) print("/");
-    else print(source(c));
+void print_coordinate(C c) {
+    if (empty(c))
+        print("/");
+    else {
+        print(source(c));
+        print(",");
+    }
 }
 
-template<typename C>
-    requires(BifurcateCoordinate(C))
-void print_coordinate(C c)
-{
-    if (empty(c)) print("/");
-    else { print(source(c)); print(","); }
-}
-
-template<typename T>
+template <typename T>
     requires(Regular(T))
-void print(const stree<T>& x)
-{
+void print(const stree<T>& x) {
     print_bifurcate(begin(x));
 }
 
-template<typename T>
+template <typename T>
     requires(Regular(T))
-void print(const tree<T>& x)
-{
+void print(const tree<T>& x) {
     print_bifurcate(begin(x));
 }
 
-template<int k, typename T>
+template <int k, typename T>
     requires(Regular(T))
-void print(const array_k<k, T>& x)
-{
+void print(const array_k<k, T>& x) {
     print("array_k[");
-        print(int(size(x)));
+    print(int(size(x)));
     print("](");
-        print_range(begin(x), end(x));
+    print_range(begin(x), end(x));
     print(")");
 }
 
-template<typename T>
+template <typename T>
     requires(Regular(T))
-void print(const array<T>& x)
-{
+void print(const array<T>& x) {
     print("array[");
-        print(int(size(x)));
+    print(int(size(x)));
     print("](");
-        print_range(begin(x), end(x));
+    print_range(begin(x), end(x));
     print(")");
 }
 
