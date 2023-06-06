@@ -103,7 +103,7 @@ For C++ synonymous to value type.
 
 Partially formed state of an object: if the object can be assigned to
 (left hand side) or destructed.
-If the object is not also well formed nothing else is defined.
+If the object is not also well-formed nothing else is defined.
 
 pointer(T): type function from type T to pointer of type T.
 
@@ -165,7 +165,7 @@ Total value type: see properly partial.
 
 Type: short for value type.
 
-Type attribute: a mapping from a type to a value describing some characteric of the type.
+Type attribute: a mapping from a type to a value describing some characteristic of the type.
 
 Type concept: a concept defined on one type.
 
@@ -188,4 +188,4 @@ Value type: a correspondence between a species and a set of datums.
 
 Weakening: a concept C weakens a concept C', whenever C' refines C.
 
-Well formed datum: if and only if that datum represents an abstract entity.
+Well-formed datum: if and only if that datum represents an abstract entity.
