@@ -85,7 +85,7 @@ void concept_Regular(T& x) {
 }
 
 template <typename T>
-    REQUIRES(TotallyOrdered(T))
+REQUIRES(TotallyOrdered(T))
 void concept_TotallyOrdered(T& x0, T& x1) {
     // Precondition: x0 < x1
 
@@ -105,7 +105,7 @@ void concept_TotallyOrdered(T& x0, T& x1) {
 }
 
 template <typename T0, typename T1>
-    REQUIRES(Regular(T0) && Regular(T1))
+REQUIRES(Regular(T0) && Regular(T1))
 void type_pair(const T0& x00, const T0& x01, const T1& x10, const T1& x11) {
     // Precondition: x00 < x01 || (x00 == x01 && x10 < x11)
     Assert(x00 < x01 || (x00 == x01 && x10 < x11));
@@ -125,7 +125,7 @@ void type_pair(const T0& x00, const T0& x01, const T1& x10, const T1& x11) {
 }
 
 template <typename T0, typename T1, typename T2>
-    REQUIRES(Regular(T0) && Regular(T1) && Regular T2)
+REQUIRES(Regular(T0) && Regular(T1) && Regular T2)
 void type_triple(const T0& x00, const T0& x01, const T1& x10, const T1& x11, const T2& x20, const T2& x21) {
     Assert(x00 < x01 || (x00 == x01 && (x10 < x11 || (x10 == x11 && x20 < x21))));
 
@@ -169,7 +169,7 @@ inline void test_tuples() {
 }
 
 template <typename T>
-    REQUIRES(MultiplicativeSemigroup(T))
+REQUIRES(MultiplicativeSemigroup(T))
 struct times {
     T operator()(const T& a, const T& b) {
         return a * b;
@@ -177,7 +177,7 @@ struct times {
 };
 
 template <typename T>
-    REQUIRES(MultiplicativeSemigroup(T))
+REQUIRES(MultiplicativeSemigroup(T))
 struct input_type<times<T>, 0> {
     typedef T type;
 };
@@ -209,7 +209,7 @@ inline void test_ch_1() {
 
 
 template <typename F>
-    REQUIRES(Transformation(F))
+REQUIRES(Transformation(F))
 void concept_Transformation(F f, Domain(F) x) {
     typedef Domain(F) X;
     typedef Codomain(F) Y;
@@ -223,7 +223,7 @@ void concept_Transformation(F f, Domain(F) x) {
 }
 
 template <typename P>
-    REQUIRES(UnaryPredicate(P))
+REQUIRES(UnaryPredicate(P))
 void concept_UnaryPredicate(P p, Domain(P) x) {
     typedef Domain(P) X;
     X x0;
@@ -235,7 +235,7 @@ void concept_UnaryPredicate(P p, Domain(P) x) {
 }
 
 template <typename T>
-    REQUIRES(MultiplicativeSemigroup(T))
+REQUIRES(MultiplicativeSemigroup(T))
 struct sq {
     T operator()(const T& x) {
         return x * x;
@@ -243,25 +243,25 @@ struct sq {
 };
 
 template <typename T>
-    REQUIRES(MultiplicativeSemigroup(T))
+REQUIRES(MultiplicativeSemigroup(T))
 struct input_type<sq<T>, 0> {
     typedef T type;
 };
 
 template <typename T>
-    REQUIRES(MultiplicativeSemigroup(T))
+REQUIRES(MultiplicativeSemigroup(T))
 struct codomain_type<sq<T>> {
     typedef T type;
 };
 
 template <typename T>
-    REQUIRES(MultiplicativeSemigroup(T))
+REQUIRES(MultiplicativeSemigroup(T))
 struct distance_type<sq<T>> {
     typedef T type;
 };
 
 template <typename I, typename N>
-    REQUIRES(Integer(I) && Integer(N) && DistanceType(I) = N)
+REQUIRES(Integer(I) && Integer(N) && DistanceType(I) = N)
 struct gen_orbit_predicate // definition space predicate
 {
     I x_0;
@@ -282,13 +282,13 @@ struct gen_orbit_predicate // definition space predicate
 };
 
 template <typename I, typename N>
-    REQUIRES(Integer(I) && Integer(N) && DistanceType(I) = N)
+REQUIRES(Integer(I) && Integer(N) && DistanceType(I) = N)
 struct input_type<gen_orbit_predicate<I, N>, 0> {
     typedef I type;
 };
 
 template <typename I, typename N>
-    REQUIRES(Integer(I) && Integer(N) && DistanceType(I) = N)
+REQUIRES(Integer(I) && Integer(N) && DistanceType(I) = N)
 struct gen_orbit // transformation
 {
     gen_orbit_predicate<I, N> p;
@@ -309,25 +309,25 @@ struct gen_orbit // transformation
 };
 
 template <typename I, typename N>
-    REQUIRES(Integer(I) && Integer(N) && DistanceType(I) = N)
+REQUIRES(Integer(I) && Integer(N) && DistanceType(I) = N)
 struct input_type<gen_orbit<I, N>, 0> {
     typedef I type;
 };
 
 template <typename I, typename N>
-    REQUIRES(Integer(I) && Integer(N) && DistanceType(I) = N)
+REQUIRES(Integer(I) && Integer(N) && DistanceType(I) = N)
 struct codomain_type<gen_orbit<I, N>> {
     typedef I type;
 };
 
 template <typename I, typename N>
-    REQUIRES(Integer(I) && Integer(N) && DistanceType(I) = N)
+REQUIRES(Integer(I) && Integer(N) && DistanceType(I) = N)
 struct distance_type<gen_orbit<I, N>> {
     typedef N type;
 };
 
 template <typename F>
-    REQUIRES(Transformation(F))
+REQUIRES(Transformation(F))
 void algorithms_orbit(Domain(F) x, DistanceType(F) h, DistanceType(F) c) {
     typedef Domain(F) T;
     typedef DistanceType(F) N;
@@ -374,7 +374,7 @@ void algorithms_orbit(Domain(F) x, DistanceType(F) h, DistanceType(F) c) {
 }
 
 template <typename N>
-    REQUIRES(Integer(N))
+REQUIRES(Integer(N))
 struct hf {
     N operator()(const N& x) {
         return x / N(2);
@@ -382,19 +382,19 @@ struct hf {
 };
 
 template <typename N>
-    REQUIRES(Integer(N))
+REQUIRES(Integer(N))
 struct input_type<hf<N>, 0> {
     typedef N type;
 };
 
 template <typename N>
-    REQUIRES(Integer(N))
+REQUIRES(Integer(N))
 struct codomain_type<hf<N>> {
     typedef N type;
 };
 
 template <typename N>
-    REQUIRES(Integer(N))
+REQUIRES(Integer(N))
 struct distance_type<hf<N>> {
     typedef N type;
 };
@@ -445,7 +445,7 @@ inline void test_ch_2() {
 
 
 template <typename Op>
-    REQUIRES(BinaryOperation(Op))
+REQUIRES(BinaryOperation(Op))
 void concept_BinaryOperation(Op op, Domain(Op) x) {
     typedef Domain(Op) X;
     typedef Codomain(Op) Y;
@@ -506,7 +506,7 @@ inline void algorithm_power_with_identity(int (*pow)(int, int, int (*)(int, int)
 }
 
 template <typename I>
-    REQUIRES(Integer(I))
+REQUIRES(Integer(I))
 void concept_Integer(I n) {
     I k(11);
     concept_Regular<I>(n);
@@ -583,7 +583,7 @@ inline void test_ch_3() {
 
 
 template <typename R>
-    REQUIRES(Relation(R))
+REQUIRES(Relation(R))
 void concept_Relation(R r, Domain(R) x) {
     typedef Domain(R) X;
     X y;
@@ -595,14 +595,14 @@ void concept_Relation(R r, Domain(R) x) {
 }
 
 template <typename R>
-    REQUIRES(Relation(R))
+REQUIRES(Relation(R))
 void property_transitive(R r, Domain(R) x, Domain(R) y, Domain(R) z) {
     concept_Relation(r, x);
     Assert(!r(x, y) || !r(y, z) || r(x, z));
 }
 
 template <typename R>
-    REQUIRES(Relation(R))
+REQUIRES(Relation(R))
 void property_total_ordering(R r, const Domain(R) & x0, const Domain(R) & x1, const Domain(R) & x2) {
     // Precondition: total_ordering(r) /\ r(x0, x1) /\ r(x1, x2)
 
@@ -615,7 +615,7 @@ void property_total_ordering(R r, const Domain(R) & x0, const Domain(R) & x1, co
 }
 
 template <typename R>
-    REQUIRES(Relation(R))
+REQUIRES(Relation(R))
 void property_reflexive_total_ordering(R r, const Domain(R) & x0, const Domain(R) & x1, const Domain(R) & x2) {
     // Precondition: total_ordering(r) /\ r(x0, x1) /\ r(x1, x2)
 
@@ -631,7 +631,7 @@ void property_reflexive_total_ordering(R r, const Domain(R) & x0, const Domain(R
 }
 
 template <typename T, typename U>
-    REQUIRES(Regular(T) && Regular(U))
+REQUIRES(Regular(T) && Regular(U))
 struct first {
     T operator()(const pair<T, U>& x) {
         return x.m0;
@@ -639,13 +639,13 @@ struct first {
 };
 
 template <typename T, typename U>
-    REQUIRES(Regular(T) && Regular(U))
+REQUIRES(Regular(T) && Regular(U))
 struct input_type<first<T, U>, 0> {
     typedef pair<T, U> type;
 };
 
 template <typename T0, typename T1>
-    REQUIRES(TotallyOrdered(T0))
+REQUIRES(TotallyOrdered(T0))
 struct less_first {
     bool operator()(const pair<T0, T1>& p0, const pair<T0, T1>& p1) {
         return p0.m0 < p1.m0;
@@ -653,13 +653,13 @@ struct less_first {
 };
 
 template <typename T0, typename T1>
-    REQUIRES(TotallyOrdered(T0))
+REQUIRES(TotallyOrdered(T0))
 struct input_type<less_first<T0, T1>, 0> {
     typedef pair<T0, T1> type;
 };
 
 template <typename T0, typename T1>
-    REQUIRES(TotallyOrdered(T0))
+REQUIRES(TotallyOrdered(T0))
 struct less_second {
     bool operator()(const pair<T0, T1>& p0, const pair<T0, T1>& p1) {
         return p0.m1 < p1.m1;
@@ -667,13 +667,13 @@ struct less_second {
 };
 
 template <typename T0, typename T1>
-    REQUIRES(TotallyOrdered(T0))
+REQUIRES(TotallyOrdered(T0))
 struct input_type<less_second<T0, T1>, 0> {
     typedef pair<T0, T1> type;
 };
 
 template <typename T0, typename T1>
-    REQUIRES(Regular(T0))
+REQUIRES(Regular(T0))
 struct eq_first {
     T0 x0;
 
@@ -687,14 +687,14 @@ struct eq_first {
 };
 
 template <typename T0, typename T1>
-    REQUIRES(Regular(T0))
+REQUIRES(Regular(T0))
 struct input_type<eq_first<T0, T1>, 0> {
     typedef pair<T0, T1> type;
 };
 
 template <typename I, typename R>
-    REQUIRES(Mutable(I) && BidirectionalIterator(I) && Relation(R)) bool
-next_permutation(I f, I l, R r) {
+REQUIRES(Mutable(I) && BidirectionalIterator(I) && Relation(R))
+bool next_permutation(I f, I l, R r) {
     // Precondition: weak_ordering(r)
     if (f == l || successor(f) == l)
         return false;
@@ -720,7 +720,7 @@ next_permutation(I f, I l, R r) {
 }
 
 template <typename F, typename R>
-    REQUIRES(UnaryFunction(F) && Relation(R) && Codomain(F) == Domain(R))
+REQUIRES(UnaryFunction(F) && Relation(R) && Codomain(F) == Domain(R))
 struct key_ordering {
     F f;
     R r;
@@ -736,7 +736,7 @@ struct key_ordering {
 };
 
 template <typename F, typename R>
-    REQUIRES(Function(F) && Arity(F) == 1 && Relation(R) && Codomain(F) == Domain(R))
+REQUIRES(Function(F) && Arity(F) == 1 && Relation(R) && Codomain(F) == Domain(R))
 struct input_type<key_ordering<F, R>, 0> {
     typedef Domain(F) type;
 };
@@ -1074,7 +1074,7 @@ inline void test_ch_4() {
 // Chapter 5. Ordered algebraic structures
 
 template <typename T>
-    REQUIRES(OrderedAdditiveSemigroup(T))
+REQUIRES(OrderedAdditiveSemigroup(T))
 void concept_OrderedAdditiveSemigroup(T& x, T& y, T& z) {
     // Precondition: x < y
     concept_Regular(x);
@@ -1086,7 +1086,7 @@ void concept_OrderedAdditiveSemigroup(T& x, T& y, T& z) {
 }
 
 template <typename T>
-    REQUIRES(OrderedAdditiveMonoid(T))
+REQUIRES(OrderedAdditiveMonoid(T))
 void concept_OrderedAdditiveMonoid(T& x, T& y, T& z) {
     concept_OrderedAdditiveSemigroup(x, y, z);
     // 0 in T
@@ -1094,7 +1094,7 @@ void concept_OrderedAdditiveMonoid(T& x, T& y, T& z) {
 }
 
 template <typename T>
-    REQUIRES(OrderedAdditiveGroup(T))
+REQUIRES(OrderedAdditiveGroup(T))
 void concept_OrderedAdditiveGroup(T& x, T& y, T& z) {
     // Precondition: x < y
     concept_OrderedAdditiveMonoid(x, y, z);
@@ -1103,7 +1103,7 @@ void concept_OrderedAdditiveGroup(T& x, T& y, T& z) {
 }
 
 template <typename T>
-    REQUIRES(OrderedAdditiveGroup(T))
+REQUIRES(OrderedAdditiveGroup(T))
 void algorithm_abs(const T& something) {
     // We need a nonzero number to test with; OrderedAdditiveGroup doesn't guarantee one
     T zero(0);
@@ -1119,7 +1119,7 @@ void algorithm_abs(const T& something) {
 }
 
 template <typename T>
-    REQUIRES(CancellableMonoid(T))
+REQUIRES(CancellableMonoid(T))
 void concept_CancellableMonoid(T& x, T& y, T& z) {
     // Precondition: x < y
     concept_OrderedAdditiveMonoid(x, y, z);
@@ -1131,7 +1131,7 @@ void concept_CancellableMonoid(T& x, T& y, T& z) {
 }
 
 template <typename T>
-    REQUIRES(ArchimedeanMonoid(T))
+REQUIRES(ArchimedeanMonoid(T))
 void concept_ArchimedeanMonoid(T& x, T& y, T& z, QuotientType(T) n) {
     // Precondition: x < y
     concept_CancellableMonoid(x, y, z);
@@ -1141,7 +1141,7 @@ void concept_ArchimedeanMonoid(T& x, T& y, T& z, QuotientType(T) n) {
 }
 
 template <typename T>
-    REQUIRES(ArchimedeanGroup(T))
+REQUIRES(ArchimedeanGroup(T))
 void concept_ArchimedeanGroup(T& x, T& y, T& z, QuotientType(T) n) {
     // Precondition: x < y
     concept_ArchimedeanMonoid(x, y, z, n);
@@ -1151,7 +1151,7 @@ void concept_ArchimedeanGroup(T& x, T& y, T& z, QuotientType(T) n) {
 }
 
 template <typename T>
-    REQUIRES(ArchimedeanMonoid(T)) // + numerals, successor
+REQUIRES(ArchimedeanMonoid(T)) // + numerals, successor
 void algorithms_slow_q_and_r() {
     typedef long Z;
     plus<T> plus_T;
@@ -1171,7 +1171,7 @@ void algorithms_slow_q_and_r() {
 }
 
 template <typename T>
-    REQUIRES(ArchimedeanMonoid(T)) // + numerals, successor
+REQUIRES(ArchimedeanMonoid(T)) // + numerals, successor
 void algorithms_q_and_r_nonnegative() {
     typedef long Z;
     plus<T> plus_T;
@@ -1192,7 +1192,7 @@ void algorithms_q_and_r_nonnegative() {
 }
 
 template <typename T>
-    REQUIRES(ArchimedeanMonoid(T)) // + numerals, successor
+REQUIRES(ArchimedeanMonoid(T)) // + numerals, successor
 void algorithms_q_and_r_nonnegative_fibonacci() {
     typedef long Z;
     plus<T> plus_T;
@@ -1215,7 +1215,7 @@ void algorithms_q_and_r_nonnegative_fibonacci() {
 }
 
 template <typename T>
-    REQUIRES(ArchimedeanMonoid(T)) // + numerals, successor
+REQUIRES(ArchimedeanMonoid(T)) // + numerals, successor
 void algorithms_q_and_r_nonnegative_iterative() {
     typedef long Z;
     plus<T> plus_T;
@@ -1238,7 +1238,7 @@ void algorithms_q_and_r_nonnegative_iterative() {
 }
 
 template <typename T>
-    REQUIRES(ArchimedeanMonoid(T))
+REQUIRES(ArchimedeanMonoid(T))
 T largest_power_of_two(T a) {
     // Precondition: $a > 0$
     T b(1);
@@ -1249,7 +1249,7 @@ T largest_power_of_two(T a) {
 }
 
 template <typename T>
-    REQUIRES(ArchimedeanMonoid(T)) // + numerals, successor
+REQUIRES(ArchimedeanMonoid(T)) // + numerals, successor
 void algorithm_largest_doubling() {
     typedef long Z;
     T max(1000);
@@ -1286,7 +1286,7 @@ inline double remainder(double x, double y) {
 // for the construction of a field of quotients from an integral domain.
 
 template <typename N>
-    REQUIRES(IntegralDomain(N))
+REQUIRES(IntegralDomain(N))
 struct rational {
     typedef rational T;
     N p; // numerator
@@ -1308,44 +1308,44 @@ struct rational {
 };
 
 template <typename N>
-    REQUIRES(IntegralDomain(N))
+REQUIRES(IntegralDomain(N))
 struct quotient_type<rational<N>> {
     typedef N type;
 };
 
 template <typename N>
-    REQUIRES(IntegralDomain(N))
+REQUIRES(IntegralDomain(N))
 rational<N> operator+(const rational<N>& x, const rational<N>& y) {
     return rational<N>(y.q * x.p + x.q * y.p, x.q * y.q);
 }
 
 template <typename N>
-    REQUIRES(IntegralDomain(N))
+REQUIRES(IntegralDomain(N))
 rational<N> operator-(const rational<N>& x) {
     return rational<N>(-x.p, x.q);
 }
 
 template <typename N>
-    REQUIRES(IntegralDomain(N))
+REQUIRES(IntegralDomain(N))
 rational<N> operator-(const rational<N>& x, const rational<N>& y) {
     return x + (-y);
 }
 
 template <typename N>
-    REQUIRES(IntegralDomain(N))
+REQUIRES(IntegralDomain(N))
 rational<N> operator*(const rational<N>& x, const rational<N>& y) {
     return rational<N>(x.p * y.p, x.q * y.q);
 }
 
 template <typename N>
-    REQUIRES(IntegralDomain(N))
+REQUIRES(IntegralDomain(N))
 rational<N> multiplicative_inverse(const rational<N>& x) {
     // Precondition: $x.p \neq 0$
     return rational<N>(x.q, x.p);
 }
 
 template <typename N>
-    REQUIRES(IntegralDomain(N))
+REQUIRES(IntegralDomain(N))
 rational<N> operator/(const rational<N>& x, const rational<N>& y) {
     return rational<N>(x.p * y.q, x.q * y.p);
     // Postcondition: x * multiplicative_inverse(y)
@@ -1354,31 +1354,31 @@ rational<N> operator/(const rational<N>& x, const rational<N>& y) {
 // Multiplication for rational<N> as a semimodule over integers
 
 template <typename N>
-    REQUIRES(IntegralDomain(N))
+REQUIRES(IntegralDomain(N))
 rational<N> operator*(const N& n, const rational<N>& x) {
     return rational<N>(n * x.p, x.q);
 }
 
 template <typename N>
-    REQUIRES(IntegralDomain(N))
+REQUIRES(IntegralDomain(N))
 rational<N> remainder(const rational<N>& x, const rational<N>& y) {
     return remainder_nonnegative(x, y);
 }
 
 template <typename N>
-    REQUIRES(IntegralDomain(N)) bool
-operator==(const rational<N>& x, const rational<N>& y) {
+REQUIRES(IntegralDomain(N))
+bool operator==(const rational<N>& x, const rational<N>& y) {
     return x.p * y.q == y.p * x.q;
 }
 
 template <typename N>
-    REQUIRES(IntegralDomain(N)) bool
-operator<(const rational<N>& x, const rational<N>& y) {
+REQUIRES(IntegralDomain(N))
+bool operator<(const rational<N>& x, const rational<N>& y) {
     return x.p * y.q < y.p * x.q;
 }
 
 template <typename N>
-    REQUIRES(IntegralDomain(N))
+REQUIRES(IntegralDomain(N))
 void print(const rational<N>& x) {
     if (zero(x.p))
         print("0");
@@ -1392,7 +1392,7 @@ void print(const rational<N>& x) {
 }
 
 template <typename T>
-    REQUIRES(ArchimedeanGroup(T))
+REQUIRES(ArchimedeanGroup(T))
 struct ag_quotient_remainder {
     pair<QuotientType(T), T> operator()(T a, T b) {
         Assert(a >= T(0) && b > T(0));
@@ -1401,13 +1401,13 @@ struct ag_quotient_remainder {
 };
 
 template <typename T>
-    REQUIRES(ArchimedeanGroup(T))
+REQUIRES(ArchimedeanGroup(T))
 struct input_type<ag_quotient_remainder<T>, 0> {
     typedef T type;
 };
 
 template <typename T>
-    REQUIRES(ArchimedeanGroup(T)) // + numerals, successor
+REQUIRES(ArchimedeanGroup(T)) // + numerals, successor
 void algorithms_signed_q_and_r() {
     typedef long Z;
     typedef QuotientType(T) N;
@@ -1464,7 +1464,7 @@ struct quotient_type<double> {
 
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 struct polynomial {
     typedef int IndexType;
     array<T> coeff;
@@ -1481,51 +1481,51 @@ struct polynomial {
 };
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 struct value_type<polynomial<T>> {
     typedef T type;
 };
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 struct index_type;
 
 #define IndexType(T) typename index_type<T>::type
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 struct index_type<polynomial<T>> {
     typedef typename polynomial<T>::IndexType type;
 };
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 IndexType(polynomial<T>) operator==(const polynomial<T>& f, const polynomial<T>& g) {
     return f.coeff == g.coeff;
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 IndexType(polynomial<T>) operator<(const polynomial<T>& f, const polynomial<T>& g) {
     return degree(f) < degree(g) || (degree(g) == degree(f) && f.coeff < g.coeff);
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 IndexType(polynomial<T>) degree(const polynomial<T>& f) {
     // ***** Should degree(polynomial<T>(0)) = -infinity ?????
     return predecessor(size(f.coeff));
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 void shift_add_in_place(polynomial<T>& f, const T& x_0) {
     insert(back<array<T>>(f.coeff), x_0);
     // Postcondition: f'(x) = x * f(x) + x_0
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 void shift_left_in_place(polynomial<T>& f, IndexType(polynomial<T>) n) {
     // Precondition: n >= 0
     while (count_down(n))
@@ -1534,14 +1534,14 @@ void shift_left_in_place(polynomial<T>& f, IndexType(polynomial<T>) n) {
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 T coefficient(const polynomial<T>& f, IndexType(polynomial<T>) i) {
     // Precondition: $0 \leq i \leq \func{degree}(f)$
     return f.coeff[degree(f) - i]; // not a reference, to guarantee the invariant holds
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 T lc(const polynomial<T>& f) // leading coefficient
 {
     return f.coeff[0];
@@ -1549,7 +1549,7 @@ T lc(const polynomial<T>& f) // leading coefficient
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 T tc(const polynomial<T>& f) // trailing coefficient
 {
     return f.coeff[size(f.coeff) - 1];
@@ -1557,13 +1557,13 @@ T tc(const polynomial<T>& f) // trailing coefficient
 }
 
 template <typename T>
-    REQUIRES(Ring(T)) bool
-monic(const polynomial<T>& f) {
+REQUIRES(Ring(T))
+bool monic(const polynomial<T>& f) {
     return lc(f) == T(1);
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 polynomial<T> indeterminate() {
     polynomial<T> f(T(1)); // f(x) = 1
     shift_add_in_place(f, T(0)); // f'(x) = f(x) * x + 0 = 1 * x = x
@@ -1572,7 +1572,7 @@ polynomial<T> indeterminate() {
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 polynomial<T> evaluate(const polynomial<T>& f, const T& x_0) {
     typedef IndexType(polynomial<T>) I;
     I n(degree(f));
@@ -1587,7 +1587,7 @@ polynomial<T> evaluate(const polynomial<T>& f, const T& x_0) {
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 polynomial<T> add(
     const polynomial<T>& f, const polynomial<T>& g, IndexType(polynomial<T>) d, IndexType(polynomial<T>) n_g) {
     // Precondition: $0 < d = degree(f) - degree(g) \wedge n_g = degree(g)$
@@ -1609,7 +1609,7 @@ polynomial<T> add(
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 polynomial<T> operator+(const polynomial<T>& f, const polynomial<T>& g) {
     typedef IndexType(polynomial<T>) I;
     I n_f = degree(f);
@@ -1636,7 +1636,7 @@ polynomial<T> operator+(const polynomial<T>& f, const polynomial<T>& g) {
 }
 
 template <typename T, typename F>
-    REQUIRES(Ring(T) && Transformation(F) && T == Domain(F))
+REQUIRES(Ring(T) && Transformation(F) && T == Domain(F))
 void transform_coefficients_in_place(polynomial<T>& f, F trans) {
     typedef IndexType(polynomial<T>) I;
     I i(0);
@@ -1648,7 +1648,7 @@ void transform_coefficients_in_place(polynomial<T>& f, F trans) {
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 polynomial<T> operator-(polynomial<T> f) // f is a copy
 {
     transform_coefficients_in_place(f, negate<T>());
@@ -1657,14 +1657,14 @@ polynomial<T> operator-(polynomial<T> f) // f is a copy
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 polynomial<T> operator-(const polynomial<T>& f, const polynomial<T>& g) {
     return f + (-g);
     // Postcondition: returns h(x) = f(x) - g(x)
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 polynomial<T> product(const polynomial<T>& f, const polynomial<T>& g) {
     // Precondition: degree(f) <= degree(g)
     typedef IndexType(polynomial<T>) I;
@@ -1689,7 +1689,7 @@ polynomial<T> product(const polynomial<T>& f, const polynomial<T>& g) {
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 polynomial<T> operator*(const polynomial<T>& f, const polynomial<T>& g) {
     if (degree(f) <= degree(g))
         return product(f, g);
@@ -1698,7 +1698,7 @@ polynomial<T> operator*(const polynomial<T>& f, const polynomial<T>& g) {
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 polynomial<T> operator*(T x_0, const polynomial<T>& f) {
     polynomial<T> h(f);
     transform_coefficients_in_place(h, multiplies_transformation<multiplies<T>>(x_0, multiplies<T>()));
@@ -1707,7 +1707,7 @@ polynomial<T> operator*(T x_0, const polynomial<T>& f) {
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 polynomial<T> shift_left(const polynomial<T>& f, IndexType(polynomial<T>) n) {
     polynomial<T> h(f);
     shift_left_in_place(h, n);
@@ -1716,7 +1716,7 @@ polynomial<T> shift_left(const polynomial<T>& f, IndexType(polynomial<T>) n) {
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 pair<polynomial<T>, polynomial<T>> quotient_remainder(const polynomial<T>& f, const polynomial<T>& g) {
     // Precondition: unit(lc(g))
     T u = multiplicative_inverse(lc(g));
@@ -1733,14 +1733,14 @@ pair<polynomial<T>, polynomial<T>> quotient_remainder(const polynomial<T>& f, co
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 polynomial<T> remainder(const polynomial<T>& f, const polynomial<T>& g) {
     // Precondition: unit(lc(g))
     return quotient_remainder(f, g).m1;
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 void print_coefficient(T c, IndexType(polynomial<T>) i) {
     if (!one(c) || zero(i)) {
         print(c);
@@ -1757,7 +1757,7 @@ void print_coefficient(T c, IndexType(polynomial<T>) i) {
 }
 
 template <typename T>
-    REQUIRES(Ring(T))
+REQUIRES(Ring(T))
 void print(const polynomial<T>& f) {
     typedef IndexType(polynomial<T>) I;
     print("polynomial(");
@@ -1937,7 +1937,7 @@ inline void test_ch_5() {
 // "Thunk"-style iterator
 
 template <typename T>
-    REQUIRES(Semiring(T))
+REQUIRES(Semiring(T))
 struct square_of_i {
     T i;
 
@@ -1947,31 +1947,31 @@ struct square_of_i {
 };
 
 template <typename T>
-    REQUIRES(Semiring(T))
+REQUIRES(Semiring(T))
 struct value_type<square_of_i<T>> {
     typedef T type;
 };
 
 template <typename T>
-    REQUIRES(Semiring(T))
+REQUIRES(Semiring(T))
 square_of_i<T> successor(const square_of_i<T>& x) {
     return square_of_i<T>(x.i + T(1));
 }
 
 template <typename T>
-    REQUIRES(Semiring(T))
+REQUIRES(Semiring(T))
 T source(const square_of_i<T>& x) {
     return x.i * x.i;
 }
 
 template <typename T>
-    REQUIRES(Semiring(T)) bool
-operator==(const square_of_i<T>& x, const square_of_i<T>& y) {
+REQUIRES(Semiring(T))
+bool operator==(const square_of_i<T>& x, const square_of_i<T>& y) {
     return x.i == y.i;
 }
 
 template <typename Op>
-    REQUIRES(BinaryOperation(Op))
+REQUIRES(BinaryOperation(Op))
 struct accumulate {
     typedef Domain(Op) T;
     Op op;
@@ -1988,13 +1988,13 @@ struct accumulate {
 };
 
 template <typename Op>
-    REQUIRES(BinaryOperation)
+REQUIRES(BinaryOperation)
 struct input_type<accumulate<Op>, 0> {
     typedef Domain(Op) type;
 };
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 struct identity {
     T operator()(const T& x) {
         return x;
@@ -2002,7 +2002,7 @@ struct identity {
 };
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 struct input_type<identity<T>, 0> {
     typedef T type;
 };
@@ -2253,7 +2253,7 @@ inline void test_ch_6() {
 
 
 template <typename C>
-    REQUIRES(BifurcateCoordinate(C))
+REQUIRES(BifurcateCoordinate(C))
 struct count_visits {
     int n_pre, n_in, n_post;
 
@@ -2323,7 +2323,7 @@ void algorithms_lexicographical() {
 }
 
 template <typename T, typename T_X>
-    REQUIRES(Tree(T) && Tree(T_X))
+REQUIRES(Tree(T) && Tree(T_X))
 void algorithms_bifurcate_coordinates() {
     print("    bifurcate coordinates\n");
 
@@ -2419,7 +2419,7 @@ void algorithms_bifurcate_coordinates() {
 }
 
 template <typename T, typename T_X>
-    REQUIRES(Tree(T) && Tree(T_X) && Integer(ValueType(T)) && Character(ValueType(T_X)))
+REQUIRES(Tree(T) && Tree(T_X) && Integer(ValueType(T)) && Character(ValueType(T_X)))
 void algorithms_bidirectional_bifurcate_coordinates() {
     print("    bidirectional bifurcate coordinates\n");
 
@@ -2579,7 +2579,7 @@ void algorithms_bidirectional_bifurcate_coordinates() {
 }
 
 template <typename Z, typename X>
-    REQUIRES(Integer(Z) && Regular(X))
+REQUIRES(Integer(Z) && Regular(X))
 void test_ch_7() {
     print("  Chapter 7\n");
 
@@ -2597,7 +2597,7 @@ void test_ch_7() {
 
 
 template <typename L>
-    REQUIRES(List(L))
+REQUIRES(List(L))
 void algorithms_linked() {
     typedef ValueType(L) Z;
     typedef IteratorType(L) I;
@@ -2650,7 +2650,7 @@ void algorithms_linked() {
 }
 
 template <typename Z>
-    REQUIRES(Integer(Z))
+REQUIRES(Integer(Z))
 void algorithms_linked_iterators() {
     print("    linked iterators\n");
 
@@ -2662,7 +2662,7 @@ void algorithms_linked_iterators() {
 }
 
 template <typename C>
-    REQUIRES(Readable(C) && AdditiveMonoid(ValueType(C)))
+REQUIRES(Readable(C) && AdditiveMonoid(ValueType(C)))
 struct sum_source {
     typedef ValueType(C) T;
     T sum;
@@ -2677,13 +2677,13 @@ struct sum_source {
 };
 
 template <typename C>
-    REQUIRES(Readable(C) && AdditiveMonoid(ValueType(C)))
+REQUIRES(Readable(C) && AdditiveMonoid(ValueType(C)))
 struct input_type<sum_source<C>, 0> {
     typedef C type;
 };
 
 template <typename Z>
-    REQUIRES(Integer(Z))
+REQUIRES(Integer(Z))
 void algorithms_linked_bifurcate_coordinates() {
     print("    linked bifurcate coordinates\n");
 
@@ -2736,7 +2736,7 @@ void algorithms_linked_bifurcate_coordinates() {
 }
 
 template <typename Z>
-    REQUIRES(Integer(Z))
+REQUIRES(Integer(Z))
 void test_bifurcate_copy_Andrej() {
     typedef stree<Z> T;
     typedef CoordinateType(T) C;
@@ -2752,7 +2752,7 @@ void test_bifurcate_copy_Andrej() {
 }
 
 template <typename Z>
-    REQUIRES(Integer(Z))
+REQUIRES(Integer(Z))
 void test_ch_8() {
     print("  Chapter 8\n");
 
@@ -2769,7 +2769,7 @@ void test_ch_8() {
 
 
 template <typename S>
-    REQUIRES(DynamicSequence(S))
+REQUIRES(DynamicSequence(S))
 void extend_sequence_n(S& s, DistanceType(IteratorType(S)) n, const ValueType(S) & x) {
     typedef after<S> AP;
     while (count_down(n))
@@ -2777,8 +2777,8 @@ void extend_sequence_n(S& s, DistanceType(IteratorType(S)) n, const ValueType(S)
 }
 
 template <typename I>
-    REQUIRES(Readable(I) && Iterator(I) && Integer(ValueType(I))) bool
-equal_iota_reverse(I f, I l) {
+REQUIRES(Readable(I) && Iterator(I) && Integer(ValueType(I)))
+bool equal_iota_reverse(I f, I l) {
     ValueType(I) n(l - f);
     while (f != l) {
         n = predecessor(n);
@@ -2790,7 +2790,7 @@ equal_iota_reverse(I f, I l) {
 }
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 struct equal_to_x {
     T x;
 
@@ -2804,15 +2804,15 @@ struct equal_to_x {
 };
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 struct input_type<equal_to_x<T>, 0> {
     typedef T type;
 };
 
 template <typename I0, typename I1>
-    REQUIRES(
-        Mutable(I0) && ForwardIterator(I0) && Mutable(I1) && ForwardIterator(I1) && ValueType(I0) == ValueType(I1)
-        && Integer(ValueType(I0)))
+REQUIRES(
+    Mutable(I0) && ForwardIterator(I0) && Mutable(I1) && ForwardIterator(I1) && ValueType(I0) == ValueType(I1)
+    && Integer(ValueType(I0)))
 void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
     // Precondition: $l0 - f0 <= l1 - f1$
     typedef ValueType(I0) T;
@@ -3098,9 +3098,9 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
 }
 
 template <typename I0, typename I1>
-    REQUIRES(
-        Readable(I0) && BidirectionalIterator(I0) && Writable(I1) && BidirectionalIterator(I1)
-        && ValueType(I0) == ValueType(I1))
+REQUIRES(
+    Readable(I0) && BidirectionalIterator(I0) && Writable(I1) && BidirectionalIterator(I1)
+    && ValueType(I0) == ValueType(I1))
 void algorithms_copy_backward(I0 f0, I0 l0, I1 f1, I1 l1) {
     // Precondition: $l0 - f0 <= l1 - f1$
     typedef ValueType(I0) T;
@@ -3187,9 +3187,9 @@ void algorithms_copy_backward(I0 f0, I0 l0, I1 f1, I1 l1) {
 }
 
 template <typename I0, typename I1>
-    REQUIRES(
-        Mutable(I0) && BidirectionalIterator(I0) && Mutable(I1) && BidirectionalIterator(I1)
-        && ValueType(I0) == ValueType(I1))
+REQUIRES(
+    Mutable(I0) && BidirectionalIterator(I0) && Mutable(I1) && BidirectionalIterator(I1)
+    && ValueType(I0) == ValueType(I1))
 void algorithms_copy_reverse(I0 f0, I0 l0, I1 f1, I1 l1) {
     // Precondition: $l0 - f0 == l1 - f1$
     typedef ValueType(I0) T;
@@ -3315,7 +3315,7 @@ void algorithms_copy_reverse(I0 f0, I0 l0, I1 f1, I1 l1) {
 }
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 void test_ch_9() {
     print("  Chapter 9\n");
 
@@ -3361,7 +3361,7 @@ void test_ch_9() {
 
 
 template <typename I>
-    REQUIRES(RandomAccessIterator(I))
+REQUIRES(RandomAccessIterator(I))
 struct successor_cyclic {
     I f;
     I l;
@@ -3393,7 +3393,7 @@ inline void algorithm_cycle_to() {
 }
 
 template <typename T, typename N>
-    REQUIRES(Regular(T) && Integer(N))
+REQUIRES(Regular(T) && Integer(N))
 void type_temporary_buffer(N n) {
     {
         temporary_buffer<T> b(n);
@@ -3463,7 +3463,7 @@ inline void algorithms_reverse() {
 typedef POINTER(int) int_pointer;
 
 template <typename C>
-    REQUIRES(IteratorConcept(C))
+REQUIRES(IteratorConcept(C))
 void algorithms_rotate_Concept(int_pointer a, int n) {
     Assert(n != 0);
     fill_n(a, n, int(7));
@@ -3525,7 +3525,7 @@ inline void algorithm_rotate_forward_annotated(int_pointer a, int n) {
 }
 
 template <typename I, typename B>
-    REQUIRES(ForwardIterator(I) && ForwardIterator(B))
+REQUIRES(ForwardIterator(I) && ForwardIterator(B))
 void algorithms_rotate_Concept_with_buffer(I f, DistanceType(I) n, B f_b, I (*algo)(I, I, I, B)) {
     Assert(n != 0);
     fill_n(f, n, int(7));
@@ -3556,7 +3556,7 @@ void algorithms_rotate_Concept_with_buffer(I f, DistanceType(I) n, B f_b, I (*al
 }
 
 template <typename N>
-    REQUIRES(Integer(N))
+REQUIRES(Integer(N))
 void algorithm_rotate_partial(N n) {
     Assert(n > N(1));
     array<N> a(twice(n), twice(n), N(-1));
@@ -3840,7 +3840,7 @@ inline const POINTER(char) end(const POINTER(char) a) {
 }
 
 template <typename M, typename R, typename E>
-    REQUIRES(WrappedMerger(M) && Relation(R) && Domain(R) == char && Relation(E) && Domain(E) == char)
+REQUIRES(WrappedMerger(M) && Relation(R) && Domain(R) == char&& Relation(E) && Domain(E) == char)
 struct merge_case {
     M merger;
     R r;
@@ -3889,7 +3889,7 @@ struct merge_case {
 };
 
 template <typename M>
-    REQUIRES(Merger(M))
+REQUIRES(Merger(M))
 void merge_cases(M m) {
     merge_case<M, less_ignoring_case, equal_ignoring_case> c(m, less_ignoring_case(), equal_ignoring_case(), true);
     merge_case<M, less_ignoring_case, equal<char>> n(m, less_ignoring_case(), equal<char>(), false);
@@ -3918,14 +3918,14 @@ void merge_cases(M m) {
 }
 
 template <typename I, typename R>
-    REQUIRES(Mutable(I) && ForwardIterator(I) && Relation(R) && ValueType(I) == Domain(R))
+REQUIRES(Mutable(I) && ForwardIterator(I) && Relation(R) && ValueType(I) == Domain(R))
 I wrapped_merge_n_with_buffer(I f0, DistanceType(I) n0, I f1, DistanceType(I) n1, R r) {
     array<ValueType(I)> b(n0, n0, ValueType(I)());
     return merge_n_with_buffer(f0, n0, f1, n1, begin(b), r);
 }
 
 template <typename I, typename R>
-    REQUIRES(Mutable(I) && ForwardIterator(I) && Relation(R) && ValueType(I) == Domain(R))
+REQUIRES(Mutable(I) && ForwardIterator(I) && Relation(R) && ValueType(I) == Domain(R))
 I wrapped_merge_n_adaptive(I f0, DistanceType(I) n0, I f1, DistanceType(I) n1, R r) {
     const DistanceType(I) n = half_nonnegative(n0);
     array<ValueType(I)> b(n, n, ValueType(I)());
@@ -3940,7 +3940,7 @@ inline void algorithms_merge() {
 }
 
 template <typename S>
-    REQUIRES(Sequence(S) && Integer(ValueType(S)))
+REQUIRES(Sequence(S) && Integer(ValueType(S)))
 void algorithms_sort(S& s) {
     typedef IteratorType(S) I;
     typedef DistanceType(I) N;
@@ -4011,12 +4011,12 @@ inline void test_ch_11() {
 
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 void nothing(const T&) {
 }
 
 template <typename W>
-    REQUIRES(Linearizable(W))
+REQUIRES(Linearizable(W))
 void concept_Linearizable(W& w) {
     // Regular
     concept_Regular(w);
@@ -4044,7 +4044,7 @@ void concept_Linearizable(W& w) {
 }
 
 template <typename S>
-    REQUIRES(Sequence(S))
+REQUIRES(Sequence(S))
 void concept_Sequence(S& s0, S& s1, ValueType(S) & x) {
     // Precondition: s0 < s1 /\ !empty(s1) /\ x != s1[0]
     Assert(begin(s1) != end(s1));
@@ -4063,7 +4063,7 @@ void concept_Sequence(S& s0, S& s1, ValueType(S) & x) {
 }
 
 template <typename T0, typename T1>
-    REQUIRES(ConstantSizeSequence(T0) && ConstantSizeSequence(T1) && ValueType(T0) == ValueType(T1))
+REQUIRES(ConstantSizeSequence(T0) && ConstantSizeSequence(T1) && ValueType(T0) == ValueType(T1))
 void concept_ConstantSizeSequence(T0& a0, T1& a1, ValueType(T1) & x) {
     // Precondition: a0 < a1 /\ x != a1[0]
 
@@ -4170,7 +4170,7 @@ inline void type_array_k() {
 }
 
 template <typename I>
-    REQUIRES(Readable(I) && Iterator(I))
+REQUIRES(Readable(I) && Iterator(I))
 void type_bounded_range(I f, I l) {
     typedef bounded_range<I> T;
     T r(f, l);
@@ -4178,7 +4178,7 @@ void type_bounded_range(I f, I l) {
 }
 
 template <typename I>
-    REQUIRES(Readable(I) && Iterator(I))
+REQUIRES(Readable(I) && Iterator(I))
 void type_counted_range(I f, DistanceType(I) n) {
     typedef counted_range<I> T;
     T r(f, n);
@@ -4186,7 +4186,7 @@ void type_counted_range(I f, DistanceType(I) n) {
 }
 
 template <typename P>
-    REQUIRES(Position(P))
+REQUIRES(Position(P))
 void concept_Position(P p, BaseType(P) & s, IteratorType(P) /*i*/) {
     typedef BaseType(P) B;
     typedef IteratorType(P) I;
@@ -4204,7 +4204,7 @@ void concept_Position(P p, BaseType(P) & s, IteratorType(P) /*i*/) {
 }
 
 template <typename S>
-    REQUIRES(DynamicSequence(S))
+REQUIRES(DynamicSequence(S))
 void test_Position(S& s, IteratorType(S) i) {
     before<S> bef(s, i);
     concept_Position(bef, s, i);
@@ -4228,7 +4228,7 @@ void test_Position(S& s, IteratorType(S) i) {
 }
 
 template <typename S>
-    REQUIRES(DynamicSequence(S))
+REQUIRES(DynamicSequence(S))
 void concept_DynamicSequence(S& s0, S& s1, ValueType(S) & x) {
     // Precondition: s0 < s1 /\ x != s1[0]
     typedef IteratorType(S) I;
@@ -4247,7 +4247,7 @@ void concept_DynamicSequence(S& s0, S& s1, ValueType(S) & x) {
 }
 
 template <typename L>
-    REQUIRES(List(L) && ValueType(L) == int)
+REQUIRES(List(L) && ValueType(L) == int)
 void type_list() {
     const SizeType(L) k0 = 10;
     {
@@ -4308,7 +4308,7 @@ void type_list() {
 }
 
 template <typename S>
-    REQUIRES(SingleExtentArray(S))
+REQUIRES(SingleExtentArray(S))
 void type_single_extent_array(S& s0, S& s1, ValueType(S) & x) {
     // Precondition: s0 < s1 /\ x != s1[0]
     concept_DynamicSequence(s0, s1, x);
@@ -4410,7 +4410,7 @@ inline void type_array() {
 }
 
 template <typename T, typename T0>
-    REQUIRES(T == array<T0>)
+REQUIRES(T == array<T0>)
 void algorithm_underlying_ref_array(T0& x) {
     typedef UnderlyingType(T) U;
     T t(2, 2, x);
@@ -4419,7 +4419,7 @@ void algorithm_underlying_ref_array(T0& x) {
 }
 
 template <typename T, typename T0>
-    REQUIRES(T == array<T0>)
+REQUIRES(T == array<T0>)
 void type_underlying_iterator_array(T0& x) {
     typedef IteratorType(T) I;
     typedef underlying_iterator<I> UI;
@@ -4445,7 +4445,7 @@ void type_underlying_iterator_array(T0& x) {
 }
 
 template <typename T, typename T0>
-    REQUIRES(T == array<T0>)
+REQUIRES(T == array<T0>)
 void algorithm_original_ref_array(T0& x) {
     typedef UnderlyingType(T) U;
     T t0(2, 2, x);
@@ -4457,7 +4457,7 @@ void algorithm_original_ref_array(T0& x) {
 }
 
 template <typename T, typename P>
-    REQUIRES(Predicate(P) && T == Domain(P))
+REQUIRES(Predicate(P) && T == Domain(P))
 void algorithm_underlying_predicate(T& x0, T& x1, P p) {
     // Precondition: !p(x0) && p(x1)
     Assert(!p(x0) && p(x1));
@@ -4467,7 +4467,7 @@ void algorithm_underlying_predicate(T& x0, T& x1, P p) {
 }
 
 template <typename T, typename R>
-    REQUIRES(Relation(R) && T == Domain(R))
+REQUIRES(Relation(R) && T == Domain(R))
 void algorithm_underlying_relation(T& x0, T& x1, R r) {
     // Precondition: r(x0, x1) && !r(x1, x0)
     typedef UnderlyingType(T) U;
@@ -4480,8 +4480,8 @@ void algorithm_underlying_relation(T& x0, T& x1, R r) {
 }
 
 template <typename T>
-    REQUIRES(Linearizable(T)) bool
-nonempty(const T& x) {
+REQUIRES(Linearizable(T))
+bool nonempty(const T& x) {
     return !empty(x);
 }
 

@@ -29,81 +29,81 @@
 // Exercise 3.2
 
 template <typename I>
-    REQUIRES(Integer(I))
+REQUIRES(Integer(I))
 I successor(const I& a) {
     return a + I(1);
 }
 
 template <typename I>
-    REQUIRES(Integer(I))
+REQUIRES(Integer(I))
 I predecessor(const I& a) {
     return a - I(1);
 }
 
 template <typename I>
-    REQUIRES(Integer(I))
+REQUIRES(Integer(I))
 I twice(const I& a) {
     return a + a;
 }
 
 template <typename I>
-    REQUIRES(Integer(I))
+REQUIRES(Integer(I))
 I half_nonnegative(const I& a) {
     return a >> I(1);
 }
 
 template <typename I>
-    REQUIRES(Integer(I))
+REQUIRES(Integer(I))
 I binary_scale_down_nonnegative(const I& a, const I& k) {
     return a >> k;
 }
 
 template <typename I>
-    REQUIRES(Integer(I))
+REQUIRES(Integer(I))
 I binary_scale_up_nonnegative(const I& a, const I& k) {
     return a << k;
 }
 
 template <typename I>
-    REQUIRES(Integer(I)) bool
-positive(const I& a) {
+REQUIRES(Integer(I))
+bool positive(const I& a) {
     return I(0) < a;
 }
 
 template <typename I>
-    REQUIRES(Integer(I)) bool
-negative(const I& a) {
+REQUIRES(Integer(I))
+bool negative(const I& a) {
     return a < I(0);
 }
 
 template <typename I>
-    REQUIRES(Integer(I)) bool
-zero(const I& a) {
+REQUIRES(Integer(I))
+bool zero(const I& a) {
     return a == I(0);
 }
 
 template <typename I>
-    REQUIRES(Integer(I)) bool
-one(const I& a) {
+REQUIRES(Integer(I))
+bool one(const I& a) {
     return a == I(1);
 }
 
 template <typename I>
-    REQUIRES(Integer(I)) bool
-even(const I& a) {
+REQUIRES(Integer(I))
+bool even(const I& a) {
     return (a bitand I(1)) == I(0);
 }
 
 template <typename I>
-    REQUIRES(Integer(I)) bool
-odd(const I& a) {
+REQUIRES(Integer(I))
+bool odd(const I& a) {
     return (a bitand I(1)) != I(0);
 }
 
 // Chapter 5: definition of half for Integer types, to model HalvableMonoid:
 
 template <typename I>
-    REQUIRES(Integer(I))
+REQUIRES(Integer(I))
 I half(const I& x) {
     return half_nonnegative(x);
 }

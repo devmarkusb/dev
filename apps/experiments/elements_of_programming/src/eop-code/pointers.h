@@ -30,55 +30,55 @@
 #include <cstddef> // ptrdiff_t
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 struct value_type<POINTER(T)> {
     typedef T type;
 };
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 const T& source(POINTER(T) x) {
     return *x;
 }
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 const T& source(const T& x) {
     return x;
 }
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 struct distance_type<POINTER(T)> {
     typedef ptrdiff_t type;
 };
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 POINTER(T) successor(POINTER(T) x) {
     return x + ptrdiff_t(1);
 }
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 POINTER(T) predecessor(POINTER(T) x) {
     return x - ptrdiff_t(1);
 }
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 T& sink(POINTER(T) x) {
     return *x;
 }
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 T& sink(T& x) {
     return x;
 }
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 T& deref(POINTER(T) x) {
     return *x;
 }
@@ -91,7 +91,7 @@ T& deref(POINTER(T) x) {
 //}
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 struct iterator_concept<T*> {
     typedef random_access_iterator_tag the_concept;
 };

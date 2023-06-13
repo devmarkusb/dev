@@ -47,14 +47,15 @@
 #define POINTER(T) T*
 
 template <typename T>
-POINTER(T) addressof(T& x) {
+POINTER(T)
+addressof(T& x) {
     return &x;
 }
 
 // In-place construction and destruction (not in Appendix B.2)
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 void construct(T& p) {
     // Precondition: $p$ refers to raw memory, not an object
     // Postcondition: $p$ is in a default-constructed state
@@ -62,7 +63,7 @@ void construct(T& p) {
 }
 
 template <typename T, typename U>
-    REQUIRES(Regular(T) && Constructible(T, U))
+REQUIRES(Regular(T) && Constructible(T, U))
 void construct(T& p, const U& initializer) {
     // Precondition: $p$ refers to raw memory, not an object
     // Postcondition: Default makes $p = initializer$
@@ -71,7 +72,7 @@ void construct(T& p, const U& initializer) {
 }
 
 template <typename T>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 void destroy(T& p) {
     // Precondition: $p$ is in a partially-formed state
     // Postcondition: $p$ refers to raw memory, not an object
@@ -79,7 +80,7 @@ void destroy(T& p) {
 }
 
 template <typename T, typename U>
-    REQUIRES(Regular(T))
+REQUIRES(Regular(T))
 void destroy(T& p, U& /*finalizer*/) {
     // Precondition: $p$ is in a partially-formed state
     // Postcondition: $p$ refers to raw memory, not an object

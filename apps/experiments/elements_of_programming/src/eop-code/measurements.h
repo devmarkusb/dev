@@ -72,7 +72,7 @@ inline double time_per_iter(const measure_time& m) {
 }
 
 template <typename M, typename F>
-    REQUIRES(Measure(M) && Measurement(F))
+REQUIRES(Measure(M) && Measurement(F))
 M perform() {
     typedef DistanceType(M) N;
     F f;
@@ -344,7 +344,7 @@ struct measure_sort_n_adaptive {
 };
 
 template <typename M>
-    REQUIRES(Measure(M))
+REQUIRES(Measure(M))
 void report(M m) {
     print(m.legend);
     print(": ");
