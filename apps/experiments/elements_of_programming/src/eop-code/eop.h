@@ -6020,8 +6020,8 @@ POINTER(array_prefix<T>) allocate_array(DistanceType(T*) n) {
     typedef POINTER(array_prefix<T>) P;
     if (zero(n))
         return P(0);
-    int bsize = int(predecessor(n)) * sizeof(T);
-    P p = P(malloc(sizeof(array_prefix<T>) + bsize));
+    int bsize = int(predecessor(n)) * static_cast<int>(sizeof(T));
+    P p = P(malloc(sizeof(array_prefix<T>) + static_cast<size_t>(bsize)));
     POINTER(T) f = &sink(p).a;
     sink(p).m = f;
     sink(p).l = f + n;

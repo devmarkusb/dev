@@ -60,6 +60,10 @@ void output_orbit_structure(Domain(F) x, F f, P p) {
     print_eol();
 }
 
+template <typename T>
+    REQUIRES(EuclideanSemiring(T))
+T remainder(T a, T b);
+
 template <typename I>
     REQUIRES(Integer(I))
 struct additive_congruential_transformation {
