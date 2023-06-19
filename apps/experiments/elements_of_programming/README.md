@@ -110,6 +110,11 @@ Interpretion of a datum: an entity corresponding to a datum.
 
 Load: obtain content of an address.
 
+Memory, address, content, lengths: a set of words (values), each with an address and
+a content. Addresses are values of fixed address length, contents are values of fixed
+word length.
+Ex: Bytes in RAM accessed by e.g. 4-Byte addresses
+
 Model: a concept is modeled by types, or a type is a model for a concept, if the
 concepts requirements are satisfied for these types. Written C(T_0,...,T_{n-1}).
 
@@ -133,18 +138,13 @@ construct or destroy them.
 Procedure input/output, direct/indirect passings, local/global/own state: obvious notions
 for objects dealt with.
 
-Refinement: A concept C' refines a concept C, if whenever C' is satisfied for a set
-of types, C is also satisfied for these types. 
-
-Memory, address, content, lengths: a set of words (values), each with an address and
-a content. Addresses are values of fixed address length, contents are values of fixed
-word length.
-Ex: Bytes in RAM accessed by e.g. 4-Byte addresses
-
 Properly partial or total object type: iff its value type is properly partial or total.
 
 Properly partial or total value type: if its values represent a proper subset of the
 abstract entities in the corresponding species, otherwise it is total.
+
+Refinement: A concept C' refines a concept C, if whenever C' is satisfied for a set
+of types, C is also satisfied for these types.
 
 Regular: a type concept corresponding to the definition of a regular type.
 
@@ -159,7 +159,7 @@ results in equal output objects.
 Regular type: if its basis includes equality, assignment, destructor,
 default constructor, copy constructor, total ordering, and underlying type.
 
-Representation of a entity: a datum corresponding to a particular entity.
+Representation of an entity: a datum corresponding to a particular entity.
 
 Representationally equal values: if their data are identical sequences of 0s and 1s.
 
@@ -191,7 +191,7 @@ Total object type: see properly partial.
 
 Total value type: see properly partial.
 
-Type: short for value type.
+Type: short for object type.
 
 Type attribute: a mapping from a type to a value describing some characteristic of the type.
 Ex: sizeof in C++
@@ -200,7 +200,7 @@ Type concept: a concept defined on one type.
 
 Type constructor: mechanism for creating a new type from existing types.
 Notation for n-ary type constructor C applied to types T_0,...,T_{n-1} is
-C_{T_0,...,T_{n-1}}. Example pair_{T_0,T_1}, or analogously for struct's. 
+C_{T_0,...,T_{n-1}}. Example pair_{T_0,T_1}, or analogously for structs. 
 
 Type function (occasionally indexed): a mapping from a type to an affiliated type.
 So this is mapping between concepts (as domain and codomain).
@@ -230,3 +230,7 @@ Well-formed object: iff its state is well-formed.
 ## Excercises
 
 1.1 don't see anything to do
+
+## Projects
+
+1.1 won't do, difficult, not anticipating much fun
