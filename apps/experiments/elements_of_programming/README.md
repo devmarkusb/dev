@@ -5,6 +5,11 @@ Glossary, examples and experiments supporting the study of the book
 
 ## Glossary
 
+# Chapter 1
+
+![ch1](README.md.d/ch1.jpg)
+
+
 Abstract entity: is an individual thing that is eternal and unchangeable.
 Ex: 5, blue
 
