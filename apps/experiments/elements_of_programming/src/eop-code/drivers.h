@@ -28,7 +28,10 @@
 #include "intrinsics.h"
 #include "print.h"
 #include "read.h"
+#include "remainder.h"
 #include "type_functions.h"
+
+#include "ul/narrow.h"
 
 // Chapter 2 - Transformations and their orbits
 
@@ -59,10 +62,6 @@ void output_orbit_structure(Domain(F) x, F f, P p) {
     }
     print_eol();
 }
-
-template <typename T>
-REQUIRES(EuclideanSemiring(T))
-T remainder(T a, T b);
 
 template <typename I>
 REQUIRES(Integer(I))
@@ -125,7 +124,7 @@ struct table_transformation {
     }
 
     int operator()(N x) {
-        return source(p + x);
+        return ul::narrow<int>(source(p + x));
     }
 };
 
@@ -521,22 +520,6 @@ inline void run_quotient_remainder() {
         print(p.m1);
         print_eol();
     }
-}
-
-// Default remainder for EuclideanSemiring
-
-template <typename T>
-REQUIRES(EuclideanSemiring(T))
-T remainder(T a, T b) {
-    return a % b;
-}
-
-// Default remainder for EuclideanSemimodule
-
-template <typename T, typename S>
-REQUIRES(EuclideanSemimodule(T, S))
-T remainder(T a, T b) {
-    return remainder_nonnegative(a, b);
 }
 
 inline void run_gcd() {

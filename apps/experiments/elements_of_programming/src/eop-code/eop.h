@@ -25,6 +25,7 @@
 #include "integers.h"
 #include "intrinsics.h"
 #include "pointers.h"
+#include "remainder.h"
 #include "type_functions.h"
 
 #include <cmath> // sqrt
@@ -979,27 +980,6 @@ QuotientType(T) slow_quotient(T a, T b) {
         n = successor(n);
     }
     return n;
-}
-
-template <typename T>
-REQUIRES(ArchimedeanMonoid(T))
-T remainder_recursive(T a, T b) {
-    // Precondition: $a \geq b > 0$
-    if (a - b >= b) {
-        a = remainder_recursive(a, b + b);
-        if (a < b)
-            return a;
-    }
-    return a - b;
-}
-
-template <typename T>
-REQUIRES(ArchimedeanMonoid(T))
-T remainder_nonnegative(T a, T b) {
-    // Precondition: $a \geq 0 \wedge b > 0$
-    if (a < b)
-        return a;
-    return remainder_recursive(a, b);
 }
 
 /* The next function is due to:
@@ -3591,8 +3571,9 @@ struct temporary_buffer {
 
     temporary_buffer(N n_)
         : n(n_) {
+        Assert(n >= N{0});
         while (true) {
-            p = P(malloc(n * sizeof(T)));
+            p = P(malloc(static_cast<size_t>(n) * sizeof(T)));
             if (p != P(0)) {
                 construct_all(p, p + n);
                 return;

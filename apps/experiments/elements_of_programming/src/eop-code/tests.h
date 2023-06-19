@@ -31,6 +31,7 @@
 #include "print.h"
 #include "type_functions.h"
 
+#include "ul/narrow.h"
 
 // Naming conventions:
 
@@ -79,7 +80,7 @@ void concept_Regular(T& x) {
     Assert(!lt(x, x));
 
     // Underlying type
-    UnderlyingType(T) u;
+    [[maybe_unused]] UnderlyingType(T) u;
 
     // Destructor
 }
@@ -219,7 +220,7 @@ void concept_Transformation(F f, Domain(F) x) {
     Assert(x == y);
     y = f(x);
     typedef DistanceType(F) N;
-    N n(1);
+    [[maybe_unused]] N n(1);
 }
 
 template <typename P>
@@ -1195,7 +1196,7 @@ template <typename T>
 REQUIRES(ArchimedeanMonoid(T)) // + numerals, successor
 void algorithms_q_and_r_nonnegative_fibonacci() {
     typedef long Z;
-    plus<T> plus_T;
+    [[maybe_unused]] plus<T> plus_T;
     typedef QuotientType(T) N;
     T max(1000);
     T a(0);
@@ -1514,7 +1515,7 @@ template <typename T>
 REQUIRES(Ring(T))
 IndexType(polynomial<T>) degree(const polynomial<T>& f) {
     // ***** Should degree(polynomial<T>(0)) = -infinity ?????
-    return predecessor(size(f.coeff));
+    return ul::narrow<IndexType(polynomial<T>)>(predecessor(size(f.coeff)));
 }
 
 template <typename T>
@@ -2773,13 +2774,13 @@ REQUIRES(DynamicSequence(S))
 void extend_sequence_n(S& s, DistanceType(IteratorType(S)) n, const ValueType(S) & x) {
     typedef after<S> AP;
     while (count_down(n))
-        AP ap = insert(AP(s, begin(s)), x);
+        [[maybe_unused]] AP ap = insert(AP(s, begin(s)), x);
 }
 
 template <typename I>
 REQUIRES(Readable(I) && Iterator(I) && Integer(ValueType(I)))
 bool equal_iota_reverse(I f, I l) {
-    ValueType(I) n(l - f);
+    auto n(ul::narrow<ValueType(I)>(l - f));
     while (f != l) {
         n = predecessor(n);
         if (source(f) != n)
@@ -3530,7 +3531,7 @@ void algorithms_rotate_Concept_with_buffer(I f, DistanceType(I) n, B f_b, I (*al
     Assert(n != 0);
     fill_n(f, n, int(7));
     I l = f + n;
-    iota(n, f);
+    iota(ul::narrow<ValueType(I)>(n), f);
     if (verbose) {
         print("      Initial range:        ");
         print_range(f, l);
