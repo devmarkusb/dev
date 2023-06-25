@@ -212,7 +212,7 @@ inline void test_ch_1() {
 template <typename F>
 REQUIRES(Transformation(F))
 void concept_Transformation(F f, Domain(F) x) {
-    typedef Domain(F) X;
+    [[maybe_unused]] typedef Domain(F) X;
     typedef Codomain(F) Y;
     // X == Y
     Y y;
@@ -448,7 +448,7 @@ inline void test_ch_2() {
 template <typename Op>
 REQUIRES(BinaryOperation(Op))
 void concept_BinaryOperation(Op op, Domain(Op) x) {
-    typedef Domain(Op) X;
+    [[maybe_unused]] typedef Domain(Op) X;
     typedef Codomain(Op) Y;
     // X == Y
     Y y;
@@ -1154,7 +1154,7 @@ void concept_ArchimedeanGroup(T& x, T& y, T& z, QuotientType(T) n) {
 template <typename T>
 REQUIRES(ArchimedeanMonoid(T)) // + numerals, successor
 void algorithms_slow_q_and_r() {
-    typedef long Z;
+    [[maybe_unused]] typedef long Z;
     plus<T> plus_T;
     typedef QuotientType(T) N;
     T max(1000);
@@ -1174,7 +1174,7 @@ void algorithms_slow_q_and_r() {
 template <typename T>
 REQUIRES(ArchimedeanMonoid(T)) // + numerals, successor
 void algorithms_q_and_r_nonnegative() {
-    typedef long Z;
+    [[maybe_unused]] typedef long Z;
     plus<T> plus_T;
     typedef QuotientType(T) N;
     T max(1000);
@@ -1197,7 +1197,7 @@ REQUIRES(ArchimedeanMonoid(T)) // + numerals, successor
 void algorithms_q_and_r_nonnegative_fibonacci() {
     typedef long Z;
     [[maybe_unused]] plus<T> plus_T;
-    typedef QuotientType(T) N;
+    [[maybe_unused]] typedef QuotientType(T) N;
     T max(1000);
     T a(0);
     while (a < max) {
@@ -1252,7 +1252,7 @@ T largest_power_of_two(T a) {
 template <typename T>
 REQUIRES(ArchimedeanMonoid(T)) // + numerals, successor
 void algorithm_largest_doubling() {
-    typedef long Z;
+    [[maybe_unused]] typedef long Z;
     T max(1000);
     T a(1);
     while (a < max) {
@@ -1410,7 +1410,7 @@ struct input_type<ag_quotient_remainder<T>, 0> {
 template <typename T>
 REQUIRES(ArchimedeanGroup(T)) // + numerals, successor
 void algorithms_signed_q_and_r() {
-    typedef long Z;
+    [[maybe_unused]] typedef long Z;
     typedef QuotientType(T) N;
     T min(-10);
     T max(10);
@@ -2330,7 +2330,7 @@ void algorithms_bifurcate_coordinates() {
 
     typedef CoordinateType(T) C;
     typedef WeightType(T) N;
-    typedef CoordinateType(T_X) C_X;
+    [[maybe_unused]] typedef CoordinateType(T_X) C_X;
 
     T t0;
     T t4(4);
@@ -2427,7 +2427,7 @@ void algorithms_bidirectional_bifurcate_coordinates() {
     typedef ValueType(T) Z;
     typedef CoordinateType(T) C;
     typedef WeightType(T) N;
-    typedef CoordinateType(T_X) C_X;
+    [[maybe_unused]] typedef CoordinateType(T_X) C_X;
 
     T t0;
     T t4(4);
@@ -2602,7 +2602,7 @@ REQUIRES(List(L))
 void algorithms_linked() {
     typedef ValueType(L) Z;
     typedef IteratorType(L) I;
-    typedef DistanceType(I) N;
+    [[maybe_unused]] typedef DistanceType(I) N;
     const int n = 500;
     array<Z> a(n, n, Z(0));
     typedef IteratorType(array<Z>) Ia;
@@ -2741,7 +2741,7 @@ REQUIRES(Integer(Z))
 void test_bifurcate_copy_Andrej() {
     typedef stree<Z> T;
     typedef CoordinateType(T) C;
-    typedef WeightType(C) N;
+    [[maybe_unused]] typedef WeightType(C) N;
 
     T tt4(4, T(5), T());
     T tt2(2, T(3), tt4);
@@ -3945,7 +3945,7 @@ REQUIRES(Sequence(S) && Integer(ValueType(S)))
 void algorithms_sort(S& s) {
     typedef IteratorType(S) I;
     typedef DistanceType(I) N;
-    typedef ValueType(I) T;
+    [[maybe_unused]] typedef ValueType(I) T;
 
     I f = begin(s);
     I l = end(s);
@@ -4191,7 +4191,7 @@ REQUIRES(Position(P))
 void concept_Position(P p, BaseType(P) & s, IteratorType(P) /*i*/) {
     typedef BaseType(P) B;
     typedef IteratorType(P) I;
-    typedef ValueType(P) T;
+    [[maybe_unused]] typedef ValueType(P) T;
     typedef SizeType(P) N;
 
     // Not regular: lacks default constructor, copy constructor, assignment

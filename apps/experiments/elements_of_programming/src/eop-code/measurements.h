@@ -200,7 +200,7 @@ void print_result(const POINTER(char) label, clock_t t0, clock_t t1, int N, int 
     print(tab);
     print(REPETITIONS);
     print(tab);
-    print((sizeof(T) * N * REPETITIONS) / seconds);
+    print((static_cast<int>(sizeof(T)) * N * REPETITIONS) / seconds);
     print_eol();
 }
 

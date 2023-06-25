@@ -707,7 +707,7 @@ inline void run_stree_tests() {
     typedef stree<int> T;
     typedef stree<char> TT;
     typedef stree_coordinate<int> I;
-    typedef stree_coordinate<char> II;
+    [[maybe_unused]] typedef stree_coordinate<char> II;
 
     verify_conservation<int> v(stree_node_count);
     T t4(4);
@@ -826,7 +826,7 @@ inline void run_tree_tests() {
     typedef tree<int> T;
     typedef tree<char> TT;
     typedef tree_coordinate<int> I;
-    typedef tree_coordinate<char> II;
+    [[maybe_unused]] typedef tree_coordinate<char> II;
 
     verify_conservation<int> v(tree_node_count);
     T t4(4);
