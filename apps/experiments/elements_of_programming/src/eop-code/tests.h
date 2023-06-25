@@ -2919,12 +2919,12 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
         N0 n2;
         n = N0(5);
         i = N0(0);
-        while (count_down(n))
+        while (count_down(n2))
             i = successor(i);
         Assert(i == N0(5));
         n2 = N0(0);
         i = N0(0);
-        while (count_down(n))
+        while (count_down(n2))
             i = successor(i);
         Assert(i == N0(0));
     }
