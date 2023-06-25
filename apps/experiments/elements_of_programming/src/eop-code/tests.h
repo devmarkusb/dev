@@ -2358,7 +2358,7 @@ void algorithms_bifurcate_coordinates() {
     C r_l = left_successor(r);
     Assert(!empty(r_l));
     Assert(has_left_successor(r_l));
-    C r_l_l = left_successor(r_l);
+    [[maybe_unused]] C r_l_l = left_successor(r_l);
 
     Assert(empty(begin(t0)));
     Assert(weight_recursive(begin(t0)) == N(0));
@@ -2376,7 +2376,7 @@ void algorithms_bifurcate_coordinates() {
     proc = traverse_nonempty(begin(t), proc);
     Assert(proc.n_pre == N(15) && proc.n_in == N(15) && proc.n_post == N(15));
 
-    C c_r = begin(t3_45);
+    [[maybe_unused]] C c_r = begin(t3_45);
 
     T s4(-4);
     T s3_45(-3, t4, T(-5));
@@ -2873,7 +2873,7 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
     // test copy_step
     {
         I0 f_i = f0;
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         I1 f_o = f1;
         fill_n(f1, l1 - f1, -1);
         copy_step(f_i, f_o);
@@ -2884,7 +2884,7 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test copy, not aliased
     {
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         I0 m0 = f0 + (n - N0(2));
         fill_n(f1, n, -1);
         I1 m1 = copy(f0, m0, successor(f1));
@@ -2895,7 +2895,7 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test copy, aliased backward
     {
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         I1 m1 = copy(f0 + N0(2), l0, f1); // save original values
         I0 m0 = copy(f0 + N0(2), l0, f0);
         Assert(m0 == f0 + (n - N0(2)));
@@ -2905,7 +2905,7 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test copy_bounded
     {
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         fill_n(f1, n, -1);
         pair<I0, I1> pio = copy_bounded(f0, l0, f1, f1 + N1(n_over_2));
         Assert(pio.m0 == f0 + n_over_2 && pio.m1 == f1 + N1(n_over_2));
@@ -2916,13 +2916,13 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
     // test count_down
     {
         N0 i;
-        N0 n;
+        N0 n2;
         n = N0(5);
         i = N0(0);
         while (count_down(n))
             i = successor(i);
         Assert(i == N0(5));
-        n = N0(0);
+        n2 = N0(0);
         i = N0(0);
         while (count_down(n))
             i = successor(i);
@@ -2942,7 +2942,7 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test copy_select
     {
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         predicate_source<I0, bool (*)(const T&)> es(even<T>);
         I1 m1 = copy_select(f0, l0, f1, es);
         Assert(m1 - f1 == count_if(f0, l0, even<T>));
@@ -2951,7 +2951,7 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test copy_if
     {
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         I1 m1 = copy_if(f0, l0, f1, odd<T>);
         Assert(m1 - f1 == count_if(f0, l0, odd<T>));
         Assert(all(f1, m1, odd<T>));
@@ -2959,7 +2959,7 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test split_copy
     {
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         I0 f_f = f0;
         I1 f_t = f1;
         predicate_source<I0, bool (*)(const T&)> es(even<T>);
@@ -2974,7 +2974,7 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test split_copy_n
     {
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         I0 f_f = f0;
         I1 f_t = f1;
         predicate_source<I0, bool (*)(const T&)> es(even<T>);
@@ -2989,7 +2989,7 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test partition_copy
     {
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         I0 f_f = f0;
         I1 f_t = f1;
         N0 n_f = count_if(f0, l0, even<T>);
@@ -3003,7 +3003,7 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test partition_copy_n
     {
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         I0 f_f = f0;
         I1 f_t = f1;
         N0 n_f = count_if(f0, l0, even<T>);
@@ -3017,8 +3017,8 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test combine_copy
     {
-        I0 m0 = iota(n_over_2, f0);
-        iota(n - n_over_2, m0);
+        I0 m0 = iota(ul::narrow<ValueType(I0)>(n_over_2), f0);
+        iota(ul::narrow<ValueType(I0)>(n - n_over_2), m0);
         less<ValueType(I0)> lt;
         relation_source<I0, I0, less<ValueType(I0)>> lts(lt);
         I1 m1 = combine_copy(f0, m0, m0, l0, f1, lts);
@@ -3028,8 +3028,8 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test combine_copy_n
     {
-        I0 m0 = iota(n_over_2, f0);
-        iota(n - n_over_2, m0);
+        I0 m0 = iota(ul::narrow<ValueType(I0)>(n_over_2), f0);
+        iota(ul::narrow<ValueType(I0)>(n - n_over_2), m0);
         less<ValueType(I0)> lt;
         relation_source<I0, I0, less<ValueType(I0)>> lts(lt);
         triple<I0, I0, I1> t = combine_copy_n(f0, m0 - f0, m0, l0 - m0, f1, lts);
@@ -3039,8 +3039,8 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test merge_copy
     {
-        I0 m0 = iota(n_over_2, f0);
-        iota(n - n_over_2, m0);
+        I0 m0 = iota(ul::narrow<ValueType(I0)>(n_over_2), f0);
+        iota(ul::narrow<ValueType(I0)>(n - n_over_2), m0);
         less<ValueType(I0)> lt;
         I1 m1 = merge_copy(f0, m0, m0, l0, f1, lt);
         Assert(m1 - f1 == n);
@@ -3066,7 +3066,7 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test swap_ranges
     {
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         fill_n(f1, n, T(-1));
         I1 m1 = swap_ranges(f0, l0, f1);
         Assert(m1 == f1 + N1(n));
@@ -3076,7 +3076,7 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test swap_ranges_ bounded
     {
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         N1 n1(n_over_2);
         fill_n(f1, n1, T(-1));
         pair<I0, I1> p01 = swap_ranges_bounded(f0, l0, f1, f1 + n1);
@@ -3088,7 +3088,7 @@ void algorithms_copy_forward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test swap_ranges_n
     {
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         fill_n(f1, n, T(-1));
         pair<I0, I1> p01 = swap_ranges_n(f0, f1, n);
         Assert(p01.m0 == f0 + n);
@@ -3114,7 +3114,7 @@ void algorithms_copy_backward(I0 f0, I0 l0, I1 f1, I1 l1) {
     // test copy_backward_step
     {
         I0 l_i = l0;
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         I1 l_o = l1;
         fill_n(f1, l1 - f1, -1);
         copy_backward_step(l_i, l_o);
@@ -3146,8 +3146,8 @@ void algorithms_copy_backward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test combine_copy_backward
     {
-        I0 m0 = iota(n_over_2, f0);
-        iota(n - n_over_2, m0);
+        I0 m0 = iota(ul::narrow<ValueType(I0)>(n_over_2), f0);
+        iota(ul::narrow<ValueType(I0)>(n - n_over_2), m0);
         less<ValueType(I0)> lt;
         relation_source<I0, I0, less<ValueType(I0)>> lts(lt);
         I1 m1 = combine_copy_backward(f0, m0, m0, l0, l1, lts);
@@ -3157,8 +3157,8 @@ void algorithms_copy_backward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test combine_copy_backward_n
     {
-        I0 m0 = iota(n_over_2, f0);
-        iota(n - n_over_2, m0);
+        I0 m0 = iota(ul::narrow<ValueType(I0)>(n_over_2), f0);
+        iota(ul::narrow<ValueType(I0)>(n - n_over_2), m0);
         less<ValueType(I0)> lt;
         relation_source<I0, I0, less<ValueType(I0)>> lts(lt);
         triple<I0, I0, I1> t = combine_copy_backward_n(m0, m0 - f0, l0, l0 - m0, l1, lts);
@@ -3168,8 +3168,8 @@ void algorithms_copy_backward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test merge_copy_backward
     {
-        I0 m0 = iota(n_over_2, f0);
-        iota(n - n_over_2, m0);
+        I0 m0 = iota(ul::narrow<ValueType(I0)>(n_over_2), f0);
+        iota(ul::narrow<ValueType(I0)>(n - n_over_2), m0);
         less<ValueType(I0)> lt;
         I1 m1 = merge_copy_backward(f0, m0, m0, l0, l1, lt);
         Assert(l1 - m1 == n);
@@ -3178,8 +3178,8 @@ void algorithms_copy_backward(I0 f0, I0 l0, I1 f1, I1 l1) {
 
     // test merge_copy_backward_n
     {
-        I0 m0 = iota(n_over_2, f0);
-        iota(n - n_over_2, m0);
+        I0 m0 = iota(ul::narrow<ValueType(I0)>(n_over_2), f0);
+        iota(ul::narrow<ValueType(I0)>(n - n_over_2), m0);
         less<ValueType(I0)> lt;
         triple<I0, I0, I1> t = merge_copy_backward_n(m0, m0 - f0, l0, l0 - m0, l1, lt);
         Assert(t.m0 == f0 && t.m1 == m0 && l1 - t.m2 == n);
@@ -3205,7 +3205,7 @@ void algorithms_copy_reverse(I0 f0, I0 l0, I1 f1, I1 l1) {
         if (verbose)
             print("        reverse_copy_step\n");
         I0 l_i = l0;
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         I1 f_o = f1;
         fill_n(f1, l1 - f1, -1);
         reverse_copy_step(l_i, f_o);
@@ -3219,7 +3219,7 @@ void algorithms_copy_reverse(I0 f0, I0 l0, I1 f1, I1 l1) {
         if (verbose)
             print("        reverse_copy_backward_step\n");
         I0 f_i = f0;
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         I1 l_o = l1;
         fill_n(f1, l1 - f1, -1);
         reverse_copy_backward_step(f_i, l_o);
@@ -3232,7 +3232,7 @@ void algorithms_copy_reverse(I0 f0, I0 l0, I1 f1, I1 l1) {
     {
         if (verbose)
             print("        reverse_copy\n");
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         fill_n(f1, l1 - f1, -1);
         I1 f_o = successor(f1);
         I1 l_o = reverse_copy(f0, l0 - N0(2), f_o);
@@ -3249,7 +3249,7 @@ void algorithms_copy_reverse(I0 f0, I0 l0, I1 f1, I1 l1) {
     {
         if (verbose)
             print("        reverse_copy_backward\n");
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         fill_n(f1, n, -1);
         I1 l_o = predecessor(l1);
         I1 f_o = reverse_copy_backward(f0, l0 - N0(2), l_o);
@@ -3279,7 +3279,7 @@ void algorithms_copy_reverse(I0 f0, I0 l0, I1 f1, I1 l1) {
     {
         if (verbose)
             print("        reverse_swap_ranges\n");
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         fill_n(f1, n, T(-1));
         I1 m1 = reverse_swap_ranges(f0, l0, f1);
         Assert(m1 == f1 + N1(n));
@@ -3292,7 +3292,7 @@ void algorithms_copy_reverse(I0 f0, I0 l0, I1 f1, I1 l1) {
         if (verbose)
             print("        reverse_swap_ranges_bounded\n");
         I0 m0 = f0 + n_over_2;
-        iota(n_over_2, f0);
+        iota(ul::narrow<ValueType(I0)>(n_over_2), f0);
         fill(f1, l1, T(-1));
         pair<I0, I1> p01 = reverse_swap_ranges_bounded(f0, m0, f1, l1);
         Assert(p01.m0 == f0);
@@ -3305,7 +3305,7 @@ void algorithms_copy_reverse(I0 f0, I0 l0, I1 f1, I1 l1) {
     {
         if (verbose)
             print("        reverse_swap_ranges_n\n");
-        iota(n, f0);
+        iota(ul::narrow<ValueType(I0)>(n), f0);
         fill_n(f1, n, T(-1));
         pair<I0, I1> p01 = reverse_swap_ranges_n(l0, f1, n);
         Assert(p01.m0 == f0);
@@ -3570,7 +3570,7 @@ void algorithm_rotate_partial(N n) {
         I m_prime = rotate_partial_nontrivial(f, m, l);
         Assert(source(predecessor(f)) == N(-1) && source(l) == N(-1));
         Assert(m_prime + (m - f) == l);
-        Assert(equal_iota(f, m_prime, m - f));
+        Assert(equal_iota(f, m_prime, static_cast<ValueType(I)>(m - f)));
         DistanceType(I) k = (l - f) % (m - f);
         rotate(m_prime, l - k, l);
         Assert(equal_iota(m_prime, l));
@@ -3956,14 +3956,14 @@ void algorithms_sort(S& s) {
     less<int> ls;
     converse<less<int>> greater(ls);
     {
-        iota(n, f);
-        int n_b = half_nonnegative(n);
+        iota(ul::narrow<ValueType(I)>(n), f);
+        auto n_b = half_nonnegative(n);
         array<int> buffer(n_b, n_b, 0);
         m = sort_n_with_buffer(f, n, begin(buffer), greater);
         Assert(m == l && equal_iota_reverse(f, l));
     }
     {
-        iota(n, f);
+        iota(ul::narrow<ValueType(I)>(n), f);
         array<int> buffer(50, 50, 0);
         POINTER(int) f_b = begin(buffer);
         auto n_b = size(buffer);
@@ -3971,12 +3971,12 @@ void algorithms_sort(S& s) {
         Assert(m == l && equal_iota_reverse(f, l));
     }
     {
-        iota(n, f);
+        iota(ul::narrow<ValueType(I)>(n), f);
         m = sort_n(f, n, greater);
         Assert(m == l && equal_iota_reverse(f, l));
     }
     {
-        iota(n, f);
+        iota(ul::narrow<ValueType(I)>(n), f);
         m = advanced_sort_n(f, n, greater);
         Assert(m == l && equal_iota_reverse(f, l));
     }
@@ -4038,7 +4038,7 @@ void concept_Linearizable(W& w) {
 
     N i(0);
     while (f != l) {
-        Assert(addressof(w[i]) == addressof(source(f)));
+        Assert(addressof(w[static_cast<int>(i)]) == addressof(source(f)));
         i = successor(i);
         f = successor(f);
     }
