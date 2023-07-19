@@ -65,6 +65,7 @@ with xy=0.
 * 4.2 medium
 * 4.7 hard
 * 5.1 hard
+* 12.7 skip for now, seems difficult
 
 ## Notes
 

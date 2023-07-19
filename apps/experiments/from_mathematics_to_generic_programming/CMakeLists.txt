@@ -11,6 +11,8 @@ target_link_libraries(multiplyBm benchmark::benchmark benchmark::benchmark_main)
 
 
 add_executable(mathTest
+    src/ch13-crypt.h
+    src/ch13-crypt.test.cpp
     src/math.h
     src/math.test.cpp
     src/multiply.cpp
