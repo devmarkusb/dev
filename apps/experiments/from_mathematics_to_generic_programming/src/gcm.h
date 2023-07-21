@@ -228,13 +228,35 @@ inline std::pair<int, LineSegment> quotient_remainder2(LineSegment a, LineSegmen
     return {n, a};
 }
 
-template <EuclideanDomainAddMult N>
-N gcd(N a, N b) {
-    while (b != N(0)) {
+template <EuclideanDomainAddMult E>
+E gcd(E a, E b) {
+    while (b != E(0)) {
         a = a % b;
         std::swap(a, b);
     }
     return a;
+}
+
+template <EuclideanDomainAddMult E>
+std::pair<E, E> extended_gcd(E a, E b) {
+    E x0(1);
+    E x1(0);
+    while (b != E(0)) {
+        // compute new r and x
+        std::pair<E, E> qr = quotient_remainder1(a, b);
+        E x2 = x0 - qr.first * x1;
+        // shift r and x
+        x0 = x1;
+        x1 = x2;
+        a = b;
+        b = qr.second;
+    }
+    return {x0, a};
+}
+
+template <EuclideanDomainAddMult E>
+E bezout_y(E x, E a, E b) {
+    return (gcd(a, b) - a * x) / b;
 }
 
 template <BinaryInteger N>

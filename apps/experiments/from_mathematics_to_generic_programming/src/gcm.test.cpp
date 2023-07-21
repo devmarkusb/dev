@@ -1,5 +1,6 @@
 #include "gcm.h"
 
+#include "ul/ul.h"
 #include "gtest/gtest.h"
 #include <random>
 
@@ -19,8 +20,8 @@ namespace {
 constexpr auto arbitrary_even{42};
 constexpr auto arbitrary_odd{43};
 constexpr auto rand_range_min{1};
-constexpr auto rand_range_max{1'000'000};
-constexpr auto rand_reps{100};
+constexpr auto rand_range_max{10'000};
+constexpr auto rand_reps{1000};
 
 struct Rand {
     static inline std::random_device dev;
@@ -194,6 +195,42 @@ TEST_P(QuotientRemainderTest, general) {
         const auto randnr2{Rand::distrib(Rand::gen)};
         EXPECT_EQ(GetParam()(randnr1, randnr2), std::make_pair(randnr1 / randnr2, randnr1 % randnr2))
             << print_randoms(randnr1, randnr2);
+    }
+}
+
+// NOLINTBEGIN
+TEST(extended_gcd_test, misc)
+{
+    auto a{12};
+    auto b{6};
+    auto [x, g]{math::extended_gcd(a, b)};
+    EXPECT_EQ(g, 6);
+    EXPECT_EQ(x, 0);
+
+    a = 12;
+    b = 7;
+    std::tie(x, g) = math::extended_gcd(a, b);
+    EXPECT_EQ(g, 1);
+    EXPECT_EQ(x, 3);
+    EXPECT_EQ(math::bezout_y(x, a, b), -5);
+
+    a = 12;
+    b = 9;
+    std::tie(x, g) = math::extended_gcd(a, b);
+    EXPECT_EQ(g, 3);
+    EXPECT_EQ(x, 1);
+    EXPECT_EQ(math::bezout_y(x, a, b), -1);
+}
+// NOLINTEND
+
+TEST(extended_gcd_test, bezout_identity_random)
+{
+    for (auto i{1}; i <= rand_reps; ++i) {
+        const auto a{Rand::distrib(Rand::gen)};
+        const auto b{Rand::distrib(Rand::gen)};
+        auto [x, g]{math::extended_gcd(a, b)};
+        ASSERT_FALSE(ul::math::mul_overflow(x, a)); // choose smaller rand_range_max
+        EXPECT_EQ(x * a + math::bezout_y(x, a, b) * b, g) << "a: " << a << " b: " << b;
     }
 }
 } // namespace
