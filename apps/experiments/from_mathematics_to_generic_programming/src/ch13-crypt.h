@@ -5,6 +5,8 @@
 #include "math.h"
 #include "ul/ul.h"
 
+#include "BigInt.hpp"
+
 namespace math {
 // E13.1
 /** Numbers n that aren't prime (are 'composite') but most likely fool the Fermat test because all witnesses > 1 and

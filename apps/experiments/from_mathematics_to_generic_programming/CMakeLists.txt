@@ -10,6 +10,7 @@ target_include_directories(multiplyBm PRIVATE ${ul_INCLUDE_DIRS})
 target_link_libraries(multiplyBm benchmark::benchmark benchmark::benchmark_main)
 
 
+ul_include(bigint.cmake)
 add_executable(mathTest
     src/ch13-crypt.h
     src/ch13-crypt.test.cpp
@@ -22,7 +23,7 @@ add_executable(mathTest
     src/permutation.test.cpp
 )
 ul_add_test(mathTest)
-target_include_directories(mathTest PRIVATE ${ul_INCLUDE_DIRS})
+target_include_directories(mathTest PRIVATE ${ul_INCLUDE_DIRS} ${bigint_INCLUDE_DIRS}/include)
 target_link_libraries(mathTest gtest_main)
 
 
