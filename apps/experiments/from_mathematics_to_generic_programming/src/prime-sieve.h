@@ -28,8 +28,8 @@ void mark_sieve(I first, I last, N factor) {
 //void sift0(I first, N n)
 //{
 //    std::fill(first, first + n, true);
-//    N i(0);
-//    N index_square(3);
+//    N i{0};
+//    N index_square{3};
 //    while (index_square < n)
 //    {
 //        // invariant: index_square = 2i^2 + 6i + 3
@@ -51,9 +51,9 @@ void mark_sieve(I first, I last, N factor) {
 //{
 //    I last = first + n;
 //    std::fill(first, last, true);
-//    N i(0);
-//    N index_square(3);
-//    N factor(3);
+//    N i{0};
+//    N index_square{3};
+//    N factor{3};
 //    while (index_square < n)
 //    {
 //        // invariant: index_square = 2i^2 + 6i + 3,
@@ -72,9 +72,9 @@ template <RandomAccessIterator I, Integral N>
 void sift2(I first, N n) {
     I last = first + n;
     std::fill(first, last, true);
-    N i(0);
-    N index_square(3);
-    N factor(3);
+    N i{0};
+    N index_square{3};
+    N factor{3};
     while (index_square < n) {
         // invariant: index_square = 2i^2 + 6i + 3,
         // factor = 2i + 3
@@ -83,7 +83,7 @@ void sift2(I first, N n) {
         }
         ++i;
         index_square += factor;
-        factor += N(2);
+        factor += N{2};
         index_square += factor;
     }
 }

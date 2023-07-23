@@ -20,8 +20,6 @@ add_executable(mathTest
     src/multiply.test.cpp
     src/permutation.h
     src/permutation.test.cpp
-    src/power.h
-    src/power.test.cpp
 )
 ul_add_test(mathTest)
 target_include_directories(mathTest PRIVATE ${ul_INCLUDE_DIRS})

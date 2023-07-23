@@ -239,11 +239,11 @@ E gcd(E a, E b) {
 
 template <EuclideanDomainAddMult E>
 std::pair<E, E> extended_gcd(E a, E b) {
-    E x0(1);
-    E x1(0);
-    while (b != E(0)) {
+    E x0{1};
+    E x1{0};
+    while (b != E{0}) {
         // compute new r and x
-        std::pair<E, E> qr = quotient_remainder1(a, b);
+        auto qr = quotient_remainder1(a, b);
         E x2 = x0 - qr.first * x1;
         // shift r and x
         x0 = x1;

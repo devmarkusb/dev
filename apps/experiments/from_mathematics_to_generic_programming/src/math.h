@@ -398,6 +398,146 @@ struct Tropical {
 private:
     double d_{inf};
 };
+
+template <MultiplicativeSemigroup A, Integral N>
+A power_accumulate_semigroup(A r, A a, N n) {
+    UL_EXPECT(n >= 0);
+    if (n == 0)
+        return r;
+    while (true) {
+        if (odd(n)) {
+            r *= a;
+            if (n == 1)
+                return r;
+        }
+        n = half(n);
+        a *= a;
+    }
+}
+
+template <MultiplicativeSemigroup A, Integral N>
+A power_semigroup(A a, N n) {
+    UL_EXPECT(n > 0);
+    while (!odd(n)) {
+        a *= a;
+        n = half(n);
+    }
+    if (n == 1)
+        return a;
+    return power_accumulate_semigroup(a, a * a, half(n - 1));
+}
+
+template <MultiplicativeMonoid A, Integral N>
+A power_monoid(A a, N n) {
+    UL_EXPECT(n >= 0);
+    if (n == 0)
+        return A{1};
+    return power_semigroup(a, n);
+}
+
+template <Regular A, Integral N, SemigroupOperation<A> Op>
+A power_accumulate_semigroup(A r, A a, N n, Op op) {
+    UL_EXPECT(n >= 0);
+    if (n == 0)
+        return r;
+    while (true) {
+        if (odd(n)) {
+            r = op(r, a);
+            if (n == 1)
+                return r;
+        }
+        n = half(n);
+        a = op(a, a);
+    }
+}
+
+/// For a multiply operation as op you achieve the canonical 'power'.
+template <Regular A, Integral N, SemigroupOperation<A> Op>
+A power_semigroup(A a, N n, Op op) {
+    UL_EXPECT(n > 0);
+    while (!odd(n)) {
+        a = op(a, a);
+        n = half(n);
+    }
+    if (n == 1)
+        return a;
+    return power_accumulate_semigroup(a, op(a, a), half(n - 1), op);
+}
+
+template <Regular A, Integral N, MonoidOperation<A> Op>
+A power_monoid(A a, N n, Op op, A identity) {
+    UL_EXPECT(n >= 0);
+    if (n == 0)
+        return identity;
+    return power_semigroup(a, n, op);
+}
+
+template <Regular A, Integral N, GroupOperation<A> Op, GroupInverseOperation<A> InvOp>
+A power_group(A a, N n, Op op, InvOp invop, A identity) {
+    if (n < 0) {
+        n = -n;
+        a = invop(a);
+    }
+    return power_monoid(a, n, op, identity);
+}
+
+template <Integer I>
+bool divides(I i, I n) {
+    return n % i == I{0};
+}
+
+/// Other than the trivial 1.
+template <Integer I>
+I smallest_divisor(I n) {
+    UL_EXPECT(n > 0);
+    if (even(n)) return I{2};
+    for (I i{}; i * i <= n; i += I{2}) {
+        if (divides(i, n))
+            return i;
+    }
+    return n;
+}
+
+/// Beware: slow, just to be used sparingly.
+template <Integer I>
+I is_prime(const I& n) {
+    return n > I{1} && smallest_divisor(n) == n;
+}
+
+template <Integer I>
+struct ModuloMultiply {
+    I modulus{};
+
+    explicit ModuloMultiply(I i)
+        : modulus(i) {
+    }
+
+    I operator()(I n, I m) const {
+        return (n * m) % modulus;
+    }
+};
+
+template <Integer I>
+I identity_element(ModuloMultiply<I>) {
+    return I{1};
+}
+
+template <Integer I>
+I multiplicative_inverse_fermat(I a, I p) {
+    UL_EXPECT(is_prime(p) && a > 0);
+    return power_monoid(a, p - 2, ModuloMultiply<I>(p));
+}
+
+/// Reads: n no prime if false, probably prime if true, more probable for more witnesses.
+template <Integer I>
+bool fermat_test(I n, I witness) {
+    UL_EXPECT(0 < witness);
+    UL_EXPECT(witness < n);
+    I remainder{power_semigroup(witness,
+                                n - I{1},
+                                ModuloMultiply<I>(n))};
+    return remainder == I{1};
+}
 } // namespace math
 
 #endif
