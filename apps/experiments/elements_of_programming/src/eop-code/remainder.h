@@ -41,4 +41,3 @@ T remainder(T a, T b) {
 }
 
 #endif
-

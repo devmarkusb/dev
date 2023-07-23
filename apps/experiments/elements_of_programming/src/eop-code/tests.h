@@ -2773,8 +2773,8 @@ template <typename S>
 REQUIRES(DynamicSequence(S))
 void extend_sequence_n(S& s, DistanceType(IteratorType(S)) n, const ValueType(S) & x) {
     typedef after<S> AP;
-    while (count_down(n))
-        [[maybe_unused]] AP ap = insert(AP(s, begin(s)), x);
+    while (count_down(n)) [[maybe_unused]]
+        AP ap = insert(AP(s, begin(s)), x);
 }
 
 template <typename I>

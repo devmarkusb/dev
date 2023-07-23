@@ -483,15 +483,17 @@ A power_group(A a, N n, Op op, InvOp invop, A identity) {
 
 template <Integer I>
 bool divides(I i, I n) {
+    UL_EXPECT(i != I{0});
     return n % i == I{0};
 }
 
 /// Other than the trivial 1.
 template <Integer I>
 I smallest_divisor(I n) {
-    UL_EXPECT(n > 0);
-    if (even(n)) return I{2};
-    for (I i{}; i * i <= n; i += I{2}) {
+    UL_EXPECT(n > I{0});
+    if (even(n))
+        return I{2};
+    for (I i{3}; i * i <= n; i += I{2}) {
         if (divides(i, n))
             return i;
     }
@@ -500,7 +502,7 @@ I smallest_divisor(I n) {
 
 /// Beware: slow, just to be used sparingly.
 template <Integer I>
-I is_prime(const I& n) {
+I is_prime(I n) {
     return n > I{1} && smallest_divisor(n) == n;
 }
 
@@ -524,18 +526,16 @@ I identity_element(ModuloMultiply<I>) {
 
 template <Integer I>
 I multiplicative_inverse_fermat(I a, I p) {
-    UL_EXPECT(is_prime(p) && a > 0);
+    UL_EXPECT(is_prime(p) && a > I{0});
     return power_monoid(a, p - 2, ModuloMultiply<I>(p));
 }
 
 /// Reads: n no prime if false, probably prime if true, more probable for more witnesses.
 template <Integer I>
 bool fermat_test(I n, I witness) {
-    UL_EXPECT(0 < witness);
+    UL_EXPECT(I{0} < witness);
     UL_EXPECT(witness < n);
-    I remainder{power_semigroup(witness,
-                                n - I{1},
-                                ModuloMultiply<I>(n))};
+    I remainder{power_semigroup(witness, n - I{1}, ModuloMultiply<I>(n))};
     return remainder == I{1};
 }
 } // namespace math

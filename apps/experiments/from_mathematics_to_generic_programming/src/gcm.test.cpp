@@ -199,8 +199,7 @@ TEST_P(QuotientRemainderTest, general) {
 }
 
 // NOLINTBEGIN
-TEST(extended_gcd_test, misc)
-{
+TEST(extended_gcd_test, misc) {
     auto a{12};
     auto b{6};
     auto [x, g]{math::extended_gcd(a, b)};
@@ -221,10 +220,10 @@ TEST(extended_gcd_test, misc)
     EXPECT_EQ(x, 1);
     EXPECT_EQ(math::bezout_y(x, a, b), -1);
 }
+
 // NOLINTEND
 
-TEST(extended_gcd_test, bezout_identity_random)
-{
+TEST(extended_gcd_test, bezout_identity_random) {
     for (auto i{1}; i <= rand_reps; ++i) {
         const auto a{Rand::distrib(Rand::gen)};
         const auto b{Rand::distrib(Rand::gen)};
