@@ -5,7 +5,7 @@
 #include "math.h"
 #include "ul/ul.h"
 
-#include "BigInt.hpp"
+#include "3rdparty/BigInt.hpp"
 
 namespace math {
 // E13.1
