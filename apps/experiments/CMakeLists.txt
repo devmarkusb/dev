@@ -1,4 +1,3 @@
-add_subdirectory(cli11)
 add_subdirectory(cmake_util_test)
 add_subdirectory(codesignal)
 add_subdirectory(communication)
