@@ -538,6 +538,23 @@ bool fermat_test(I n, I witness) {
     I remainder{power_semigroup(witness, n - I{1}, ModuloMultiply<I>(n))};
     return remainder == I{1};
 }
+
+template <Integer I>
+bool miller_rabin_test(I n, I q, I k, I w) {
+    UL_EXPECT(n > 1);
+    UL_EXPECT(n - 1 == 2 * k * q);
+    UL_EXPECT(odd(q));
+    ModuloMultiply<I> mmult{n};
+    I x = power_semigroup(w, q, mmult);
+    if (x == I{1} || x == n - I{1}) return true;
+    for (I i{1}; i < k; ++i) {
+        // invariant x = w^(2^(i−1)q)
+        x = mmult(x, x);
+        if (x == n - I{1}) return true;
+        if (x == I{1}) return false;
+    }
+    return false;
+}
 } // namespace math
 
 #endif
