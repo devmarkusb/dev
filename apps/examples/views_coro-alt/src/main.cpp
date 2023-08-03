@@ -30,14 +30,16 @@ void any_of_ys_no_span(auto any_of_ys) {
         return y == 20;
     });
 }
-}
+} // namespace
 
 int main(int, char*[]) {
     std::vector<S> ss{{1, 10}, {2, 20}};
     std::vector<S> ss2{{11, 100}, {12, 200}};
 
 #if ENABLE_VIEWS_TRANSFORM_DEMO
-    auto x = std::views::transform(ss, [](auto elem){return elem.y;});
+    auto x = std::views::transform(ss, [](auto elem) {
+        return elem.y;
+    });
     want_ys_view(x);
     std::cout << std::endl;
 #endif
