@@ -3,6 +3,8 @@
 #define ENABLE_VIEWS_TRANSFORM_DEMO 0
 
 namespace {
+// The idea is to have a container of these but wanting a view of one of its members instead (without a transformed
+// copy to store), iterable ideally.
 struct S {
     int x{};
     int y{};
