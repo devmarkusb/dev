@@ -20,11 +20,9 @@ repo as a clean sheet for any kind of sketch, draft, study.
 * Almost always: `apps/tmp-cleansheet`
 * `apps/tmp` is more loaded with (3rd-party) libs, not a completely green field.
 
-## I like to conserve something for longer, where do I put it?
+## Directory structure
 
-* `experiments` everything that is meant to be work in progress for longer
-* `examples` 'finished' stuff that wants to be conserved
-* `sdks` are the place for libs shared among various apps (obviously
+* `sdks` is the place for libs shared among various apps (obviously
 beyond this repo), typically submodules for frequent development
 * `3rdparty` the place for the obvious, might be archives or CMake scripts
 (FetchContent, FindPackage, whatever). Of course, you should consider
