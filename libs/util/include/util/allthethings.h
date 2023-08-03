@@ -12,6 +12,7 @@
 #include <climits>
 #include <cmath>
 #include <complex>
+#include <concepts>
 #include <cstdarg>
 #include <cstdio>
 #include <deque>
@@ -28,8 +29,10 @@
 #include <omp.h>
 #include <queue>
 #include <random>
+#include <ranges>
 #include <regex>
 #include <set>
+#include <span>
 #include <sstream>
 #include <stack>
 #include <string>
