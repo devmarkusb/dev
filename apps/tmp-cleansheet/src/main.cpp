@@ -1,14 +1,11 @@
 #include "util/allthethings.h"
 
-template<class T, class... U>
-concept AnyOf = (std::same_as<T, U> || ...);
-
 struct S {
     int i{};
 };
 
 template<typename T>
-concept ContextC = AnyOf<T, int, S>;
+concept ContextC = ul::AnyOf<T, int, S>;
 
 
 int f(const ContextC auto& t) {
