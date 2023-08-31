@@ -30,6 +30,7 @@
 
 #include <cstddef> // ptrdiff_t
 
+namespace eop {
 struct cmd {
     const POINTER(char) name;
     void (*action)();
@@ -42,8 +43,10 @@ struct cmd {
         , action(action) {
     }
 };
+}
 
 int main() {
+    using namespace eop;
     array<cmd> c;
 
     // General

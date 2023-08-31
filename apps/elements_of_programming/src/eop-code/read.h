@@ -21,9 +21,9 @@
 #ifndef EOP_READ
 #define EOP_READ
 
-
 #include <cstdio> // scanf
 
+namespace eop {
 inline void read(int& x) {
     scanf("%d", &x);
 }
@@ -35,6 +35,6 @@ inline void read(long int& x) {
 inline void read(long long int& x) {
     scanf("%lld", &x);
 }
-
+}
 
 #endif // EOP_READ

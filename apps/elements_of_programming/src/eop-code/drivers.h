@@ -21,7 +21,6 @@
 #ifndef EOP_DRIVERS
 #define EOP_DRIVERS
 
-
 #include "assertions.h"
 #include "eop.h"
 #include "integers.h"
@@ -33,6 +32,7 @@
 
 #include "ul/narrow.h"
 
+namespace eop {
 // Chapter 2 - Transformations and their orbits
 
 
@@ -1105,6 +1105,6 @@ void run_array_tests() {
     sort_n_adaptive(begin(big), size(big), big_buffer, N_BIG_BUFFER, less<int>());
     Assert(equal_iota(begin(big), end(big)));
 }
-
+}
 
 #endif // EOP_DRIVERS

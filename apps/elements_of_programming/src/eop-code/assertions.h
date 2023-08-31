@@ -26,12 +26,14 @@
 #include <cstdio> // fprintf, stderr
 #include <cstdlib> // abort
 
+namespace eop {
 inline void Assert(bool b) {
     assert(b); // if debug mode
     if (!b) { // if release mode
         fprintf(stderr, "Assert failed\n");
         abort();
     }
+}
 }
 
 #endif // EOP_ASSERTIONS

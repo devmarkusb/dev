@@ -17,14 +17,12 @@
 // by Alexander Stepanov and Paul McJones
 // Addison-Wesley Professional, 2009
 
-
 #ifndef TYPE_FUNCTIONS
 #define TYPE_FUNCTIONS
 
-
 #include "intrinsics.h"
 
-
+namespace eop {
 //  As explained in Appendix B.2, to allow the language defined above
 //  to compile as a valid C++ program, a few macros and structure
 //  definitions are necessary.
@@ -356,6 +354,6 @@ struct underlying_type {
 };
 
 #define UnderlyingType(T) typename underlying_type<T>::type
-
+}
 
 #endif // TYPE_FUNCTIONS

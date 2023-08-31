@@ -31,6 +31,7 @@
 
 #include <time.h> // measurements
 
+namespace eop {
 struct measure_time {
     typedef measure_time M;
     typedef long int N; // DistanceType(M)
@@ -371,6 +372,7 @@ inline void run_measurements() {
     report(perform<M, measure_gcd>());
     report(perform<M, measure_reverse_bidirectional>());
     measure_reverse_algorithms();
+}
 }
 
 #endif // EOP_MEASUREMENTS

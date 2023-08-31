@@ -21,10 +21,10 @@
 #ifndef EOP_INTRINSICS
 #define EOP_INTRINSICS
 
-
 #include <new> // placement operator new
 
 
+namespace eop {
 // As explained in Appendix B.2, to allow the language defined in Appendix B.1
 // to compile as a valid C++ program, a few macros and structure
 // definitions are necessary.
@@ -89,5 +89,6 @@ void destroy(T& p, U& /*finalizer*/) {
 }
 
 // Type functions: see type_functions.h
+}
 
 #endif // EOP_INTRINSICS

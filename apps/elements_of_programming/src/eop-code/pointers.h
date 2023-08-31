@@ -23,12 +23,12 @@
 #ifndef EOP_POINTERS
 #define EOP_POINTERS
 
-
 #include "intrinsics.h"
 #include "type_functions.h"
 
 #include <cstddef> // ptrdiff_t
 
+namespace eop {
 template <typename T>
 REQUIRES(Regular(T))
 struct value_type<POINTER(T)> {
@@ -95,5 +95,6 @@ REQUIRES(Regular(T))
 struct iterator_concept<T*> {
     typedef random_access_iterator_tag the_concept;
 };
+}
 
 #endif // EOP_POINTERS

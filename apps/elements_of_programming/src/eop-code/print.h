@@ -21,12 +21,12 @@
 #ifndef EOP_PRINT
 #define EOP_PRINT
 
-
 #include "eop.h"
 #include "intrinsics.h"
 
 #include <cstdio> // printf
 
+namespace eop {
 inline void print(const char* x) {
     printf("%s", x);
 }
@@ -203,6 +203,6 @@ void print(const array<T>& x) {
     print_range(begin(x), end(x));
     print(")");
 }
-
+}
 
 #endif // EOP_PRINT

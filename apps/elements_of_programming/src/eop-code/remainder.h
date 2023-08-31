@@ -3,6 +3,7 @@
 
 #include "intrinsics.h"
 
+namespace eop {
 template <typename T>
 REQUIRES(ArchimedeanMonoid(T))
 T remainder_recursive(T a, T b) {
@@ -38,6 +39,7 @@ template <typename T, typename S>
 REQUIRES(EuclideanSemimodule(T, S))
 T remainder(T a, T b) {
     return remainder_nonnegative(a, b);
+}
 }
 
 #endif

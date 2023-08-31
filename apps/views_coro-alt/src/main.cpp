@@ -46,6 +46,7 @@ int main(int, char*[]) {
     std::cout << std::endl;
 #endif
 
+#if __cpp_lib_ranges
     want_ys_no_span([&ss, &ss2](auto call_per_elem) {
         std::ranges::for_each(ss, [call_per_elem](const auto& s) {
             call_per_elem(s.y);
@@ -66,5 +67,6 @@ int main(int, char*[]) {
                       return call_per_elem(s.y);
                   });
     });
+#endif
     return 0;
 }

@@ -31,6 +31,7 @@
 #include <cmath> // sqrt
 #include <cstdlib> // malloc, free
 
+namespace eop {
 //
 //  Chapter 1. Foundations
 //
@@ -6411,6 +6412,7 @@ REQUIRES(Regular(T) && Relation(R) && Domain(R) == T)
 void sort(array<T>& x, R r) {
     // Precondition: $\func{weak\_ordering}(r)$
     advanced_sort_n(begin(x), size(x), r);
+}
 }
 
 #endif // EOP_EOP

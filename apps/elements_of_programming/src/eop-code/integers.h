@@ -21,11 +21,11 @@
 #ifndef EOP_INTEGERS
 #define EOP_INTEGERS
 
-
 #include "intrinsics.h"
 
 #include <ciso646> // bitand
 
+namespace eop {
 // Exercise 3.2
 
 template <typename I>
@@ -107,6 +107,6 @@ REQUIRES(Integer(I))
 I half(const I& x) {
     return half_nonnegative(x);
 }
-
+}
 
 #endif // EOP_INTEGERS
