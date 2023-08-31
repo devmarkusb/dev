@@ -1,6 +1,3 @@
-include(${ul_CMAKE_DIRS}/cmake_util.cmake)
-ul_include(defaults.cmake)
-
 add_subdirectory(cli11)
 add_subdirectory(cmake_util_test)
 add_subdirectory(codesignal)
