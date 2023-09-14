@@ -47,24 +47,6 @@ with xy=0.
 * 4.2 medium
 * 4.7 hard
 * 5.1 hard
-
-## Notes
-
-* 9.3 accomplished only the following order: commutativity,
-  distributivity, associativity (so, the latter not independently).
-  Helpful was proving a'b=ab+b first.
-
-# Excercises
-
-## Failed
-
-* 2.1 did many examples, got a feeling, but no
-  general solution for n
-* 3.4 just made all the observations but no chance of understanding
-* 4.1 too hard
-* 4.2 medium
-* 4.7 hard
-* 5.1 hard
 * 12.7 skip for now, seems difficult
 
 ## Notes
