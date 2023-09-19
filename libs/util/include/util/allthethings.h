@@ -26,7 +26,6 @@
 #include <map>
 #include <memory>
 #include <numeric>
-#include <omp.h>
 #include <queue>
 #include <random>
 #include <ranges>
