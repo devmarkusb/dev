@@ -44,13 +44,13 @@ with xy=0.
   general solution for n
 * 3.4 just made all the observations but no chance of understanding
 * 4.1 too hard
-* 4.2 medium
 * 4.7 hard
 * 5.1 hard
 * 12.7 skip for now, seems difficult
 
 ## Notes
 
+* 4.2 accomplished more hand-wavingly like gcm algorithm
 * 9.3 accomplished only the following order: commutativity,
   distributivity, associativity (so, the latter not independently).
   Helpful was proving a'b=ab+b first.
