@@ -16,7 +16,6 @@ target_include_directories(${targetAsLibForTest} PUBLIC ${ul_INCLUDE_DIRS})
 ul_include(asio.cmake)
 ul_use_asio(${targetAsLibForTest} ${CMAKE_SOURCE_DIR}/3rdparty/asio-1.12.2.tar.gz
         MD5=43c53b8d255edc385dc4e704e59b3641)
-ul_include(openmp.cmake)
 
 ul_set_target_defaults(${targetAsLibForTest})
 
@@ -27,7 +26,7 @@ add_executable(${target}
         src/main.cpp
 )
 
-target_link_libraries(${target} PRIVATE ${targetAsLibForTest} OpenMP::OpenMP_CXX)
+target_link_libraries(${target} PRIVATE ${targetAsLibForTest})
 
 ul_set_target_defaults(${target})
 
@@ -44,7 +43,7 @@ add_executable(${targetTest}
         src/tmp.test.cpp
 )
 
-target_link_libraries(${targetTest} PRIVATE gmock_main gtest ${targetAsLibForTest} OpenMP::OpenMP_CXX)
+target_link_libraries(${targetTest} PRIVATE gmock_main gtest ${targetAsLibForTest})
 
 ul_set_target_defaults(${targetTest})
 

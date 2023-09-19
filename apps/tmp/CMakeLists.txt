@@ -3,7 +3,6 @@ set(target ${PROJECT_NAME})
 
 ul_include(asio.cmake)
 ul_include(gperftools.cmake)
-ul_include(openmp.cmake)
 
 ######################################################################################################################
 
@@ -32,7 +31,7 @@ add_executable(${target}
         src/main.cpp
 )
 
-target_link_libraries(${target} PRIVATE ${targetAsLibForTest} OpenMP::OpenMP_CXX)
+target_link_libraries(${target} PRIVATE ${targetAsLibForTest})
 
 ul_set_target_defaults(${target})
 #ul_set_target_cuda_separable_compilation(${target})
@@ -52,7 +51,7 @@ add_executable(${targetTest}
         src/tmp.test.cpp
 )
 
-target_link_libraries(${targetTest} PRIVATE gmock_main gtest ${targetAsLibForTest} OpenMP::OpenMP_CXX)
+target_link_libraries(${targetTest} PRIVATE gmock_main gtest ${targetAsLibForTest})
 
 ul_set_target_defaults(${targetTest})
 
