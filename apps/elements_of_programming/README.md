@@ -47,7 +47,7 @@ We strive for efficiency (the basis being at least as efficient as any other) an
 expressiveness (the basis allowing convenient usage).
 
 Concept: a collection of requirements on types, expressed as syntactic and semantic
-properties. Concepts represents genera as types represent species as values represent entities.
+properties. Concepts represents genera, as types represent species, as values represent entities.
 
 Concrete entity: individual thing that comes into and out of existence in space and time.
 Ex: objects in a computer game
@@ -71,7 +71,7 @@ Default constructor: procedure taking no arguments and leaving the object in a
 partially formed state.
 
 Definition space: for a functional procedure is that subset of values for its inputs
-to which it is intended to be applied. 
+to which it is intended to be applied. (It cannot be applied to other values.)
 
 Destructor: procedure causing the end of an object's existence.
 
@@ -111,7 +111,7 @@ Implementation of functions on abstract entities: as functions on values by comp
 
 InputType(F, i): i'th input type of functional procedure F.
 
-Interpretion of a datum: an entity corresponding to a datum.
+Interpretation of a datum: an entity corresponding to a datum.
 
 Load: obtain content of an address.
 
@@ -145,8 +145,9 @@ for objects dealt with.
 
 Properly partial or total object type: iff its value type is properly partial or total.
 
-Properly partial or total value type: if its values represent a proper subset of the
-abstract entities in the corresponding species, otherwise it is total.
+Properly partial (nontotal) or total value type: if its values represent a proper subset of
+the abstract entities in the corresponding species, otherwise it is total. (Partial includes
+total.)
 
 Refinement: A concept C' refines a concept C, if whenever C' is satisfied for a set
 of types, C is also satisfied for these types.
@@ -230,7 +231,6 @@ Weakening: a concept C weakens a concept C', whenever C' refines C.
 Well-formed datum w.r.t. a value type: if and only if that datum represents an abstract entity.
 
 Well-formed object: iff its state is well-formed. 
-
 
 ## Excercises
 

@@ -22,7 +22,7 @@ struct NaturalNumber {
     int data{}; // datum, representation
 
     static constexpr NaturalNumber _13() noexcept {
-        // abstract entity, despite of a technical lifetime
+        // abstract entity, despite a technical lifetime
         // value
         constexpr NaturalNumber _13{13};
         return _13;
@@ -30,7 +30,7 @@ struct NaturalNumber {
 };
 
 // abstract species
-using Integer = int; // interpretion represented by some fixed number of bits using 2's complement big endian format
+using Integer = int; // interpretation represented by some fixed number of bits using 2's complement big endian format
 
 // abstract species
 struct WholeNumber {};
