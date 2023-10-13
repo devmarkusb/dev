@@ -45,7 +45,7 @@ if (NOT UL_BUILD_UNITTESTS)
     return ()
 endif ()
 
-set(targetTest ${PROJECT_NAME}Test)
+set(targetTest ${PROJECT_NAME}-test)
 
 add_executable(${targetTest}
         src/tmp.test.cpp
