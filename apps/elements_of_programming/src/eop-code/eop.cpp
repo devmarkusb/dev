@@ -43,7 +43,7 @@ struct cmd {
         , action(action) {
     }
 };
-}
+} // namespace eop
 
 int main() {
     using namespace eop;

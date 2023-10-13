@@ -354,6 +354,6 @@ struct underlying_type {
 };
 
 #define UnderlyingType(T) typename underlying_type<T>::type
-}
+} // namespace eop
 
 #endif // TYPE_FUNCTIONS

@@ -373,6 +373,6 @@ inline void run_measurements() {
     report(perform<M, measure_reverse_bidirectional>());
     measure_reverse_algorithms();
 }
-}
+} // namespace eop
 
 #endif // EOP_MEASUREMENTS

@@ -34,6 +34,6 @@ inline void Assert(bool b) {
         abort();
     }
 }
-}
+} // namespace eop
 
 #endif // EOP_ASSERTIONS

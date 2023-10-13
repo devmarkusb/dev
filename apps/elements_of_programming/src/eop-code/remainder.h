@@ -40,6 +40,6 @@ REQUIRES(EuclideanSemimodule(T, S))
 T remainder(T a, T b) {
     return remainder_nonnegative(a, b);
 }
-}
+} // namespace eop
 
 #endif

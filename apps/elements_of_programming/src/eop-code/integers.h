@@ -107,6 +107,6 @@ REQUIRES(Integer(I))
 I half(const I& x) {
     return half_nonnegative(x);
 }
-}
+} // namespace eop
 
 #endif // EOP_INTEGERS

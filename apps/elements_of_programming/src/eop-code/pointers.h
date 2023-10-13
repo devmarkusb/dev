@@ -95,6 +95,6 @@ REQUIRES(Regular(T))
 struct iterator_concept<T*> {
     typedef random_access_iterator_tag the_concept;
 };
-}
+} // namespace eop
 
 #endif // EOP_POINTERS

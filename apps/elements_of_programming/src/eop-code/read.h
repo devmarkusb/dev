@@ -35,6 +35,6 @@ inline void read(long int& x) {
 inline void read(long long int& x) {
     scanf("%lld", &x);
 }
-}
+} // namespace eop
 
 #endif // EOP_READ

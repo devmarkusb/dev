@@ -6413,6 +6413,6 @@ void sort(array<T>& x, R r) {
     // Precondition: $\func{weak\_ordering}(r)$
     advanced_sort_n(begin(x), size(x), r);
 }
-}
+} // namespace eop
 
 #endif // EOP_EOP

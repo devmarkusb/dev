@@ -1105,6 +1105,6 @@ void run_array_tests() {
     sort_n_adaptive(begin(big), size(big), big_buffer, N_BIG_BUFFER, less<int>());
     Assert(equal_iota(begin(big), end(big)));
 }
-}
+} // namespace eop
 
 #endif // EOP_DRIVERS

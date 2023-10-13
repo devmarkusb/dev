@@ -203,6 +203,6 @@ void print(const array<T>& x) {
     print_range(begin(x), end(x));
     print(")");
 }
-}
+} // namespace eop
 
 #endif // EOP_PRINT
