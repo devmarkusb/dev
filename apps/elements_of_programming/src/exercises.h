@@ -3,8 +3,9 @@
 
 #include "eop-code/intrinsics.h"
 #include "eop-code/type_functions.h"
-
 #include "eop-code/eop.h"
+
+#include "ul/ul.h"
 
 namespace eop {
 // Chapter 2

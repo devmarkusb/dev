@@ -2,33 +2,88 @@
 #include "gtest/gtest.h"
 
 namespace eop {
-const auto example_nr{5};
+const auto cycle_size{5};
+const auto orbit_terminator{100};
+const auto orbit_separator{50};
 
-struct terminating_orbit {
-    /// Expects x > 1.
-    int operator()(int x) {
-        --x;
-        return (x + 1) / x;
-    }
-};
+template <typename T>
+using TransformationFctByValue = T(*)(T);
 
 template <>
-struct input_type<terminating_orbit, 0> {
+struct input_type<TransformationFctByValue<int>, 0> {
     using type = int;
 };
 
-bool terminating_orbit_pred(int x) {
-    return x > 1;
+/// Expects x < orbit_terminator.
+int terminating_orbit(int x) {
+    UL_EXPECT(x < orbit_terminator);
+    if (x >= orbit_terminator)
+        throw std::overflow_error{"terminating_orbit"};
+    return ++x;
 }
 
-/// Cycle size 5. Handle size 1 or 0 for x >= -1, more for x < -1.
+static_assert(std::is_same_v<TransformationFctByValue<int>, decltype(&terminating_orbit)>);
+
+bool terminating_orbit_pred(int x) {
+    return x < orbit_terminator;
+}
+
+/// Cycle size 5. Handle size 0 for 0 <= x <= 4, 1 for -1 and >= 5, up to 5 for <= -2
 int non_terminating_orbit(int x) {
-    return (x + 1) % example_nr;
+    return (x + 1) % cycle_size;
+}
+
+static_assert(std::is_same_v<TransformationFctByValue<int>, decltype(&non_terminating_orbit)>);
+
+void non_terminating_orbit_dump() {
+    const auto example_count{20};
+    for (auto i{0}; i <= example_count; ++i)
+        std::cout << power_unary(-4, i, non_terminating_orbit) << ",";
+    std::cout << std::endl;
+    for (auto i{0}; i <= example_count; ++i)
+        std::cout << power_unary(-16, i, non_terminating_orbit) << ",";
+    std::cout << std::endl;
+    for (auto i{0}; i <= example_count; ++i)
+        std::cout << power_unary(-15, i, non_terminating_orbit) << ",";
+    std::cout << std::endl;
+    for (auto i{0}; i <= example_count; ++i)
+        std::cout << power_unary(-14, i, non_terminating_orbit) << ",";
+    std::cout << std::endl;
+    for (auto i{0}; i <= example_count; ++i)
+        std::cout << power_unary(-1, i, non_terminating_orbit) << ",";
+    std::cout << std::endl;
+    for (auto i{0}; i <= example_count; ++i)
+        std::cout << power_unary(0, i, non_terminating_orbit) << ",";
+    std::cout << std::endl;
+    for (auto i{0}; i <= example_count; ++i)
+        std::cout << power_unary(1, i, non_terminating_orbit) << ",";
+    std::cout << std::endl;
+    for (auto i{0}; i <= example_count; ++i)
+        std::cout << power_unary(42, i, non_terminating_orbit) << ",";
+    std::cout << std::endl;
+}
+
+int orbit(int x) {
+    if (x >= orbit_separator)
+        return terminating_orbit(x);
+    else
+        return non_terminating_orbit(x);
+}
+
+static_assert(std::is_same_v<TransformationFctByValue<int>, decltype(&orbit)>);
+
+bool orbit_pred(int x) {
+    return x < orbit_terminator;
 }
 } // namespace eop
 
 using namespace eop;
 
-TEST(intersectTest, misc) {
-    //EXPECT_TRUE(intersect(example_nr, 2, terminating_orbit{}, terminating_orbit_pred));
+TEST(intersectTest, both_terminating) {
+    EXPECT_TRUE(intersect(orbit_terminator / 2, 1, terminating_orbit, terminating_orbit_pred));
+}
+
+TEST(intersectTest, terminating_and_circular) {
+    non_terminating_orbit_dump();
+   EXPECT_FALSE(intersect(orbit_separator - 1, orbit_separator + 1, orbit, orbit_pred));
 }
