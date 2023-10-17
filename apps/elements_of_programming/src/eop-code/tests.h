@@ -25,6 +25,7 @@
 #define EOP_TESTS
 
 #include "assertions.h"
+#include "drivers.h"
 #include "eop.h"
 #include "intrinsics.h"
 #include "print.h"
