@@ -5,7 +5,12 @@
 #include "math.h"
 #include "ul/ul.h"
 
+UL_PRAGMA_WARNINGS_PUSH
+// clang-format off
+UL_WARNING_DISABLE_GCC(conversion)
+// clang-format on
 #include "3rdparty/BigInt.hpp"
+UL_PRAGMA_WARNINGS_POP
 
 namespace math {
 // E13.1
@@ -32,7 +37,7 @@ bool is_carmichael(N n) {
 template <size_t n, Integer N>
 std::array<N, n> gen_first_carmichaels() {
     std::array<N, n> res{};
-    N found{};
+    size_t found{};
     for (N candidate{3}; candidate <= std::numeric_limits<N>::max(); candidate += N{2}) {
         if (is_prime(candidate)) {
             continue;

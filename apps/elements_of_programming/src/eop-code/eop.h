@@ -30,6 +30,7 @@
 
 #include <cmath> // sqrt
 #include <cstdlib> // malloc, free
+#include <stdexcept>
 
 namespace eop {
 //
@@ -1846,7 +1847,7 @@ WeightType(C) height_recursive(C c) {
     return successor(max(l, r));
 }
 
-enum visit {
+enum class visit {
     pre,
     in,
     post
@@ -1858,13 +1859,13 @@ REQUIRES(
     && C == InputType(Proc, 1))
 Proc traverse_nonempty(C c, Proc proc) {
     // Precondition: $\property{tree}(c) \wedge \neg \func{empty}(c)$
-    proc(pre, c);
+    proc(visit::pre, c);
     if (has_left_successor(c))
         proc = traverse_nonempty(left_successor(c), proc);
-    proc(in, c);
+    proc(visit::in, c);
     if (has_right_successor(c))
         proc = traverse_nonempty(right_successor(c), proc);
-    proc(post, c);
+    proc(visit::post, c);
     return proc;
 }
 
@@ -1889,27 +1890,28 @@ REQUIRES(BidirectionalBifurcateCoordinate(C))
 int traverse_step(visit& v, C& c) {
     // Precondition: $\func{has\_predecessor}(c) \vee v \neq post$
     switch (v) {
-        case pre:
+        case visit::pre:
             if (has_left_successor(c)) {
                 c = left_successor(c);
                 return 1;
             }
-            v = in;
+            v = visit::in;
             return 0;
-        case in:
+        case visit::in:
             if (has_right_successor(c)) {
-                v = pre;
+                v = visit::pre;
                 c = right_successor(c);
                 return 1;
             }
-            v = post;
+            v = visit::post;
             return 0;
-        case post:
+        case visit::post:
             if (is_left_successor(c))
-                v = in;
+                v = visit::in;
             c = predecessor(c);
             return -1;
     }
+    throw std::invalid_argument{"v unknown"};
 }
 
 template <typename C>
@@ -1919,12 +1921,12 @@ bool reachable(C x, C y) {
     if (empty(x))
         return false;
     C root = x;
-    visit v = pre;
+    visit v = visit::pre;
     do {
         if (x == y)
             return true;
         traverse_step(v, x);
-    } while (x != root || v != post);
+    } while (x != root || v != visit::post);
     return false;
 }
 
@@ -1936,13 +1938,13 @@ WeightType(C) weight(C c) {
     if (empty(c))
         return N(0);
     C root = c;
-    visit v = pre;
+    visit v = visit::pre;
     N n(1); // Invariant: $n$ is count of $\type{pre}$ visits so far
     do {
         traverse_step(v, c);
-        if (v == pre)
+        if (v == visit::pre)
             n = successor(n);
-    } while (c != root || v != post);
+    } while (c != root || v != visit::post);
     return n;
 }
 
@@ -1954,13 +1956,13 @@ WeightType(C) height(C c) {
     if (empty(c))
         return N(0);
     C root = c;
-    visit v = pre;
+    visit v = visit::pre;
     N n(1); // Invariant: $n$ is max of height of $\type{pre}$ visits so far
     N m(1); // Invariant: $m$ is height of current $\type{pre}$ visit
     do {
         m = (m - N(1)) + N(traverse_step(v, c) + 1);
         n = max(n, m);
-    } while (c != root || v != post);
+    } while (c != root || v != visit::post);
     return n;
 }
 
@@ -1973,12 +1975,12 @@ Proc traverse(C c, Proc proc) {
     if (empty(c))
         return proc;
     C root = c;
-    visit v = pre;
-    proc(pre, c);
+    visit v = visit::pre;
+    proc(visit::pre, c);
     do {
         traverse_step(v, c);
         proc(v, c);
-    } while (c != root || v != post);
+    } while (c != root || v != visit::post);
     return proc;
 }
 
@@ -2019,14 +2021,14 @@ bool bifurcate_isomorphic(C0 c0, C1 c1) {
     if (empty(c1))
         return false;
     C0 root0 = c0;
-    visit v0 = pre;
-    visit v1 = pre;
+    visit v0 = visit::pre;
+    visit v1 = visit::pre;
     while (true) {
         traverse_step(v0, c0);
         traverse_step(v1, c1);
         if (v0 != v1)
             return false;
-        if (c0 == root0 && v0 == post)
+        if (c0 == root0 && v0 == visit::post)
             return true;
     }
 }
@@ -2108,16 +2110,16 @@ bool bifurcate_equivalent(C0 c0, C1 c1, R r) {
     if (empty(c1))
         return false;
     C0 root0 = c0;
-    visit v0 = pre;
-    visit v1 = pre;
+    visit v0 = visit::pre;
+    visit v1 = visit::pre;
     while (true) {
-        if (v0 == pre && !r(source(c0), source(c1)))
+        if (v0 == visit::pre && !r(source(c0), source(c1)))
             return false;
         traverse_step(v0, c0);
         traverse_step(v1, c1);
         if (v0 != v1)
             return false;
-        if (c0 == root0 && v0 == post)
+        if (c0 == root0 && v0 == visit::post)
             return true;
     }
 }
@@ -2284,10 +2286,10 @@ bool bifurcate_compare(C0 c0, C1 c1, R r) {
     if (empty(c0))
         return true;
     C0 root0 = c0;
-    visit v0 = pre;
-    visit v1 = pre;
+    visit v0 = visit::pre;
+    visit v1 = visit::pre;
     while (true) {
-        if (v0 == pre) {
+        if (v0 == visit::pre) {
             if (r(source(c0), source(c1)))
                 return true;
             if (r(source(c1), source(c0)))
@@ -2297,7 +2299,7 @@ bool bifurcate_compare(C0 c0, C1 c1, R r) {
         traverse_step(v1, c1);
         if (v0 != v1)
             return v0 > v1;
-        if (c0 == root0 && v0 == post)
+        if (c0 == root0 && v0 == visit::post)
             return false;
     }
 }

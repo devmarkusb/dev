@@ -32,6 +32,7 @@
 #include "type_functions.h"
 
 #include "ul/narrow.h"
+#include "ul/warnings.h"
 
 namespace eop {
 // Naming conventions:
@@ -228,12 +229,17 @@ template <typename P>
 REQUIRES(UnaryPredicate(P))
 void concept_UnaryPredicate(P p, Domain(P) x) {
     typedef Domain(P) X;
+    UL_PRAGMA_WARNINGS_PUSH
+    // clang-format off
+    UL_WARNING_DISABLE_GCC(unused-but-set-variable)
+    // clang-format on
     X x0;
     X x1;
     if (p(x))
         x0 = x;
     else
         x1 = x;
+    UL_PRAGMA_WARNINGS_POP
 }
 
 template <typename T>
@@ -588,12 +594,17 @@ template <typename R>
 REQUIRES(Relation(R))
 void concept_Relation(R r, Domain(R) x) {
     typedef Domain(R) X;
+    UL_PRAGMA_WARNINGS_PUSH
+    // clang-format off
+    UL_WARNING_DISABLE_GCC(unused-but-set-variable)
+    // clang-format on
     X y;
     X z;
     if (r(x, x))
         y = x;
     else
         z = x;
+    UL_PRAGMA_WARNINGS_POP
 }
 
 template <typename R>
@@ -2268,13 +2279,13 @@ struct count_visits {
 
     void operator()(visit v, C) {
         switch (v) {
-            case pre:
+            case visit::pre:
                 n_pre = successor(n_pre);
                 break;
-            case in:
+            case visit::in:
                 n_in = successor(n_in);
                 break;
-            case post:
+            case visit::post:
                 n_post = successor(n_post);
                 break;
         }
@@ -2472,24 +2483,24 @@ void algorithms_bidirectional_bifurcate_coordinates() {
 
     C c_r = begin(t3_45);
     C c = c_r;
-    visit v(pre);
+    visit v(visit::pre);
     int dh;
     dh = traverse_step(v, c);
-    Assert(dh == 1 && c == left_successor(c_r) && v == pre);
+    Assert(dh == 1 && c == left_successor(c_r) && v == visit::pre);
     dh = traverse_step(v, c);
-    Assert(dh == 0 && c == left_successor(c_r) && v == in);
+    Assert(dh == 0 && c == left_successor(c_r) && v == visit::in);
     dh = traverse_step(v, c);
-    Assert(dh == 0 && c == left_successor(c_r) && v == post);
+    Assert(dh == 0 && c == left_successor(c_r) && v == visit::post);
     dh = traverse_step(v, c);
-    Assert(dh == -1 && c == c_r && v == in);
+    Assert(dh == -1 && c == c_r && v == visit::in);
     dh = traverse_step(v, c);
-    Assert(dh == 1 && c == right_successor(c_r) && v == pre);
+    Assert(dh == 1 && c == right_successor(c_r) && v == visit::pre);
     dh = traverse_step(v, c);
-    Assert(dh == 0 && c == right_successor(c_r) && v == in);
+    Assert(dh == 0 && c == right_successor(c_r) && v == visit::in);
     dh = traverse_step(v, c);
-    Assert(dh == 0 && c == right_successor(c_r) && v == post);
+    Assert(dh == 0 && c == right_successor(c_r) && v == visit::post);
     dh = traverse_step(v, c);
-    Assert(dh == -1 && c == c_r && v == post);
+    Assert(dh == -1 && c == c_r && v == visit::post);
 
     Assert(reachable(root, root_l_l));
     Assert(!reachable(root_l_l, root));
