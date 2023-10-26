@@ -68,118 +68,66 @@ bool orbit_pred(int x) {
     return x < orbit_terminator;
 }
 
+bool hf_pred(int) {
+    return true;
+}
+
+template <typename F, typename P>
+std::ostream& orbit_dump(std::ostream& os, F f, P p, Domain(F) starting_point, int example_count) {
+    for (auto i{0}; i <= example_count; ++i) {
+        const auto x{power_unary_guarded(starting_point, i, f, p)};
+        if (x)
+            os << *x << ',';
+        else {
+            os << "terminated";
+            break;
+        }
+    }
+    os << '\n';
+    return os;
+}
+
 template <typename F, typename P>
 REQUIRES(Transformation(F) && UnaryPredicate(P) && Domain(F) == Domain(P))
-void orbit_dump(F f, P p, std::string_view loglabel) {
+std::ostream& orbit_dump(std::ostream& os, F f, P p, std::string_view loglabel) {
     const auto example_count{50};
-    std::cout << loglabel << " orbit_dump\n";
-    for (auto i{0}; i <= example_count; ++i) {
-        const auto x{power_unary_guarded(-4, i, f, p)};
-        if (x)
-            std::cout << *x << ',';
-        else {
-            std::cout << "terminated";
-            break;
-        }
-    }
-    std::cout << '\n';
-    for (auto i{0}; i <= example_count; ++i) {
-        const auto x{power_unary_guarded(neg_example_nr - 1, i, f, p)};
-        if (x)
-            std::cout << *x << ',';
-        else {
-            std::cout << "terminated";
-            break;
-        }
-    }
-    std::cout << '\n';
-    for (auto i{0}; i <= example_count; ++i) {
-        const auto x{power_unary_guarded(neg_example_nr, i, f, p)};
-        if (x)
-            std::cout << *x << ',';
-        else {
-            std::cout << "terminated";
-            break;
-        }
-    }
-    std::cout << '\n';
-    for (auto i{0}; i <= example_count; ++i) {
-        const auto x{power_unary_guarded(neg_example_nr + 1, i, f, p)};
-        if (x)
-            std::cout << *x << ',';
-        else {
-            std::cout << "terminated";
-            break;
-        }
-    }
-    std::cout << '\n';
-    for (auto i{0}; i <= example_count; ++i) {
-        const auto x{power_unary_guarded(-1, i, f, p)};
-        if (x)
-            std::cout << *x << ',';
-        else {
-            std::cout << "terminated";
-            break;
-        }
-    }
-    std::cout << '\n';
-    for (auto i{0}; i <= example_count; ++i) {
-        const auto x{power_unary_guarded(0, i, f, p)};
-        if (x)
-            std::cout << *x << ',';
-        else {
-            std::cout << "terminated";
-            break;
-        }
-    }
-    std::cout << '\n';
-    for (auto i{0}; i <= example_count; ++i) {
-        const auto x{power_unary_guarded(1, i, f, p)};
-        if (x)
-            std::cout << *x << ',';
-        else {
-            std::cout << "terminated";
-            break;
-        }
-    }
-    std::cout << '\n';
-    for (auto i{0}; i <= example_count; ++i) {
-        {
-            const auto x{power_unary_guarded(pos_example_nr, i, f, p)};
-            if (x)
-                std::cout << *x << ',';
-            else {
-                std::cout << "terminated";
-                break;
-            }
-        }
-    }
-    std::cout << '\n';
-    for (auto i{0}; i <= example_count; ++i) {
-        {
-            const auto x{power_unary_guarded(pos_example_nr * 2, i, f, p)};
-            if (x)
-                std::cout << *x << ',';
-            else {
-                std::cout << "terminated";
-                break;
-            }
-        }
-    }
-    std::cout << '\n';
+    os << loglabel << " orbit_dump\n";
+    orbit_dump(os, f, p, -4, example_count);
+    orbit_dump(os, f, p, neg_example_nr - 1, example_count);
+    orbit_dump(os, f, p, neg_example_nr, example_count);
+    orbit_dump(os, f, p, neg_example_nr + 1, example_count);
+    orbit_dump(os, f, p, -1, example_count);
+    orbit_dump(os, f, p, 0, example_count);
+    orbit_dump(os, f, p, 1, example_count);
+    orbit_dump(os, f, p, pos_example_nr, example_count);
+    orbit_dump(os, f, p, pos_example_nr * 2, example_count);
+    return os;
 }
 } // namespace eop
 
 using namespace eop;
 
 TEST(intersectTest, dumps) {
-    orbit_dump(terminating_orbit, terminating_orbit_pred, "terminating_orbit");
-    orbit_dump(non_terminating_orbit, [](int) {
+    orbit_dump(std::cout, terminating_orbit, terminating_orbit_pred, "terminating_orbit");
+    std::stringstream ss;
+    orbit_dump(ss, terminating_orbit, terminating_orbit_pred, "terminating_orbit");
+    EXPECT_EQ(ss.str(), R"(terminating_orbit orbit_dump
+-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,
+-16,-15,-14,-13,-12,-11,-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,
+-15,-14,-13,-12,-11,-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,
+-14,-13,-12,-11,-10,-9,-8,-7,-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,
+-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,
+0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,
+1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,
+42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,
+84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,terminated
+)");
+    orbit_dump(std::cout, non_terminating_orbit, [](int) {
         return true;
     }, "non_terminating_orbit");
-    orbit_dump(orbit, orbit_pred, "orbit");
+    orbit_dump(std::cout, orbit, orbit_pred, "orbit");
     const auto o{gen_orbit<int, DistanceType(int)>{-20, 20, 5}};
-    orbit_dump(o, o.p, "gen_orbit");
+    orbit_dump(std::cout, o, o.p, "gen_orbit");
 }
 
 TEST(intersectTest, both_terminating) {
@@ -206,4 +154,12 @@ TEST(intersectTest, both_non_terminating) {
     EXPECT_TRUE(intersect(pos_example_nr, -2, orbit, orbit_pred));
     EXPECT_TRUE(intersect(-2, pos_example_nr, orbit, orbit_pred));
     EXPECT_TRUE(intersect(-2, -1, orbit, orbit_pred));
+}
+
+TEST(convergent_point_guardedTest, misc) {
+    EXPECT_TRUE(convergent_point_guarded(1024, 64, hf<int>{}, hf_pred) == 64);
+    EXPECT_TRUE(convergent_point_guarded(1025, 65, hf<int>{}, hf_pred) == 32);
+    EXPECT_TRUE(convergent_point_guarded(64, 1024, hf<int>{}, hf_pred) == 64);
+    EXPECT_TRUE(convergent_point_guarded(65, 1025, hf<int>{}, hf_pred) == 32);
+    EXPECT_TRUE(convergent_point_guarded(1024, 2047, hf<int>{}, hf_pred) == 1);
 }
