@@ -31,7 +31,7 @@ bool intersect(Domain(F) x, Domain(F) y, F f, P p) {
         // They intersect, if they have the last element in common. Intersection means having at least
         // one element in common. But that implies having all the following ones - applying the
         // transformation, in common also.
-        return p(x_coll) == p(y_coll);
+        return x_coll == y_coll;
     }
 
     // Case of two non-terminating orbits (\rho-shaped or cyclic).
@@ -48,6 +48,18 @@ bool intersect(Domain(F) x, Domain(F) y, F f, P p) {
     }
     return false;
 }
+
+// 2.3
+//template <typename F, typename P>
+//REQUIRES(Transformation(F) && UnaryPredicate(P) && Domain(F) == Domain(P))
+//Domain(F) convergent_point_guarded(Domain(F) x0, Domain(F) x1, F f, P p) {
+//    // Precondition: $(\exists n \in \func{DistanceType}(F))\,n \geq 0 \wedge f^n(x0) = f^n(x1)$
+//    while (x0 != x1) {
+//        x0 = f(x0);
+//        x1 = f(x1);
+//    }
+//    return x0;
+//}
 } // namespace eop
 
 #endif
