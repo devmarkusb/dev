@@ -46,8 +46,8 @@ template <typename P>
 concept Procedure = std::invocable<P>;
 
 //todo refine (or not? without restricting too much at least)
-template <typename F>
-concept FunctionalProcedure = std::regular_invocable<F> && !std::is_same_v<void, std::invoke_result_t<F>>;
+template <typename F, typename... Args>
+concept FunctionalProcedure = std::regular_invocable<F, Args...> && !std::is_same_v<void, std::invoke_result_t<F, Args...>>;
 
 template <FunctionalProcedure, int>
 struct InputTypeDecl;
@@ -65,18 +65,18 @@ template <FunctionalProcedure F>
 using Codomain = CodomainDecl<F>::Type;
 
 //todo refine?
-template <typename F>
-concept HomogeneousFunction = FunctionalProcedure<F>;
+template <typename F, typename... Args>
+concept HomogeneousFunction = FunctionalProcedure<F, Args...>;
 
-template <typename Op>
+template <typename Op, typename... Args>
 concept Operation =
-    HomogeneousFunction<Op> && std::is_same_v<Domain<Op>, Codomain<Op>>
+    HomogeneousFunction<Op, Args...> && std::is_same_v<Domain<Op>, Codomain<Op>>
     && requires(Op op, ul::Domain<Op> a, ul::Domain<Op> b, ul::Domain<Op> c) {
            { op(a, b) } -> std::convertible_to<ul::Domain<Op>>;
        };
 
-template <typename Op>
-concept BinaryOperation = Operation<Op> && std::invocable<Op, Domain<Op>, Domain<Op>>;
+template <typename Op, typename... Args>
+concept BinaryOperation = Operation<Op, Args...> && std::invocable<Op, Domain<Op>, Domain<Op>>;
 } // namespace mb::ul
 
 UL_HEADER_END

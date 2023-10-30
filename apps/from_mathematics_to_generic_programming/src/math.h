@@ -25,7 +25,7 @@ concept Regular = ul::Regular<T>;
 template <typename S>
 concept Set = Regular<S>;
 
-inline namespace v1 {
+namespace v1 {
 template <typename Op, typename SetT>
 concept SemigroupOperation =
     Set<SetT> && std::regular_invocable<Op, SetT, SetT> && std::is_same_v<SetT, std::invoke_result_t<Op, SetT, SetT>>
@@ -37,7 +37,7 @@ concept SemigroupOperation =
        };
 }
 
-namespace v2 {
+inline namespace v2 {
 template <typename Op>
 concept SemigroupOperation =
     ul::BinaryOperation<Op> && Set<ul::Domain<Op>>
@@ -49,7 +49,7 @@ concept SemigroupOperation =
 }
 
 template <typename SetT, typename Op>
-concept Semigroup = Set<SetT> && SemigroupOperation<Op, SetT>;
+concept Semigroup = Set<SetT> && SemigroupOperation<Op>;
 
 template <typename SetT>
 concept NoncommutativeAdditiveSemigroup = Semigroup<SetT, std::plus<SetT>>;
@@ -58,7 +58,7 @@ template <typename SetT>
 concept MultiplicativeSemigroup = Semigroup<SetT, std::multiplies<SetT>>;
 
 template <typename Op, typename SetT>
-concept MonoidOperation = Set<SetT> && SemigroupOperation<Op, SetT> && requires(Op op, SetT a, SetT identity) {
+concept MonoidOperation = Set<SetT> && SemigroupOperation<Op> && requires(Op op, SetT a, SetT identity) {
                                                                            UL_SEMANTICS {
                                                                                op(identity, a) == identity;
                                                                                op(a, identity) == identity;
@@ -417,7 +417,7 @@ A power_monoid(A a, N n) {
     return power_semigroup(a, n);
 }
 
-template <Regular A, Integral N, SemigroupOperation<A> Op>
+template <Regular A, Integral N, SemigroupOperation Op>
 A power_accumulate_semigroup(A r, A a, N n, Op op) {
     UL_EXPECT(n >= 0);
     if (n == 0)
@@ -434,7 +434,7 @@ A power_accumulate_semigroup(A r, A a, N n, Op op) {
 }
 
 /// For a multiply operation as op you achieve the canonical 'power'.
-template <Regular A, Integral N, SemigroupOperation<A> Op>
+template <Regular A, Integral N, SemigroupOperation Op>
 A power_semigroup(A a, N n, Op op) {
     UL_EXPECT(n > 0);
     while (!odd(n)) {
