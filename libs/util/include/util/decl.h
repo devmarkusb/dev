@@ -23,8 +23,8 @@ Semantics:
                                                                                Time/space complexity:
     * each operation on Regular is no worse than linear in the memory of the object
     */
-    template <typename R>
-    concept Regular = std::copyable<R> && std::equality_comparable<R>;
+template <typename R>
+concept Regular = std::copyable<R> && std::equality_comparable<R>;
 
 template <typename R>
 concept SemiRegular = std::copyable<R>;
@@ -45,15 +45,39 @@ concept SemiRegular = std::semiregular<R>;
 template <typename P>
 concept Procedure = std::invocable<P>;
 
+//todo refine (or not? without restricting too much at least)
 template <typename F>
-concept FunctionalProcedure = std::regular_invocable<F>;
+concept FunctionalProcedure = std::regular_invocable<F> && !std::is_same_v<void, std::invoke_result_t<F>>;
 
-template <FunctionalProcedure F, int i>
+template <FunctionalProcedure, int>
 struct InputTypeDecl;
 
 template <FunctionalProcedure F, int i>
 using InputType = InputTypeDecl<F, i>::Type;
-}
+
+template <FunctionalProcedure F>
+using Domain = InputTypeDecl<F, 0>::Type;
+
+template <FunctionalProcedure F>
+struct CodomainDecl;
+
+template <FunctionalProcedure F>
+using Codomain = CodomainDecl<F>::Type;
+
+//todo refine?
+template <typename F>
+concept HomogeneousFunction = FunctionalProcedure<F>;
+
+template <typename Op>
+concept Operation =
+    HomogeneousFunction<Op> && std::is_same_v<Domain<Op>, Codomain<Op>>
+    && requires(Op op, ul::Domain<Op> a, ul::Domain<Op> b, ul::Domain<Op> c) {
+           { op(a, b) } -> std::convertible_to<ul::Domain<Op>>;
+       };
+
+template <typename Op>
+concept BinaryOperation = Operation<Op> && std::invocable<Op, Domain<Op>, Domain<Op>>;
+} // namespace mb::ul
 
 UL_HEADER_END
 

@@ -25,6 +25,7 @@ concept Regular = ul::Regular<T>;
 template <typename S>
 concept Set = Regular<S>;
 
+inline namespace v1 {
 template <typename Op, typename SetT>
 concept SemigroupOperation =
     Set<SetT> && std::regular_invocable<Op, SetT, SetT> && std::is_same_v<SetT, std::invoke_result_t<Op, SetT, SetT>>
@@ -34,6 +35,18 @@ concept SemigroupOperation =
                op(op(a, b), c) == op(a, op(b, c));
            };
        };
+}
+
+namespace v2 {
+template <typename Op>
+concept SemigroupOperation =
+    ul::BinaryOperation<Op> && Set<ul::Domain<Op>>
+    && requires(Op op, ul::Domain<Op> a, ul::Domain<Op> b, ul::Domain<Op> c) {
+           UL_SEMANTICS {
+               op(op(a, b), c) == op(a, op(b, c));
+           };
+       };
+}
 
 template <typename SetT, typename Op>
 concept Semigroup = Set<SetT> && SemigroupOperation<Op, SetT>;
