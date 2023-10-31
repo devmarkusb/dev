@@ -56,9 +56,9 @@ template <FunctionalProcedure F, int i>
 using InputType = InputTypeDecl<F, i>::Type;
 
 template <FunctionalProcedure F>
-using Domain = InputTypeDecl<F, 0>::Type;
+using Domain = InputType<F, 0>;
 
-template <FunctionalProcedure F>
+template <FunctionalProcedure>
 struct CodomainDecl;
 
 template <FunctionalProcedure F>
@@ -66,7 +66,7 @@ using Codomain = CodomainDecl<F>::Type;
 
 //todo refine?
 template <typename F, typename... Args>
-concept HomogeneousFunction = FunctionalProcedure<F, Args...>;
+concept HomogeneousFunction = FunctionalProcedure<F, Args...> && std::is_same_v<Args...>;
 
 template <typename Op, typename... Args>
 concept Operation =
@@ -75,8 +75,18 @@ concept Operation =
            { op(a, b) } -> std::convertible_to<ul::Domain<Op>>;
        };
 
-template <typename Op, typename... Args>
-concept BinaryOperation = Operation<Op, Args...> && std::invocable<Op, Domain<Op>, Domain<Op>>;
+template <typename Op>
+concept BinaryOperation = Operation<Op, Domain<Op>, Domain<Op>> && std::invocable<Op, Domain<Op>, Domain<Op>>;
+
+template <typename T>
+struct InputTypeDecl<std::plus<T>, 0> {
+    using Type = T;
+};
+
+template <typename T>
+struct CodomainDecl<std::plus<T>> {
+    using Type = T;
+};
 } // namespace mb::ul
 
 UL_HEADER_END
