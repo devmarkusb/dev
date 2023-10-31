@@ -48,14 +48,14 @@ concept SemigroupOperation =
        };
 }
 
-template <typename SetT, typename Op>
-concept Semigroup = Set<SetT> && SemigroupOperation<Op>;
+template <typename Op>
+concept Semigroup = Set<ul::Domain<Op>> && SemigroupOperation<Op>;
 
 template <typename SetT>
-concept NoncommutativeAdditiveSemigroup = Semigroup<SetT, std::plus<SetT>>;
+concept NoncommutativeAdditiveSemigroup = Semigroup<std::plus<SetT>>;
 
 template <typename SetT>
-concept MultiplicativeSemigroup = Semigroup<SetT, std::multiplies<SetT>>;
+concept MultiplicativeSemigroup = Semigroup<std::multiplies<SetT>>;
 
 template <typename Op, typename SetT>
 concept MonoidOperation = Set<SetT> && SemigroupOperation<Op> && requires(Op op, SetT a, SetT identity) {
