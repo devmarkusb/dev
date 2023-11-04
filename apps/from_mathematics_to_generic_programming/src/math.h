@@ -7,6 +7,7 @@
 #include <cmath>
 #include <compare>
 #include <concepts>
+#include <functional>
 #include <ostream>
 
 namespace math {
@@ -59,19 +60,18 @@ concept MultiplicativeSemigroup = Semigroup<std::multiplies<SetT>>;
 
 template <typename Op, typename SetT>
 concept MonoidOperation = Set<SetT> && SemigroupOperation<Op> && requires(Op op, SetT a, SetT identity) {
-                                                                           UL_SEMANTICS {
-                                                                               op(identity, a) == identity;
-                                                                               op(a, identity) == identity;
-                                                                           };
-                                                                       };
+    UL_SEMANTICS {
+        op(identity, a) == identity;
+        op(a, identity) == identity;
+    };
+};
 
 template <typename Op, typename SetT>
-concept CommutativeMonoidOperation =
-    Set<SetT> && MonoidOperation<Op, SetT> && requires(Op op, SetT a, SetT b) {
-                                                  UL_SEMANTICS {
-                                                      op(a, b) == op(b, a);
-                                                  };
-                                              };
+concept CommutativeMonoidOperation = Set<SetT> && MonoidOperation<Op, SetT> && requires(Op op, SetT a, SetT b) {
+    UL_SEMANTICS {
+        op(a, b) == op(b, a);
+    };
+};
 
 template <typename SetT, typename Op>
 concept Monoid = Set<SetT> && MonoidOperation<Op, SetT>;
@@ -112,10 +112,10 @@ concept NoncommutativeAdditiveGroup = Group<SetT, std::plus<SetT>, std::negate<S
 
 template <typename SetT>
 concept AdditiveGroup = NoncommutativeAdditiveGroup<SetT> && requires(SetT a, SetT b) {
-                                                                 UL_SEMANTICS {
-                                                                     a + b == b + a;
-                                                                 };
-                                                             };
+    UL_SEMANTICS {
+        a + b == b + a;
+    };
+};
 
 /** Borderline, works for arithmetic types but enforces general Regular to provide a constructor accepting integer 1
     to produce the multiplicative identity element.*/
@@ -283,10 +283,10 @@ using Matrix = std::array<std::array<ElemT, n>, m>;
 
 template <typename MatrixT, typename ElemT>
 concept MatrixLike = requires(MatrixT m, size_t r, size_t c) {
-                         m[r];
-                         m[r][c];
-                         requires std::is_same_v<std::remove_cvref_t<decltype(m[r][c])>, ElemT>;
-                     };
+    m[r];
+    m[r][c];
+    requires std::is_same_v<std::remove_cvref_t<decltype(m[r][c])>, ElemT>;
+};
 
 // Not yet useful. Even problematic in the difficulty of inferring template parameters.
 //template <typename MatrixT, typename ElemT, size_t m, size_t n>

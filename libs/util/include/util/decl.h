@@ -7,7 +7,7 @@
 #include <concepts>
 
 namespace mb::ul {
-inline namespace most_generic_regular {
+inline namespace more_generic {
 /**
     Opposed to std::regular this doesn't contain std::default_initializable.
     The intention of the latter might be to be able to write something like 'R x;' with possibly uninitialized x,
@@ -28,9 +28,9 @@ concept Regular = std::copyable<R> && std::equality_comparable<R>;
 
 template <typename R>
 concept SemiRegular = std::copyable<R>;
-} // namespace most_generic_regular
+} // namespace more_generic
 
-namespace generic_regular {
+namespace generic {
 /**
     Opposed to Regular from most_generic_regular implies default initializable also. This allows for the equivalence
     of 'T a; a = b;' and ' T a{b};'.
@@ -40,28 +40,33 @@ concept Regular = std::regular<R>;
 
 template <typename R>
 concept SemiRegular = std::semiregular<R>;
-} // namespace generic_regular
+} // namespace generic
 
 template <typename P>
 concept Procedure = std::invocable<P>;
+
+namespace most_generic {
+template <typename>
+concept FunctionalProcedure = true;
+}
 
 //todo refine (or not? without restricting too much at least)
 template <typename F, typename... Args>
 concept FunctionalProcedure = std::regular_invocable<F, Args...> && !std::is_same_v<void, std::invoke_result_t<F, Args...>>;
 
-template <FunctionalProcedure, int>
+template <int, most_generic::FunctionalProcedure>
 struct InputTypeDecl;
 
-template <FunctionalProcedure F, int i>
-using InputType = InputTypeDecl<F, i>::Type;
+template <int i, most_generic::FunctionalProcedure F>
+using InputType = InputTypeDecl<i, F>::Type;
 
-template <FunctionalProcedure F>
-using Domain = InputType<F, 0>;
+template <most_generic::FunctionalProcedure F>
+using Domain = InputType<0, F>;
 
-template <FunctionalProcedure>
+template <most_generic::FunctionalProcedure>
 struct CodomainDecl;
 
-template <FunctionalProcedure F>
+template <most_generic::FunctionalProcedure F>
 using Codomain = CodomainDecl<F>::Type;
 
 //todo refine?
@@ -70,7 +75,7 @@ concept HomogeneousFunction = FunctionalProcedure<F, Args...> && std::is_same_v<
 
 template <typename Op, typename... Args>
 concept Operation =
-    HomogeneousFunction<Op, Args...> && std::is_same_v<Domain<Op>, Codomain<Op>>
+    HomogeneousFunction<Op, Args...> && std::is_convertible_v<Domain<Op>, Codomain<Op>>
     && requires(Op op, ul::Domain<Op> a, ul::Domain<Op> b, ul::Domain<Op> c) {
            { op(a, b) } -> std::convertible_to<ul::Domain<Op>>;
        };
@@ -78,14 +83,49 @@ concept Operation =
 template <typename Op>
 concept BinaryOperation = Operation<Op, Domain<Op>, Domain<Op>> && std::invocable<Op, Domain<Op>, Domain<Op>>;
 
-template <typename T>
-struct InputTypeDecl<std::plus<T>, 0> {
-    using Type = T;
+template<typename ArgTypes>
+struct FirstArg
+{
+    using Type = std::tuple_element_t<0, ArgTypes>;
 };
 
-template <typename T>
-struct CodomainDecl<std::plus<T>> {
-    using Type = T;
+template<>
+struct FirstArg<std::tuple<>>
+{
+    using Type = void;
+};
+
+template<typename T>
+struct Method
+{
+    using Type = void;
+};
+
+template<typename Ret, typename Type, typename... Args>
+struct Method<Ret (Type::*)(Args...) const>
+{
+    using ReturnType = Ret;
+    using ArgsTuple = std::tuple<Args...>;
+    using FirstArgType = typename FirstArg<ArgsTuple>::Type;
+};
+
+template<typename F>
+using CallOperator = Method<decltype(&F::operator())>;
+
+template <typename F>
+struct InputTypeDecl<0, F> {
+    using Type = std::remove_cvref_t<typename CallOperator<F>::FirstArgType>;
+private:
+    using TypeForCheck = CallOperator<F>::FirstArgType;
+    static_assert((std::is_reference_v<TypeForCheck> && std::is_const_v<std::remove_reference_t<TypeForCheck>>)
+                  || (std::is_pointer_v<TypeForCheck> &&  std::is_const_v<std::remove_pointer_t<TypeForCheck>>)
+                  || (!std::is_pointer_v<TypeForCheck> && !std::is_reference_v<TypeForCheck>),
+                  "arguments have to by regular types, but we want to allow `const a*` and `const a&` as well");
+};
+
+template <most_generic::FunctionalProcedure F>
+struct CodomainDecl {
+    using Type = CallOperator<F>::ReturnType;
 };
 } // namespace mb::ul
 
