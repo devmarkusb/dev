@@ -50,10 +50,19 @@ template <typename>
 concept FunctionalProcedure = true;
 }
 
-//todo refine (or not? without restricting too much at least)
 template <typename F, typename... Args>
-concept FunctionalProcedure = std::regular_invocable<F, Args...> && !std::is_same_v<void, std::invoke_result_t<F, Args...>>;
+concept FunctionalProcedure =
+    std::regular_invocable<F, Args...> && !std::is_same_v<void, std::invoke_result_t<F, Args...>>
+    && (Regular<Args> && ...);
 
+// Remarks on the purpose and implementation of the following traits.
+// We want to be able to define algorithms like `template <Function F> Domain(F) do_sth(F f, Domain(F) x)` without
+// the necessity of additionally passing the domain of `F` as another template parameter all the time. Ideally it
+// should get deduced from `F` alone automatically - either by the maximum generic trait implementations below, or
+// by handcrafted specializations on the application side whenever needed.
+// Unfortunately, we need to use the most generic version of FunctionalProcedure here, otherwise we get (additional)
+// constraint checks that seem syntactically impossible to fulfill. Specifically: the variadic arguments for the
+// parameters of the underlying invocable concept.
 template <int, most_generic::FunctionalProcedure>
 struct InputTypeDecl;
 
@@ -69,7 +78,57 @@ struct CodomainDecl;
 template <most_generic::FunctionalProcedure F>
 using Codomain = CodomainDecl<F>::Type;
 
-//todo refine?
+namespace impl {
+template <typename ArgTypes>
+struct FirstArg {
+    using Type = std::tuple_element_t<0, ArgTypes>;
+};
+
+template <>
+struct FirstArg<std::tuple<>> {
+    using Type = void;
+};
+
+template <typename>
+struct Method {
+    using Type = void;
+};
+
+template <typename Ret, typename Type, typename... Args>
+struct Method<Ret (Type::*)(Args...) const> {
+    using ReturnType = Ret;
+    using ArgsTuple = std::tuple<Args...>;
+    using FirstArgType = typename FirstArg<ArgsTuple>::Type;
+};
+
+template <typename F>
+using CallOperator = Method<decltype(&F::operator())>;
+
+template <typename TypeForCheck>
+struct AssertRegularityWeakSyntax {
+    static_assert((std::is_reference_v<TypeForCheck> && std::is_const_v<std::remove_reference_t<TypeForCheck>>)
+                      || (std::is_pointer_v<TypeForCheck> &&  std::is_const_v<std::remove_pointer_t<TypeForCheck>>)
+                      || (!std::is_pointer_v<TypeForCheck> && !std::is_reference_v<TypeForCheck>),
+                  "arguments/return have to by regular types, but we want to allow `const a*` and `const a&` as well");
+};
+} // namespace impl
+
+template <typename F>
+struct InputTypeDecl<0, F> {
+    using TypeOrig = impl::CallOperator<F>::FirstArgType;
+    using Type = std::remove_cvref_t<TypeOrig>;
+private:
+    using _ = impl::AssertRegularityWeakSyntax<TypeOrig>;
+};
+
+template <most_generic::FunctionalProcedure F>
+struct CodomainDecl {
+    using TypeOrig = impl::CallOperator<F>::ReturnType;
+    using Type = std::remove_cvref_t<TypeOrig>;
+private:
+    using _ = impl::AssertRegularityWeakSyntax<TypeOrig>;
+};
+
 template <typename F, typename... Args>
 concept HomogeneousFunction = FunctionalProcedure<F, Args...> && std::is_same_v<Args...>;
 
@@ -81,52 +140,10 @@ concept Operation =
        };
 
 template <typename Op>
-concept BinaryOperation = Operation<Op, Domain<Op>, Domain<Op>> && std::invocable<Op, Domain<Op>, Domain<Op>>;
+concept BinaryOperation = Operation<Op, Domain<Op>, Domain<Op>>;
 
-template<typename ArgTypes>
-struct FirstArg
-{
-    using Type = std::tuple_element_t<0, ArgTypes>;
-};
-
-template<>
-struct FirstArg<std::tuple<>>
-{
-    using Type = void;
-};
-
-template<typename T>
-struct Method
-{
-    using Type = void;
-};
-
-template<typename Ret, typename Type, typename... Args>
-struct Method<Ret (Type::*)(Args...) const>
-{
-    using ReturnType = Ret;
-    using ArgsTuple = std::tuple<Args...>;
-    using FirstArgType = typename FirstArg<ArgsTuple>::Type;
-};
-
-template<typename F>
-using CallOperator = Method<decltype(&F::operator())>;
-
-template <typename F>
-struct InputTypeDecl<0, F> {
-    using Type = std::remove_cvref_t<typename CallOperator<F>::FirstArgType>;
-private:
-    using TypeForCheck = CallOperator<F>::FirstArgType;
-    static_assert((std::is_reference_v<TypeForCheck> && std::is_const_v<std::remove_reference_t<TypeForCheck>>)
-                  || (std::is_pointer_v<TypeForCheck> &&  std::is_const_v<std::remove_pointer_t<TypeForCheck>>)
-                  || (!std::is_pointer_v<TypeForCheck> && !std::is_reference_v<TypeForCheck>),
-                  "arguments have to by regular types, but we want to allow `const a*` and `const a&` as well");
-};
-
-template <most_generic::FunctionalProcedure F>
-struct CodomainDecl {
-    using Type = CallOperator<F>::ReturnType;
-};
+template <typename Op>
+concept UnaryOperation = Operation<Op, Domain<Op>>;
 } // namespace mb::ul
 
 UL_HEADER_END

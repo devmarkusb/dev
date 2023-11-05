@@ -417,8 +417,8 @@ A power_monoid(A a, N n) {
     return power_semigroup(a, n);
 }
 
-template <Regular A, Integral N, SemigroupOperation Op>
-A power_accumulate_semigroup(A r, A a, N n, Op op) {
+template <Integral N, SemigroupOperation Op>
+ul::Domain<Op> power_accumulate_semigroup(ul::Domain<Op> r, ul::Domain<Op> a, N n, Op op) {
     UL_EXPECT(n >= 0);
     if (n == 0)
         return r;
@@ -434,8 +434,8 @@ A power_accumulate_semigroup(A r, A a, N n, Op op) {
 }
 
 /// For a multiply operation as op you achieve the canonical 'power'.
-template <Regular A, Integral N, SemigroupOperation Op>
-A power_semigroup(A a, N n, Op op) {
+template <Integral N, SemigroupOperation Op>
+ul::Domain<Op> power_semigroup(ul::Domain<Op> a, N n, Op op) {
     UL_EXPECT(n > 0);
     while (!odd(n)) {
         a = op(a, a);
