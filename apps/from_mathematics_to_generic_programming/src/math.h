@@ -41,7 +41,7 @@ concept SemigroupOperation =
 inline namespace v2 {
 template <typename Op>
 concept SemigroupOperation =
-    ul::BinaryOperation<Op> && Set<ul::Domain<Op>>
+    Set<ul::Domain<Op>> && ul::BinaryOperation<Op>
     && requires(Op op, ul::Domain<Op> a, ul::Domain<Op> b, ul::Domain<Op> c) {
            UL_SEMANTICS {
                op(op(a, b), c) == op(a, op(b, c));
@@ -50,7 +50,7 @@ concept SemigroupOperation =
 }
 
 template <typename Op>
-concept Semigroup = Set<ul::Domain<Op>> && SemigroupOperation<Op>;
+concept Semigroup = SemigroupOperation<Op>;
 
 template <typename SetT>
 concept NoncommutativeAdditiveSemigroup = Semigroup<std::plus<SetT>>;
@@ -58,49 +58,51 @@ concept NoncommutativeAdditiveSemigroup = Semigroup<std::plus<SetT>>;
 template <typename SetT>
 concept MultiplicativeSemigroup = Semigroup<std::multiplies<SetT>>;
 
-template <typename Op, typename SetT>
-concept MonoidOperation = Set<SetT> && SemigroupOperation<Op> && requires(Op op, SetT a, SetT identity) {
-    UL_SEMANTICS {
-        op(identity, a) == identity;
-        op(a, identity) == identity;
+template <typename Op>
+concept MonoidOperation =
+    SemigroupOperation<Op> && requires(Op op, ul::Domain<Op> a, ul::Domain<Op> identity) {
+        UL_SEMANTICS {
+            op(identity, a) == identity;
+            op(a, identity) == identity;
+        };
     };
-};
 
-template <typename Op, typename SetT>
-concept CommutativeMonoidOperation = Set<SetT> && MonoidOperation<Op, SetT> && requires(Op op, SetT a, SetT b) {
-    UL_SEMANTICS {
-        op(a, b) == op(b, a);
+template <typename Op>
+concept CommutativeMonoidOperation =
+    MonoidOperation<Op> && requires(Op op, ul::Domain<Op> a, ul::Domain<Op> b) {
+        UL_SEMANTICS {
+            op(a, b) == op(b, a);
+        };
     };
-};
 
-template <typename SetT, typename Op>
-concept Monoid = Set<SetT> && MonoidOperation<Op, SetT>;
+template <typename Op>
+concept Monoid = MonoidOperation<Op>;
 
-template <typename SetT, typename Op>
-concept CommutativeMonoid = Monoid<SetT, Op> && CommutativeMonoidOperation<Op, SetT>;
+template <typename Op>
+concept CommutativeMonoid = CommutativeMonoidOperation<Op>;
 
 template <typename SetT>
-concept NoncommutativeAdditiveMonoid = Monoid<SetT, std::plus<SetT>>;
+concept NoncommutativeAdditiveMonoid = Monoid<std::plus<SetT>>;
 
 template <typename SetT>
-concept MultiplicativeMonoid = Monoid<SetT, std::multiplies<SetT>>;
+concept MultiplicativeMonoid = Monoid<std::multiplies<SetT>>;
 
-template <typename Op, typename SetT>
-concept GroupOperation = Set<SetT> && MonoidOperation<Op, SetT>;
+template <typename Op>
+concept GroupOperation = MonoidOperation<Op>;
 
-template <typename Op, typename SetT>
+template <typename Op>
 concept GroupInverseOperation =
-    Set<SetT> && std::regular_invocable<Op, SetT> && std::is_same_v<SetT, std::invoke_result_t<Op, SetT>>
-    && requires(Op op, SetT a) {
-           { op(a) } -> std::convertible_to<SetT>;
+    Set<ul::Domain<Op>> && ul::UnaryOperation<Op>
+    && requires(Op op, ul::Domain<Op> a) {
+           { op(a) } -> std::convertible_to<ul::Domain<Op>>;
            UL_SEMANTICS {
                op(op(a)) == a;
            };
        };
 
-template <typename SetT, typename Op, typename InverseOp>
-concept Group = Set<SetT> && GroupOperation<Op, SetT> && GroupInverseOperation<InverseOp, SetT>
-                && requires(Op op, InverseOp inverse_op, SetT a, SetT identity) {
+template <typename Op, typename InverseOp>
+concept Group = GroupOperation<Op> && GroupInverseOperation<InverseOp>
+                && requires(Op op, InverseOp inverse_op, ul::Domain<Op> a, ul::Domain<Op> identity) {
                        UL_SEMANTICS {
                            op(a, inverse_op(a)) == identity;
                            op(inverse_op(a), a) == identity;
@@ -108,7 +110,7 @@ concept Group = Set<SetT> && GroupOperation<Op, SetT> && GroupInverseOperation<I
                    };
 
 template <typename SetT>
-concept NoncommutativeAdditiveGroup = Group<SetT, std::plus<SetT>, std::negate<SetT>>;
+concept NoncommutativeAdditiveGroup = Group<std::plus<SetT>, std::negate<SetT>>;
 
 template <typename SetT>
 concept AdditiveGroup = NoncommutativeAdditiveGroup<SetT> && requires(SetT a, SetT b) {
@@ -138,20 +140,23 @@ T multiplicative_inverse(T a) {
 
 template <Regular T>
 struct Reciprocal {
-    T operator()(const T& a) const {
+    T operator()(T a) const {
         return multiplicative_inverse(a);
     }
 };
 
 template <typename SetT>
-concept MultiplicativeGroup = Group<SetT, std::multiplies<SetT>, Reciprocal<SetT>>;
+concept MultiplicativeGroup = Group<std::multiplies<SetT>, Reciprocal<SetT>>;
 
-template <typename SetT, typename OpCommutativeMonoid /*add*/, typename OpMonoid /*multiply*/>
+template <typename OpCommutativeMonoid /*add*/, typename OpMonoid /*multiply*/>
 concept SemiRing =
-    Set<SetT> && CommutativeMonoid<SetT, OpCommutativeMonoid> && Monoid<SetT, OpMonoid>
+    CommutativeMonoid<OpCommutativeMonoid> && Monoid<OpMonoid>
+    && std::is_convertible_v<ul::Domain<OpCommutativeMonoid>, ul::Domain<OpMonoid>>
+    && std::is_convertible_v<ul::Domain<OpMonoid>, ul::Domain<OpCommutativeMonoid>>
     && requires(
-        OpCommutativeMonoid op_commutative_monoid, OpMonoid op_monoid, SetT a, SetT b, SetT c,
-        SetT commutative_monoid_identity, SetT monoid_identity) {
+        OpCommutativeMonoid op_commutative_monoid, OpMonoid op_monoid, ul::Domain<OpMonoid> a, ul::Domain<OpMonoid> b,
+        ul::Domain<OpMonoid> c, ul::Domain<OpCommutativeMonoid> commutative_monoid_identity,
+        ul::Domain<OpMonoid> monoid_identity) {
            UL_SEMANTICS {
                commutative_monoid_identity != monoid_identity;
                op_monoid(commutative_monoid_identity, a) == commutative_monoid_identity;
@@ -160,26 +165,28 @@ concept SemiRing =
        };
 
 template <typename SetT>
-concept SemiRingAddMult = SemiRing<SetT, std::plus<SetT>, std::multiplies<SetT>>;
+concept SemiRingAddMult = SemiRing<std::plus<SetT>, std::multiplies<SetT>>;
 
 template <
-    typename SetT, typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/,
+    typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/,
     typename OpMonoid /*multiply*/>
 concept Ring =
-    Set<SetT> && SemiRing<SetT, OpCommutativeGroup, OpMonoid> && Group<SetT, OpCommutativeGroup, OpInvCommutativeGroup>;
+    SemiRing<OpCommutativeGroup, OpMonoid> && Group<OpCommutativeGroup, OpInvCommutativeGroup>;
 
 template <
-    typename SetT, typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/,
+    typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/,
     typename OpCommutativeMonoid /*multiply*/>
-concept CommutativeRing = Set<SetT> && Ring<SetT, OpCommutativeGroup, OpInvCommutativeGroup, OpCommutativeMonoid>
-                          && CommutativeMonoid<SetT, OpCommutativeMonoid>;
+concept CommutativeRing = Ring<OpCommutativeGroup, OpInvCommutativeGroup, OpCommutativeMonoid>
+                          && CommutativeMonoid<OpCommutativeMonoid>;
 
 template <
-    typename SetT, typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/,
+    typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/,
     typename OpCommutativeMonoid /*multiply*/>
 concept IntegralDomain =
-    Set<SetT> && CommutativeRing<SetT, OpCommutativeGroup, OpInvCommutativeGroup, OpCommutativeMonoid>
-    && requires(OpCommutativeMonoid op_commutative_monoid, SetT a, SetT b, SetT commutative_group_identity) {
+    CommutativeRing<OpCommutativeGroup, OpInvCommutativeGroup, OpCommutativeMonoid>
+    && requires(
+        OpCommutativeMonoid op_commutative_monoid, ul::Domain<OpCommutativeGroup> a, ul::Domain<OpCommutativeGroup> b,
+        ul::Domain<OpCommutativeGroup> commutative_group_identity) {
            UL_SEMANTICS {
                // a * b = 0  => a = 0 || b = 0 (no other zero divisor besides 0)
                // 0: commutativeGroupIdentity, *: opCommutativeMonoid
@@ -208,20 +215,18 @@ template <typename T>
 concept NaturalNumber = UnsignedInteger<T>;
 
 template <
-    typename SetT, typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/,
+    typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/,
     typename OpCommutativeMonoid /*multiply*/, typename OpQuotient, typename OpRemainder, typename OpNorm>
 concept EuclideanDomain =
-    IntegralDomain<SetT, OpCommutativeGroup, OpInvCommutativeGroup, OpCommutativeMonoid>
-    && std::regular_invocable<OpQuotient, SetT, SetT>
-    && std::is_same_v<SetT, std::invoke_result_t<OpQuotient, SetT, SetT>>
-    && std::regular_invocable<OpRemainder, SetT, SetT>
-    && std::is_same_v<SetT, std::invoke_result_t<OpRemainder, SetT, SetT>> && std::regular_invocable<OpNorm, SetT>
-    && NaturalNumber<std::invoke_result_t<OpNorm, SetT>>
+    IntegralDomain<OpCommutativeGroup, OpInvCommutativeGroup, OpCommutativeMonoid> && ul::BinaryOperation<OpQuotient>
+    && ul::BinaryOperation<OpRemainder> && std::regular_invocable<OpNorm, ul::Domain<OpCommutativeGroup>>
+    && NaturalNumber<std::invoke_result_t<OpNorm, ul::Domain<OpCommutativeGroup>>>
     && requires(
-        SetT a, SetT b, SetT commutative_group_identity, OpQuotient op_quotient, OpRemainder op_remainder,
+        ul::Domain<OpCommutativeGroup> a, ul::Domain<OpCommutativeGroup> b,
+        ul::Domain<OpCommutativeGroup> commutative_group_identity, OpQuotient op_quotient, OpRemainder op_remainder,
         OpCommutativeMonoid op_commutative_monoid, OpCommutativeGroup op_commutative_group, OpNorm op_norm) {
-           { op_quotient(a, b) } -> std::convertible_to<SetT>;
-           { op_remainder(a, b) } -> std::convertible_to<SetT>;
+           { op_quotient(a, b) } -> std::convertible_to<ul::Domain<OpCommutativeGroup>>;
+           { op_remainder(a, b) } -> std::convertible_to<ul::Domain<OpCommutativeGroup>>;
            { op_norm(a) } -> NaturalNumber;
            UL_SEMANTICS {
                b != commutative_group_identity;
@@ -245,13 +250,13 @@ struct Abs {
 
 template <typename SetT>
 concept EuclideanDomainAddMult = EuclideanDomain<
-    SetT, std::plus<SetT>, std::negate<SetT>, std::multiplies<SetT>, std::divides<SetT>, std::modulus<SetT>, Abs<SetT>>;
+    std::plus<SetT>, std::negate<SetT>, std::multiplies<SetT>, std::divides<SetT>, std::modulus<SetT>, Abs<SetT>>;
 
 template <
-    typename SetT, typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/,
+    typename OpCommutativeGroup /*add*/, typename OpInvCommutativeGroup /*add*/,
     typename OpCommutativeGroupMul /*multiply*/, typename OpInvCommutativeGroupMul /*multiply*/>
-concept Field = Set<SetT> && IntegralDomain<SetT, OpCommutativeGroup, OpInvCommutativeGroup, OpCommutativeGroupMul>
-                && Group<SetT, OpCommutativeGroupMul, OpInvCommutativeGroupMul>;
+concept Field = IntegralDomain<OpCommutativeGroup, OpInvCommutativeGroup, OpCommutativeGroupMul>
+                && Group<OpCommutativeGroupMul, OpInvCommutativeGroupMul>;
 
 template <Integral N>
 bool odd(N n) {
@@ -311,12 +316,13 @@ std::ostream& operator<<(std::ostream& os, const Matrix<ElemT, m, n>& matrix) {
 }
 
 template <
-    Set ElemT, size_t m, size_t k, size_t n, CommutativeMonoidOperation<ElemT> OpElemCommutativeMonoid /*add*/,
-    MonoidOperation<ElemT> OpElemMonoid /*multiply*/>
-    requires SemiRing<ElemT, OpElemCommutativeMonoid, OpElemMonoid>
+    size_t m, size_t k, size_t n, CommutativeMonoidOperation OpElemCommutativeMonoid /*add*/,
+    MonoidOperation OpElemMonoid /*multiply*/>
+    requires SemiRing<OpElemCommutativeMonoid, OpElemMonoid>
 auto multiply(
-    Matrix<ElemT, m, k> l, Matrix<ElemT, k, n> r, OpElemCommutativeMonoid&& inner_add, OpElemMonoid&& inner_mul) {
-    Matrix<ElemT, m, n> res{};
+    Matrix<ul::Domain<OpElemMonoid>, m, k> l, Matrix<ul::Domain<OpElemMonoid>, k, n> r,
+    OpElemCommutativeMonoid&& inner_add, OpElemMonoid&& inner_mul) {
+    Matrix<ul::Domain<OpElemMonoid>, m, n> res{};
     for (decltype(m) i{}; i < m; ++i)
         for (decltype(k) h{}; h < k; ++h)
             for (decltype(n) j{}; j < n; ++j)
@@ -446,16 +452,16 @@ ul::Domain<Op> power_semigroup(ul::Domain<Op> a, N n, Op op) {
     return power_accumulate_semigroup(a, op(a, a), half(n - 1), op);
 }
 
-template <Regular A, Integral N, MonoidOperation<A> Op>
-A power_monoid(A a, N n, Op op, A identity) {
+template <Integral N, MonoidOperation Op>
+ul::Domain<Op> power_monoid(ul::Domain<Op> a, N n, Op op, ul::Domain<Op> identity) {
     UL_EXPECT(n >= 0);
     if (n == 0)
         return identity;
     return power_semigroup(a, n, op);
 }
 
-template <Regular A, Integral N, GroupOperation<A> Op, GroupInverseOperation<A> InvOp>
-A power_group(A a, N n, Op op, InvOp invop, A identity) {
+template <Integral N, GroupOperation Op, GroupInverseOperation InvOp>
+ul::Domain<Op> power_group(ul::Domain<Op> a, N n, Op op, InvOp invop, ul::Domain<Op> identity) {
     if (n < 0) {
         n = -n;
         a = invop(a);

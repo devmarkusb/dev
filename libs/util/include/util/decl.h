@@ -130,14 +130,12 @@ private:
 };
 
 template <typename F, typename... Args>
-concept HomogeneousFunction = FunctionalProcedure<F, Args...> && std::is_same_v<Args...>;
+concept HomogeneousFunction =
+    FunctionalProcedure<F, Args...> && AllOf<std::tuple_element_t<0, std::tuple<Args...>>, Args...>;
 
 template <typename Op, typename... Args>
 concept Operation =
-    HomogeneousFunction<Op, Args...> && std::is_convertible_v<Domain<Op>, Codomain<Op>>
-    && requires(Op op, ul::Domain<Op> a, ul::Domain<Op> b, ul::Domain<Op> c) {
-           { op(a, b) } -> std::convertible_to<ul::Domain<Op>>;
-       };
+    HomogeneousFunction<Op, Args...> && std::is_convertible_v<Domain<Op>, Codomain<Op>>;
 
 template <typename Op>
 concept BinaryOperation = Operation<Op, Domain<Op>, Domain<Op>>;
