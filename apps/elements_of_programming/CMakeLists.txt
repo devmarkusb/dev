@@ -13,6 +13,7 @@ add_executable(${target}-test
     src/exercises.test.cpp
 )
 ul_add_test(${target}-test)
+target_include_directories(${target}-test PUBLIC ${lib_util_INCLUDE_DIRS})
 target_include_directories(${target}-test PRIVATE ${ul_INCLUDE_DIRS})
 target_link_libraries(${target}-test gtest_main)
 

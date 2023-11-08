@@ -4,4 +4,6 @@
 #include "util/allthethings.h"
 
 int main() {
+    eop::print_orbit_structure_random_nr_generators();
+    return {};
 }

@@ -14,9 +14,9 @@ const auto neg_example_nr{-15};
 template <typename T>
 using TransformationFctByValue = T (*)(T);
 
-template <>
-struct input_type<TransformationFctByValue<int>, 0> {
-    using type = int;
+template <typename T>
+struct input_type<TransformationFctByValue<T>, 0> {
+    using type = T;
 };
 
 template <typename F, typename N, typename P>

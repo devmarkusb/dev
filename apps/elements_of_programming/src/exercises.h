@@ -4,7 +4,9 @@
 #include "eop-code/intrinsics.h"
 #include "eop-code/type_functions.h"
 #include "eop-code/eop.h"
+#include "util/decl.h"
 #include <optional>
+#include <random>
 
 #include "ul/ul.h"
 
@@ -68,6 +70,32 @@ Domain(F) convergent_point_guarded(Domain(F) x0, Domain(F) x1, F f, P p) {
     else if (d1 < d0)
         x0 = power_unary(x0, d0 - d1, f);
     return convergent_point(x0, x1, f);
+}
+
+// 2.5
+/** RandGen examples: default_random_engine, mt19937, mt19937_64, minstd_rand, ranlux24_base, ranlux48_base,
+    knuth_b.*/
+template <typename RandGen>
+RandGen::result_type rand_gen(typename RandGen::result_type seed) {
+    RandGen gen{seed};
+    return gen();
+}
+
+template <typename T>
+using TransformationFctByValue = T (*)(T);
+
+template <typename RandGen>
+ul::Domain<TransformationFctByValue<typename RandGen::result_type>> trans(ul::Domain<TransformationFctByValue<typename RandGen::result_type>> x) {
+    return x;
+}
+
+template <>
+struct input_type<TransformationFctByValue<std::default_random_engine::result_type>, 0> {
+    using type = std::default_random_engine::result_type;
+};
+
+inline void print_orbit_structure_random_nr_generators() {
+    orbit_structure_nonterminating_orbit(42, rand_gen<std::default_random_engine>);
 }
 } // namespace eop
 
