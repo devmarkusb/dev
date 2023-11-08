@@ -4,7 +4,6 @@
 #include "eop-code/intrinsics.h"
 #include "eop-code/type_functions.h"
 #include "eop-code/eop.h"
-#include "util/decl.h"
 #include <optional>
 #include <random>
 
@@ -76,7 +75,7 @@ Domain(F) convergent_point_guarded(Domain(F) x0, Domain(F) x1, F f, P p) {
 /** RandGen examples: default_random_engine, mt19937, mt19937_64, minstd_rand, ranlux24_base, ranlux48_base,
     knuth_b.*/
 template <typename RandGen>
-RandGen::result_type rand_gen(typename RandGen::result_type seed) {
+typename RandGen::result_type rand_gen(typename RandGen::result_type seed) {
     RandGen gen{seed};
     return gen();
 }

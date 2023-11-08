@@ -2,7 +2,6 @@
 #define MATH_H_REOGH378904H27837H3
 
 #include "ul/ul.h"
-#include "util/decl.h"
 #include <array>
 #include <cmath>
 #include <compare>
