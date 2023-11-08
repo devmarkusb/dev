@@ -20,7 +20,7 @@ namespace eop {
 template <typename F, typename P>
 REQUIRES(Transformation(F) && UnaryPredicate(P) && Domain(F) == Domain(P))
 std::optional<Domain(F)> intersect(Domain(F) x0, Domain(F) x1, F f, P p) {
-    // for any x in Domain(F): p(x) <=> f(x) defined
+    // expect for any x in Domain(F): p(x) <=> f(x) defined
     const auto x_coll{collision_point(x0, f, p)};
     const auto y_coll{collision_point(x1, f, p)};
 
@@ -59,7 +59,7 @@ std::optional<Domain(F)> intersect(Domain(F) x0, Domain(F) x1, F f, P p) {
 template <typename F, typename P>
 REQUIRES(Transformation(F) && UnaryPredicate(P) && Domain(F) == Domain(P))
 Domain(F) convergent_point_guarded(Domain(F) x0, Domain(F) x1, F f, P p) {
-    // Precondition: intersect(x0, x1, f, p) is true
+    // expect intersect(x0, x1, f, p) true
     auto xs{intersect(x0, x1, f, p)};
     UL_EXPECT(xs);
     auto d0{distance(x0, *xs, f)};
@@ -84,7 +84,8 @@ template <typename T>
 using TransformationFctByValue = T (*)(T);
 
 template <typename RandGen>
-ul::Domain<TransformationFctByValue<typename RandGen::result_type>> trans(ul::Domain<TransformationFctByValue<typename RandGen::result_type>> x) {
+ul::Domain<TransformationFctByValue<typename RandGen::result_type>> trans(
+    ul::Domain<TransformationFctByValue<typename RandGen::result_type>> x) {
     return x;
 }
 
@@ -92,9 +93,18 @@ template <>
 struct input_type<TransformationFctByValue<std::default_random_engine::result_type>, 0> {
     using type = std::default_random_engine::result_type;
 };
+} // namespace eop
 
+namespace mb::ul {
+template <>
+struct DistanceTypeDecl<eop::TransformationFctByValue<unsigned long>> {
+    using Type = uint64_t;
+};
+} // namespace mb::ul
+
+namespace eop {
 inline void print_orbit_structure_random_nr_generators() {
-    orbit_structure_nonterminating_orbit(42, rand_gen<std::default_random_engine>);
+    ul::orbit_structure_nonterminating_orbit(42, rand_gen<std::default_random_engine>);
 }
 } // namespace eop
 
