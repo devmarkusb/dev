@@ -4,8 +4,10 @@
 #include "eop-code/intrinsics.h"
 #include "eop-code/type_functions.h"
 #include "eop-code/eop.h"
+#include <cstdlib>
 #include <optional>
 #include <random>
+#include <string_view>
 
 #include "ul/ul.h"
 
@@ -80,31 +82,46 @@ typename RandGen::result_type rand_gen(typename RandGen::result_type seed) {
     return gen();
 }
 
-template <typename T>
-using TransformationFctByValue = T (*)(T);
-
-template <typename RandGen>
-ul::Domain<TransformationFctByValue<typename RandGen::result_type>> trans(
-    ul::Domain<TransformationFctByValue<typename RandGen::result_type>> x) {
-    return x;
+inline int rand_gen_legacy(int seed) {
+    std::srand(static_cast<unsigned int>(seed));
+    return std::rand();
 }
 
-template <>
-struct input_type<TransformationFctByValue<std::default_random_engine::result_type>, 0> {
-    using type = std::default_random_engine::result_type;
-};
+template <typename T>
+using TransformationFctByValue = T (*)(T);
 } // namespace eop
 
 namespace mb::ul {
-template <>
-struct DistanceTypeDecl<eop::TransformationFctByValue<unsigned long>> {
+template <std::integral T>
+struct DistanceTypeDecl<eop::TransformationFctByValue<T>> {
     using Type = uint64_t;
 };
 } // namespace mb::ul
 
 namespace eop {
+template <ul::Transformation F>
+inline void print_orbit_structure_random_nr_generator(const ul::Domain<F>& x, F f, std::string_view f_as_str) {
+    std::cout << f_as_str << ", starting point=" << x << '\n';
+    auto [m0, m1, m2]{
+        ul::orbit_structure_nonterminating_orbit(x, f)};
+    if (!m0)
+        std::cout << "    circular: c-1=" << m1 << '\n';
+    else
+        std::cout << "    \\rho-shaped: h=" << m0 << ", c-1=" << m1 << ", connection point=" << m2 << '\n';
+    std::cout << '\n';
+}
+
 inline void print_orbit_structure_random_nr_generators() {
-    ul::orbit_structure_nonterminating_orbit(42, rand_gen<std::default_random_engine>);
+    const auto x{1};
+    print_orbit_structure_random_nr_generator(x, rand_gen<std::default_random_engine>, "std::default_random_engine");
+    print_orbit_structure_random_nr_generator(x, rand_gen<std::mt19937>, "std::mt19937");
+    // taking too long
+//    print_orbit_structure_random_nr_generator(x, rand_gen<std::mt19937_64>, "std::mt19937_64");
+    print_orbit_structure_random_nr_generator(x, rand_gen<std::minstd_rand>, "std::minstd_rand");
+    print_orbit_structure_random_nr_generator(x, rand_gen<std::ranlux24_base>, "std::ranlux24_base");
+    print_orbit_structure_random_nr_generator(x, rand_gen<std::ranlux48_base>, "std::ranlux48_base");
+    print_orbit_structure_random_nr_generator(x, rand_gen<std::knuth_b>, "std::knuth_b");
+    print_orbit_structure_random_nr_generator(x, rand_gen_legacy, "(s)rand");
 }
 } // namespace eop
 
