@@ -8,6 +8,7 @@
 #include <optional>
 #include <random>
 #include <string_view>
+#include <thread>
 
 #include "ul/ul.h"
 
@@ -100,10 +101,11 @@ struct DistanceTypeDecl<eop::TransformationFctByValue<T>> {
 
 namespace eop {
 template <ul::Transformation F>
-inline void print_orbit_structure_random_nr_generator(const ul::Domain<F>& x, F f, std::string_view f_as_str) {
-    std::cout << f_as_str << ", starting point=" << x << '\n';
+inline void print_orbit_structure_random_nr_generator(std::mutex& stdout_mutex, ul::Domain<F> x, F f, std::string_view f_as_str) {
     auto [m0, m1, m2]{
         ul::orbit_structure_nonterminating_orbit(x, f)};
+    const std::lock_guard lk{stdout_mutex};
+    std::cout << f_as_str << ", starting point=" << x << '\n';
     if (!m0)
         std::cout << "    circular: c-1=" << m1 << '\n';
     else
@@ -112,16 +114,35 @@ inline void print_orbit_structure_random_nr_generator(const ul::Domain<F>& x, F 
 }
 
 inline void print_orbit_structure_random_nr_generators() {
-    const auto x{1};
-    print_orbit_structure_random_nr_generator(x, rand_gen<std::default_random_engine>, "std::default_random_engine");
-    print_orbit_structure_random_nr_generator(x, rand_gen<std::mt19937>, "std::mt19937");
+    const auto x{0};
+    std::mutex stdout_mutex;
+    std::vector<std::jthread> t;
+    t.emplace_back([&stdout_mutex]() {
+        print_orbit_structure_random_nr_generator(
+            stdout_mutex, x, rand_gen<std::default_random_engine>, "std::default_random_engine");
+    });
+    t.emplace_back([&stdout_mutex]() {
+        print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen<std::mt19937>, "std::mt19937");
+    });
     // taking too long
-//    print_orbit_structure_random_nr_generator(x, rand_gen<std::mt19937_64>, "std::mt19937_64");
-    print_orbit_structure_random_nr_generator(x, rand_gen<std::minstd_rand>, "std::minstd_rand");
-    print_orbit_structure_random_nr_generator(x, rand_gen<std::ranlux24_base>, "std::ranlux24_base");
-    print_orbit_structure_random_nr_generator(x, rand_gen<std::ranlux48_base>, "std::ranlux48_base");
-    print_orbit_structure_random_nr_generator(x, rand_gen<std::knuth_b>, "std::knuth_b");
-    print_orbit_structure_random_nr_generator(x, rand_gen_legacy, "(s)rand");
+    t.emplace_back([&stdout_mutex]() {
+        print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen<std::mt19937_64>, "std::mt19937_64");
+    });
+    t.emplace_back([&stdout_mutex]() {
+        print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen<std::minstd_rand>, "std::minstd_rand");
+    });
+    t.emplace_back([&stdout_mutex]() {
+        print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen<std::ranlux24_base>, "std::ranlux24_base");
+    });
+    t.emplace_back([&stdout_mutex]() {
+        print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen<std::ranlux48_base>, "std::ranlux48_base");
+    });
+    t.emplace_back([&stdout_mutex]() {
+        print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen<std::knuth_b>, "std::knuth_b");
+    });
+    t.emplace_back([&stdout_mutex]() {
+        print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen_legacy, "(s)rand");
+    });
 }
 } // namespace eop
 
