@@ -88,18 +88,6 @@ inline int rand_gen_legacy(int seed) {
     return std::rand();
 }
 
-template <typename T>
-using TransformationFctByValue = T (*)(T);
-} // namespace eop
-
-namespace mb::ul {
-template <std::integral T>
-struct DistanceTypeDecl<eop::TransformationFctByValue<T>> {
-    using Type = uint64_t;
-};
-} // namespace mb::ul
-
-namespace eop {
 template <ul::Transformation F>
 inline void print_orbit_structure_random_nr_generator(std::mutex& stdout_mutex, ul::Domain<F> x, F f, std::string_view f_as_str) {
     auto [m0, m1, m2]{
@@ -124,10 +112,12 @@ inline void print_orbit_structure_random_nr_generators() {
     t.emplace_back([&stdout_mutex]() {
         print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen<std::mt19937>, "std::mt19937");
     });
-    // taking too long
-    t.emplace_back([&stdout_mutex]() {
-        print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen<std::mt19937_64>, "std::mt19937_64");
-    });
+    // taking too long, but that was one output:
+    //     std::mt19937_64, starting point=0
+    //         \rho-shaped: h=349528656, c-1=4664684600, connection point=6974110543638746052
+    // t.emplace_back([&stdout_mutex]() {
+    //     print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen<std::mt19937_64>, "std::mt19937_64");
+    // });
     t.emplace_back([&stdout_mutex]() {
         print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen<std::minstd_rand>, "std::minstd_rand");
     });
