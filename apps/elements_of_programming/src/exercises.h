@@ -73,6 +73,7 @@ Domain(F) convergent_point_guarded(Domain(F) x0, Domain(F) x1, F f, P p) {
         x0 = power_unary(x0, d0 - d1, f);
     return convergent_point(x0, x1, f);
 }
+} // namespace eop
 
 // 2.5
 /** RandGen examples: default_random_engine, mt19937, mt19937_64, minstd_rand, ranlux24_base, ranlux48_base,
@@ -85,7 +86,7 @@ typename RandGen::result_type rand_gen(typename RandGen::result_type seed) {
 
 inline int rand_gen_legacy(int seed) {
     std::srand(static_cast<unsigned int>(seed));
-    return std::rand();
+    return std::rand(); // NOLINT
 }
 
 template <ul::Transformation F>
@@ -104,6 +105,10 @@ inline void print_orbit_structure_random_nr_generator(std::mutex& stdout_mutex, 
 inline void print_orbit_structure_random_nr_generators() {
     const auto x{0};
     std::mutex stdout_mutex;
+
+    // rand_gen_legacy not thread-safe, so...
+    print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen_legacy, "(s)rand");
+
     std::vector<std::jthread> t;
     t.emplace_back([&stdout_mutex]() {
         print_orbit_structure_random_nr_generator(
@@ -130,10 +135,6 @@ inline void print_orbit_structure_random_nr_generators() {
     t.emplace_back([&stdout_mutex]() {
         print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen<std::knuth_b>, "std::knuth_b");
     });
-    t.emplace_back([&stdout_mutex]() {
-        print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen_legacy, "(s)rand");
-    });
 }
-} // namespace eop
 
 #endif

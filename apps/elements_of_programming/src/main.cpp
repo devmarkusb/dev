@@ -11,6 +11,6 @@ int main(int argc, char** argv) {
         return exitCode;
     }
     if (args->a)
-        eop::print_orbit_structure_random_nr_generators();
+        print_orbit_structure_random_nr_generators();
     return {};
 }
