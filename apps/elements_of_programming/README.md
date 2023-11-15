@@ -5,7 +5,7 @@ Glossary, examples and experiments supporting the study of the book
 
 ## Glossary
 
-# Chapter 1
+### Chapter 1
 
 ![ch1](README.md.d/ch1.jpg)
 
@@ -234,8 +234,9 @@ Well-formed object: iff its state is well-formed.
 
 ## Excercises
 
-1.1 don't see anything to do
+* 1.1 don't see anything to do
 
 ## Projects
 
-1.1 won't do, difficult, not anticipating much fun
+* 1.1 won't do, difficult, not anticipating much fun
+* 2.1 skipped, lack of motivation
