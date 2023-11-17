@@ -235,6 +235,7 @@ Well-formed object: iff its state is well-formed.
 ## Excercises
 
 * 1.1 don't see anything to do
+* 2.4 too lazy
 
 ## Projects
 
