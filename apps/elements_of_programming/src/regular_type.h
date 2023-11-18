@@ -12,7 +12,7 @@ inline bool operator==(const RegularEx1&, const RegularEx1&) {
 template <typename Regular>
 void check_regularity(const Regular& r) {
     Regular r_other;
-    bool _{r == r_other};
+    const bool _{r == r_other};
     ul::ignore_unused(_);
     Regular r_copied_from{r};
     ul::ignore_unused(r_copied_from);
@@ -22,7 +22,7 @@ void check_regularity(const Regular& r) {
 }
 
 inline void check_regularity() {
-    RegularEx1 r;
+    const RegularEx1 r;
     check_regularity(r);
 }
 
