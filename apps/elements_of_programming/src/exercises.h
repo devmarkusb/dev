@@ -22,7 +22,7 @@ namespace eop {
     one.*/
 template <typename F, typename P>
 REQUIRES(Transformation(F) && UnaryPredicate(P) && Domain(F) == Domain(P))
-std::optional<Domain(F)> intersect(Domain(F) x0, Domain(F) x1, F f, P p) {
+std::optional<Domain(F)> intersect(const Domain(F)& x0, const Domain(F)& x1, F f, P p) {
     // expect for any x in Domain(F): p(x) <=> f(x) defined
     const auto x_coll{collision_point(x0, f, p)};
     const auto y_coll{collision_point(x1, f, p)};
@@ -90,9 +90,9 @@ inline int rand_gen_legacy(int seed) {
 }
 
 template <ul::Transformation F>
-inline void print_orbit_structure_random_nr_generator(std::mutex& stdout_mutex, ul::Domain<F> x, F f, std::string_view f_as_str) {
-    auto [m0, m1, m2]{
-        ul::orbit_structure_nonterminating_orbit(x, f)};
+void print_orbit_structure_nonterminating_orbit(
+    std::mutex& stdout_mutex, const ul::Domain<F>& x, F f, std::string_view f_as_str) {
+    auto [m0, m1, m2]{ul::orbit_structure_nonterminating_orbit(x, f)};
     const std::lock_guard lk{stdout_mutex};
     std::cout << f_as_str << ", starting point=" << x << '\n';
     if (!m0)
@@ -107,15 +107,15 @@ inline void print_orbit_structure_random_nr_generators() {
     std::mutex stdout_mutex;
 
     // rand_gen_legacy not thread-safe, so...
-    print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen_legacy, "(s)rand");
+    print_orbit_structure_nonterminating_orbit(stdout_mutex, x, rand_gen_legacy, "(s)rand");
 
     std::vector<std::jthread> t;
     t.emplace_back([&stdout_mutex]() {
-        print_orbit_structure_random_nr_generator(
+        print_orbit_structure_nonterminating_orbit(
             stdout_mutex, x, rand_gen<std::default_random_engine>, "std::default_random_engine");
     });
     t.emplace_back([&stdout_mutex]() {
-        print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen<std::mt19937>, "std::mt19937");
+        print_orbit_structure_nonterminating_orbit(stdout_mutex, x, rand_gen<std::mt19937>, "std::mt19937");
     });
     // taking too long, but that was one output:
     //     std::mt19937_64, starting point=0
@@ -124,16 +124,16 @@ inline void print_orbit_structure_random_nr_generators() {
     //     print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen<std::mt19937_64>, "std::mt19937_64");
     // });
     t.emplace_back([&stdout_mutex]() {
-        print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen<std::minstd_rand>, "std::minstd_rand");
+        print_orbit_structure_nonterminating_orbit(stdout_mutex, x, rand_gen<std::minstd_rand>, "std::minstd_rand");
     });
     t.emplace_back([&stdout_mutex]() {
-        print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen<std::ranlux24_base>, "std::ranlux24_base");
+        print_orbit_structure_nonterminating_orbit(stdout_mutex, x, rand_gen<std::ranlux24_base>, "std::ranlux24_base");
     });
     t.emplace_back([&stdout_mutex]() {
-        print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen<std::ranlux48_base>, "std::ranlux48_base");
+        print_orbit_structure_nonterminating_orbit(stdout_mutex, x, rand_gen<std::ranlux48_base>, "std::ranlux48_base");
     });
     t.emplace_back([&stdout_mutex]() {
-        print_orbit_structure_random_nr_generator(stdout_mutex, x, rand_gen<std::knuth_b>, "std::knuth_b");
+        print_orbit_structure_nonterminating_orbit(stdout_mutex, x, rand_gen<std::knuth_b>, "std::knuth_b");
     });
 }
 

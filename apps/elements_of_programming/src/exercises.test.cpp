@@ -22,10 +22,9 @@ struct input_type<TransformationFctByValue<T>, 0> {
 template <typename F, typename N, typename P>
 REQUIRES(Transformation(F) && Integer(N) && UnaryPredicate(P) && Domain(F) == Domain(P))
 std::optional<Domain(F)> power_unary_guarded(Domain(F) x, N n, F f, P p) {
-    // Precondition:
-    // $n \geq 0 \wedge (\forall i \in N)\,0 < i \leq n \Rightarrow f^i(x)$ is defined
-    while (n != N(0)) {
-        n = n - N(1);
+    UL_EXPECT(n >= 0);
+    while (n != N{0}) {
+        n = n - N{1};
         if (!p(x)) {
             return {};
         }
