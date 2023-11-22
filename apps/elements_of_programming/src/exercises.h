@@ -62,7 +62,6 @@ std::optional<Domain(F)> intersect(const Domain(F)& x0, const Domain(F)& x1, F f
 template <typename F, typename P>
 REQUIRES(Transformation(F) && UnaryPredicate(P) && Domain(F) == Domain(P))
 Domain(F) convergent_point_guarded(Domain(F) x0, Domain(F) x1, F f, P p) {
-    // expect intersect(x0, x1, f, p) true
     auto xs{intersect(x0, x1, f, p)};
     UL_EXPECT(xs);
     auto d0{distance(x0, *xs, f)};
@@ -81,6 +80,12 @@ Domain(F) convergent_point_guarded(Domain(F) x0, Domain(F) x1, F f, P p) {
 template <typename RandGen>
 typename RandGen::result_type rand_gen(typename RandGen::result_type seed) {
     RandGen gen{seed};
+    return gen();
+}
+
+template <typename RandGen>
+typename RandGen::result_type rand_gen_no_seed(typename RandGen::result_type) {
+    RandGen gen;
     return gen();
 }
 
@@ -106,10 +111,22 @@ inline void print_orbit_structure_random_nr_generators() {
     const auto x{0};
     std::mutex stdout_mutex;
 
+    const std::random_device rd;
+    const auto rd_entropy{rd.entropy()};
+    std::cout << "(perhaps) non-deterministic std::random_device's entropy (0 if deterministic): " << rd_entropy
+              << "\n\n";
+
     // rand_gen_legacy not thread-safe, so...
     print_orbit_structure_nonterminating_orbit(stdout_mutex, x, rand_gen_legacy, "(s)rand");
 
     std::vector<std::jthread> t;
+    // otherwise we have an infinite orbit
+    if (rd_entropy == decltype(rd_entropy){}) {
+        t.emplace_back([&stdout_mutex]() {
+            print_orbit_structure_nonterminating_orbit(
+                stdout_mutex, x, rand_gen_no_seed<std::random_device>, "std::random_device");
+        });
+    }
     t.emplace_back([&stdout_mutex]() {
         print_orbit_structure_nonterminating_orbit(
             stdout_mutex, x, rand_gen<std::default_random_engine>, "std::default_random_engine");
