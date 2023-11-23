@@ -33,7 +33,7 @@ std::optional<Domain(F)> power_unary_guarded(Domain(F) x, N n, F f, P p) {
     return x;
 }
 
-/// Expects x < orbit_terminator.
+//! Expects x < orbit_terminator.
 int terminating_orbit(int x) {
     UL_EXPECT(x < orbit_terminator);
     if (x >= orbit_terminator)
@@ -47,7 +47,7 @@ bool terminating_orbit_pred(int x) {
     return x < orbit_terminator;
 }
 
-/// Cycle size 5. Handle size 0 for 0 <= x <= 4, 1 for -1 and >= 5, up to 5 for <= -2
+//! Cycle size 5. Handle size 0 for 0 <= x <= 4, 1 for -1 and >= 5, up to 5 for <= -2
 int non_terminating_orbit(int x) {
     return (x + 1) % cycle_size;
 }
@@ -72,6 +72,7 @@ bool hf_pred(int) {
 }
 
 template <typename F, typename P>
+REQUIRES(Transformation(F) && UnaryPredicate(P) && Domain(F) == Domain(P))
 std::ostream& orbit_dump(std::ostream& os, F f, P p, Domain(F) starting_point, int example_count) {
     for (auto i{0}; i <= example_count; ++i) {
         const auto x{power_unary_guarded(starting_point, i, f, p)};

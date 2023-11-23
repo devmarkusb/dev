@@ -106,7 +106,7 @@ inline LineSegment gcm3(LineSegment a, LineSegment b) {
     return a;
 }
 
-/// Faster segment remainder.
+//! Faster segment remainder.
 inline LineSegment gcm4(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     UL_EXPECT(a > 0);
@@ -117,7 +117,7 @@ inline LineSegment gcm4(LineSegment a, LineSegment b) {
     return a;
 }
 
-/// Remainder instead of segment remainder.
+//! Remainder instead of segment remainder.
 inline LineSegment gcm5(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     while (b) {
@@ -127,7 +127,7 @@ inline LineSegment gcm5(LineSegment a, LineSegment b) {
     return a;
 }
 
-/// Faster remainder.
+//! Faster remainder.
 inline LineSegment gcm6(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     while (b) {
@@ -173,13 +173,13 @@ inline std::pair<int, LineSegment> quotient_remainder0(LineSegment a, LineSegmen
     return {n, a};
 }
 
-/// Ordinary /, %.
+//! Ordinary /, %.
 inline std::pair<int, LineSegment> quotient_remainder1(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     return {a / b, a % b};
 }
 
-/// Fibonacci.
+//! Fibonacci.
 inline LineSegment remainder2(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     if (a < b)
@@ -200,7 +200,7 @@ inline LineSegment remainder2(LineSegment a, LineSegment b) {
     return a;
 }
 
-/// Fibonacci.
+//! Fibonacci.
 inline std::pair<int, LineSegment> quotient_remainder2(LineSegment a, LineSegment b) {
     UL_EXPECT(b > 0);
     if (a < b)

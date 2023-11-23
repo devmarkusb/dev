@@ -197,11 +197,11 @@ concept IntegralDomain =
 template <typename T>
 concept Integral = std::integral<T>;
 
-/// Fast mul/div by 2 and even/odd testing.
+//! Fast mul/div by 2 and even/odd testing.
 template <typename T>
 concept BinaryInteger = Integral<T>;
 
-/// Broader than Integral, which is restricted to built-in integer types.
+//! Broader than Integral, which is restricted to built-in integer types.
 /** Would be interesting to construct. Won't like to built it upon algebraic structure like ring, but perhaps more
     likely upon Peano axioms.*/
 template <typename>
@@ -438,7 +438,7 @@ ul::Domain<Op> power_accumulate_semigroup(ul::Domain<Op> r, ul::Domain<Op> a, N 
     }
 }
 
-/// For a multiply operation as op you achieve the canonical 'power'.
+//! For a multiply operation as op you achieve the canonical 'power'.
 template <Integral N, SemigroupOperation Op>
 ul::Domain<Op> power_semigroup(ul::Domain<Op> a, N n, Op op) {
     UL_EXPECT(n > 0);
@@ -474,7 +474,7 @@ bool divides(I i, I n) {
     return n % i == I{0};
 }
 
-/// Other than the trivial 1.
+//! Other than the trivial 1.
 template <Integer I>
 I smallest_divisor(I n) {
     UL_EXPECT(n > I{0});
@@ -487,7 +487,7 @@ I smallest_divisor(I n) {
     return n;
 }
 
-/// Beware: slow, just to be used sparingly.
+//! Beware: slow, just to be used sparingly.
 template <Integer I>
 I is_prime(I n) {
     return n > I{1} && smallest_divisor(n) == n;
@@ -517,7 +517,7 @@ I multiplicative_inverse_fermat(I a, I p) {
     return power_monoid(a, p - 2, ModuloMultiply<I>(p));
 }
 
-/// Reads: n no prime if false, probably prime if true, more probable for more witnesses.
+//! Reads: n no prime if false, probably prime if true, more probable for more witnesses.
 template <Integer I>
 bool fermat_test(I n, I witness) {
     UL_EXPECT(I{0} < witness);
