@@ -380,7 +380,7 @@ struct Tropical {
         return d_;
     }
 
-    auto operator<=>(const Tropical&) const noexcept = default;
+    // auto operator<=>(const Tropical&) const noexcept = default;
 
 private:
     double d_{inf};
