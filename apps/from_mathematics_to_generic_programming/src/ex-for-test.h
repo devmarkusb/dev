@@ -1,3 +1,6 @@
+#ifndef EX_FOR_TEST_H_SGF4876KGE643IUYFYUTW343175
+#define EX_FOR_TEST_H_SGF4876KGE643IUYFYUTW343175
+
 #include "ul/ul.h"
 #include <functional>
 #include <string>
@@ -41,3 +44,5 @@ using SemiRingOpCommMonoidEx = std::plus<SemiRingEx>;
 using SemiRingOpMonoidEx = std::multiplies<SemiRingEx>;
 
 using RingEx = int;
+
+#endif
