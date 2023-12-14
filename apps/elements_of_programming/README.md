@@ -236,8 +236,14 @@ Well-formed object: iff its state is well-formed.
 
 * 1.1 don't see anything to do
 * 2.4 too lazy
+* 3.2 too easy, don't see value right now (assume for the built-in types everything
+is already efficient, waiting to see an application and special-case replacements
+within algorithm)
+* 3.3 won't do, not much to learn, easy
 
 ## Projects
 
 * 1.1 won't do, difficult, not anticipating much fun
 * 2.1 skipped, lack of motivation
+* 3.1 don't believe raising floating point to a power depends on left/right assoc.
+* 3.2 no, too much, could also learn on real or more interesting projects
