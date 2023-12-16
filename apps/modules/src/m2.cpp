@@ -1,10 +1,8 @@
-module;
+export module m2;
 
-#include <iostream>
+import std;
 
-export module m1;
-
-namespace m1 {
+namespace m2 {
 export int f(int x) {
     std::cout << "hello from f\n";
     return x + 1;

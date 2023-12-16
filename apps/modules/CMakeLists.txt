@@ -12,6 +12,7 @@ target_sources(modules
 target_sources(modules
     PUBLIC FILE_SET modules TYPE CXX_MODULES FILES
     src/m1.cpp
+    src/m2.cpp
 )
 target_include_directories(modules PRIVATE ${ul_INCLUDE_DIRS})
 target_link_libraries(modules PRIVATE CLI11::CLI11)
