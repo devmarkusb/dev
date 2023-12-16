@@ -7,4 +7,4 @@ add_executable(debug
     src/main.cpp
 )
 target_include_directories(debug PRIVATE ${ul_INCLUDE_DIRS})
-target_link_libraries(debug PRIVATE CLI11::CLI11 ConsoleTableLib)
+target_link_libraries(debug PRIVATE CLI11::CLI11)
