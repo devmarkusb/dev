@@ -6,6 +6,8 @@ add_subdirectory(debug)
 add_subdirectory(elements_of_programming)
 add_subdirectory(from_mathematics_to_generic_programming)
 add_subdirectory(mixing_c_cpp)
+# disabled, as at least we don't have ninja 1.11 yet
+#add_subdirectory(modules)
 add_subdirectory(perf_demo)
 add_subdirectory(programming_principles_practice)
 add_subdirectory(threads_n_cachelines)
