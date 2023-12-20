@@ -584,7 +584,9 @@ inline void test_ch_3() {
     Fib f21 = fibonacci_matrix_multiply(f10, f11);
     Assert(f21.m0 == 10946 && f21.m1 == 6765);
     Assert(fibonacci<N>(10) == N(55));
+    Assert(fibonacci<N>(11) == N(89));
     Assert(fibonacci<N>(20) == N(6765));
+    Assert(fibonacci<N>(21) == N(10946));
 };
 
 // Chapter 4. Linear orderings

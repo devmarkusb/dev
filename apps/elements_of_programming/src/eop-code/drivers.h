@@ -331,7 +331,7 @@ inline void run_any_lcg_transformation() {
     output_orbit_structure(x0, LCG(m, a, b, x0, "any"), always_defined<LCG::T>);
 }
 
-// Chapter 3 - Ordered algebraic structures
+// Chapter 3 - Associative Operations
 
 template <typename T>
 REQUIRES(DiscreteEuclideanSemiring(T))
@@ -456,7 +456,7 @@ inline void run_egyptian_multiplication() {
 // Chapter 4 - Linear orderings
 
 
-// Chapter 5 - Combining concepts
+// Chapter 5 - Ordered algebraic structures
 
 template <typename T>
 REQUIRES(EuclideanSemiring(T))
