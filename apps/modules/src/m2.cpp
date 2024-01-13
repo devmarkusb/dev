@@ -7,4 +7,4 @@ export int f(int x) {
     std::cout << "hello from f\n";
     return x + 1;
 }
-}
+} // namespace m2

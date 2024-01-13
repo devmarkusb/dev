@@ -10,7 +10,7 @@ void f(bool& crash, size_t& nr) {
         crash = true;
     }
 }
-}
+} // namespace
 
 int main(int argc, char** argv) {
     const auto [args, exitCode]{Args::parse_command_line(argc, argv)};

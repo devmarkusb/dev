@@ -1,9 +1,9 @@
 #ifndef EXERCISES_H_FBE9B1D27DBF4A7CBD27E83431D2624B
 #define EXERCISES_H_FBE9B1D27DBF4A7CBD27E83431D2624B
 
+#include "eop-code/eop.h"
 #include "eop-code/intrinsics.h"
 #include "eop-code/type_functions.h"
-#include "eop-code/eop.h"
 #include <cstdlib>
 #include <optional>
 #include <random>
@@ -22,7 +22,7 @@ namespace eop {
     one.*/
 template <typename F, typename P>
 REQUIRES(Transformation(F) && UnaryPredicate(P) && Domain(F) == Domain(P))
-std::optional<Domain(F)> intersect(const Domain(F)& x0, const Domain(F)& x1, F f, P p) {
+std::optional<Domain(F)> intersect(const Domain(F) & x0, const Domain(F) & x1, F f, P p) {
     // expect for any x in Domain(F): p(x) <=> f(x) defined
     const auto x_coll{collision_point(x0, f, p)};
     const auto y_coll{collision_point(x1, f, p)};
