@@ -9,10 +9,10 @@
 #include <vector>
 
 // !!! YOU MUST UPDATE THIS TO BE ACCURATE !!!
-constexpr std::size_t hardware_destructive_interference_size = 64;
+constexpr size_t hardware_destructive_interference_size = 64;
 
 // !!! YOU MUST UPDATE THIS TO BE ACCURATE !!!
-constexpr std::size_t hardware_constructive_interference_size = 64;
+constexpr size_t hardware_constructive_interference_size = 64;
 
 constexpr unsigned k_timing_trials_to_compute_average = 100;
 constexpr unsigned k_inner_loop_trials = 1000000;
@@ -97,7 +97,7 @@ UselessResultT sample_pair_threadfunc(Latch& latch, unsigned, T& pair) {
 // utility: allow threads to wait until everyone is ready
 class Threadlatch {
 public:
-    explicit Threadlatch(const std::size_t count)
+    explicit Threadlatch(const size_t count)
         : count_{count} {
     }
 
@@ -115,7 +115,7 @@ public:
 private:
     std::mutex mutex_;
     std::condition_variable cv_;
-    std::size_t count_;
+    size_t count_;
 };
 
 namespace {
