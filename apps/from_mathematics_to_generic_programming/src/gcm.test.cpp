@@ -143,7 +143,6 @@ INSTANTIATE_TEST_SUITE_P(
     RemainderVariousImpl, RemainderTest, testing::Values(math::remainder0, math::remainder1, math::remainder2));
 
 TEST_P(RemainderTest, zero) {
-    EXPECT_DEBUG_DEATH(GetParam()(1, 0), ".*");
     EXPECT_EQ(GetParam()(0, 1), 0);
     EXPECT_EQ(GetParam()(0, arbitrary_even), 0);
     EXPECT_EQ(GetParam()(0, arbitrary_odd), 0);
@@ -157,12 +156,22 @@ TEST_P(RemainderTest, general) {
     }
 }
 
+class RemainderDeathTest : public testing::TestWithParam<std::function<int(int, int)>> {};
+
+INSTANTIATE_TEST_SUITE_P(
+    RemainderVariousImpl, RemainderDeathTest, testing::Values(math::remainder0, math::remainder1, math::remainder2));
+
+TEST_P(RemainderDeathTest, zero) {
+#ifndef NDEBUG
+    EXPECT_DEBUG_DEATH(GetParam()(1, 0), ".*");
+#endif
+}
+
 class QuotientTest : public testing::TestWithParam<std::function<int(int, int)>> {};
 
 INSTANTIATE_TEST_SUITE_P(QuotientVariousImpl, QuotientTest, testing::Values(math::quotient0));
 
 TEST_P(QuotientTest, zero) {
-    EXPECT_DEBUG_DEATH(GetParam()(1, 0), ".*");
     EXPECT_EQ(GetParam()(0, 1), 0);
     EXPECT_EQ(GetParam()(0, arbitrary_even), 0);
     EXPECT_EQ(GetParam()(0, arbitrary_odd), 0);
@@ -176,6 +185,16 @@ TEST_P(QuotientTest, general) {
     }
 }
 
+class QuotientDeathTest : public testing::TestWithParam<std::function<int(int, int)>> {};
+
+INSTANTIATE_TEST_SUITE_P(QuotientVariousImpl, QuotientDeathTest, testing::Values(math::quotient0));
+
+TEST_P(QuotientDeathTest, zero) {
+#ifndef NDEBUG
+    EXPECT_DEBUG_DEATH(GetParam()(1, 0), ".*");
+#endif
+}
+
 class QuotientRemainderTest : public testing::TestWithParam<std::function<std::pair<int, int>(int, int)>> {};
 
 INSTANTIATE_TEST_SUITE_P(
@@ -183,7 +202,6 @@ INSTANTIATE_TEST_SUITE_P(
     testing::Values(math::quotient_remainder0, math::quotient_remainder1 /*, math::quotient_remainder2*/));
 
 TEST_P(QuotientRemainderTest, zero) {
-    EXPECT_DEBUG_DEATH(GetParam()(1, 0), ".*");
     EXPECT_EQ(GetParam()(0, 1), std::make_pair(0, 0));
     EXPECT_EQ(GetParam()(0, arbitrary_even), std::make_pair(0, 0));
     EXPECT_EQ(GetParam()(0, arbitrary_odd), std::make_pair(0, 0));
@@ -196,6 +214,18 @@ TEST_P(QuotientRemainderTest, general) {
         EXPECT_EQ(GetParam()(randnr1, randnr2), std::make_pair(randnr1 / randnr2, randnr1 % randnr2))
             << print_randoms(randnr1, randnr2);
     }
+}
+
+class QuotientRemainderDeathTest : public testing::TestWithParam<std::function<std::pair<int, int>(int, int)>> {};
+
+INSTANTIATE_TEST_SUITE_P(
+    QuotientRemainderVariousImpl, QuotientRemainderDeathTest,
+    testing::Values(math::quotient_remainder0, math::quotient_remainder1 /*, math::quotient_remainder2*/));
+
+TEST_P(QuotientRemainderDeathTest, zero) {
+#ifndef NDEBUG
+    EXPECT_DEBUG_DEATH(GetParam()(1, 0), ".*");
+#endif
 }
 
 // NOLINTBEGIN

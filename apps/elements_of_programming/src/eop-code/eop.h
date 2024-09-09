@@ -82,8 +82,8 @@ struct input_type<equal<T>, 0> {
 template <typename T0, typename T1>
 REQUIRES(Regular(T0) && Regular(T1))
 struct pair {
-    T0 m0;
-    T1 m1;
+    T0 m0{};
+    T1 m1{};
 
     pair() {
     } // default constructor
@@ -118,9 +118,9 @@ bool operator<(const pair<T0, T1>& x, const pair<T0, T1>& y) {
 template <typename T0, typename T1, typename T2>
 REQUIRES(Regular(T0) && Regular(T1) && Regular(T2))
 struct triple {
-    T0 m0;
-    T1 m1;
-    T2 m2;
+    T0 m0{};
+    T1 m1{};
+    T2 m2{};
 
     triple() {
     }

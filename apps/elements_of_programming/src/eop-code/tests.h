@@ -4366,8 +4366,8 @@ inline void type_array() {
     }
     {
         typedef pair<int, char> P;
-        array<P> a0(3, 3, P());
-        array<P> a1(3, 3, P());
+        array<P> a0(3, 3, P{});
+        array<P> a1(3, 3, P{});
         a0[0] = P(0, 'a');
         a1[0] = P(1, 'Z'); // establish a0 < a1
         P x(2, '0');
@@ -4508,7 +4508,7 @@ inline void test_ch_12() {
     type_array_k();
 
     print("    bounded_range\n");
-    array_k<3, int> ca;
+    array_k<3, int> ca{};
     type_bounded_range(begin(ca), end(ca));
     array<array_k<3, int>> da(5, 5, ca);
     type_bounded_range(begin(da), end(da));

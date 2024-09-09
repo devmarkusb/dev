@@ -22,18 +22,28 @@
 #define EOP_READ
 
 #include <cstdio> // scanf
+#include <stdexcept> // runtime_error
 
 namespace eop {
 inline void read(int& x) {
-    scanf("%d", &x);
+    const auto err = scanf("%d", &x);
+    if (err != 1) {
+        throw std::runtime_error{"scanf"};
+    }
 }
 
 inline void read(long int& x) {
-    scanf("%ld", &x);
+    const auto err = scanf("%ld", &x);
+    if (err != 1) {
+        throw std::runtime_error{"scanf"};
+    }
 }
 
 inline void read(long long int& x) {
-    scanf("%lld", &x);
+    const auto err = scanf("%lld", &x);
+    if (err != 1) {
+        throw std::runtime_error{"scanf"};
+    }
 }
 } // namespace eop
 

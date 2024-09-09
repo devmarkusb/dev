@@ -22,7 +22,12 @@ TEST(multiply_accumulate_semigroup, tests_with_just_semigroup) {
         math::multiply_semigroup(2, NoncommutativeAdditiveSemigroupEx{"b"}), NoncommutativeAdditiveSemigroupEx{"bb"});
     EXPECT_EQ(
         math::multiply_semigroup(1, NoncommutativeAdditiveSemigroupEx{"b"}), NoncommutativeAdditiveSemigroupEx{"b"});
+}
+
+TEST(multiply_accumulate_semigroup_DeathTest, tests_with_just_semigroup) {
+#ifndef NDEBUG
     EXPECT_DEBUG_DEATH(math::multiply_semigroup(0, NoncommutativeAdditiveSemigroupEx{"b"}), ".*");
+#endif
 }
 
 TEST(multiply_monoid, tests_with_just_monoid) {
