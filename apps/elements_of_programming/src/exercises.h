@@ -9,6 +9,7 @@
 #include <random>
 #include <string_view>
 #include <thread>
+#include <vector>
 
 #include "ul/ul.h"
 
@@ -119,7 +120,16 @@ inline void print_orbit_structure_random_nr_generators() {
     // rand_gen_legacy not thread-safe, so...
     print_orbit_structure_nonterminating_orbit(stdout_mutex, x, rand_gen_legacy, "(s)rand");
 
+#if __cpp_lib_jthread
     std::vector<std::jthread> t;
+#else
+    std::vector<std::thread> t;
+    auto scoped_join = ul::finally([&t]() {
+        for (auto& thread : t) {
+            thread.join();
+        }
+    });
+#endif
     // otherwise we have an infinite orbit
     if (rd_entropy == decltype(rd_entropy){}) {
         t.emplace_back([&stdout_mutex]() {
