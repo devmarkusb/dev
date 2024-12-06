@@ -1,6 +1,5 @@
 #include "multiply.h"
 #include "benchmark/benchmark.h"
-#include <string>
 
 namespace {
 constexpr auto lhs_factors{1'000};
