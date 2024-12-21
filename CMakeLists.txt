@@ -5,8 +5,6 @@ project(dev)
 add_subdirectory(sdks)
 add_subdirectory(3rdparty)
 
-ul_include(googlebenchmark.cmake)
-
 include(${ul_CMAKE_DIRS}/cmake_util.cmake)
 ul_include(defaults.cmake)
 add_subdirectory(libs)
