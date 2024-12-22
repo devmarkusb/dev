@@ -7,7 +7,7 @@ add_executable(multiplyBm
     src/multiply.h
 )
 target_include_directories(multiplyBm PRIVATE ${lib_util_INCLUDE_DIRS} ${ul_INCLUDE_DIRS})
-target_link_libraries(multiplyBm benchmark::benchmark_main)
+target_link_libraries(multiplyBm benchmark_main)
 
 
 add_executable(mathTest
@@ -44,7 +44,7 @@ add_executable(prime-sieveBm
     src/prime-sieve.h
 )
 target_include_directories(prime-sieveBm PRIVATE ${ul_INCLUDE_DIRS})
-target_link_libraries(prime-sieveBm benchmark::benchmark_main)
+target_link_libraries(prime-sieveBm benchmark_main)
 
 
 ul_include(matplotlib-cpp.cmake)
@@ -77,4 +77,4 @@ add_executable(gcmBm
     src/gcm.h
 )
 target_include_directories(gcmBm PRIVATE ${lib_util_INCLUDE_DIRS} ${ul_INCLUDE_DIRS})
-target_link_libraries(gcmBm benchmark::benchmark_main)
+target_link_libraries(gcmBm benchmark_main)
