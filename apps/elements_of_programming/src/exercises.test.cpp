@@ -5,6 +5,7 @@
 #include <optional>
 
 namespace eop {
+namespace {
 const auto cycle_size{5};
 const auto orbit_terminator{100};
 const auto orbit_separator{50};
@@ -13,12 +14,14 @@ const auto neg_example_nr{-15};
 
 template <typename T>
 using TransformationFctByValue = T (*)(T);
+}
 
 template <typename T>
 struct input_type<TransformationFctByValue<T>, 0> {
     using type = T;
 };
 
+namespace {
 template <typename F, typename N, typename P>
 REQUIRES(Transformation(F) && Integer(N) && UnaryPredicate(P) && Domain(F) == Domain(P))
 std::optional<Domain(F)> power_unary_guarded(Domain(F) x, N n, F f, P p) {
@@ -165,4 +168,5 @@ TEST(convergent_point_guardedTest, misc) {
     EXPECT_TRUE(convergent_point_guarded(64, 1024, hf<int>{}, hf_pred) == 64);
     EXPECT_TRUE(convergent_point_guarded(65, 1025, hf<int>{}, hf_pred) == 32);
     EXPECT_TRUE(convergent_point_guarded(1024, 2047, hf<int>{}, hf_pred) == 1);
+}
 }

@@ -13,11 +13,9 @@ add_library(${targetAsLibForTest} STATIC
         src/tmp.h
 )
 
-target_include_directories(${targetAsLibForTest} PUBLIC ${lib_util_INCLUDE_DIRS})
-target_include_directories(${targetAsLibForTest} PUBLIC ${ul_INCLUDE_DIRS})
 target_include_directories(${targetAsLibForTest} PUBLIC ${toolib_INCLUDE_DIRS})
 
-target_link_libraries(${targetAsLibForTest} PUBLIC toolib)
+target_link_libraries(${targetAsLibForTest} PUBLIC toolib util)
 
 ul_use_asio(${targetAsLibForTest} ${CMAKE_SOURCE_DIR}/3rdparty/asio-1.12.2.tar.gz
         MD5=43c53b8d255edc385dc4e704e59b3641)

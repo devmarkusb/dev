@@ -10,8 +10,7 @@ add_library(${targetAsLibForTest} STATIC
         src/tmp.h
 )
 
-target_include_directories(${targetAsLibForTest} PUBLIC ${lib_util_INCLUDE_DIRS})
-target_include_directories(${targetAsLibForTest} PUBLIC ${ul_INCLUDE_DIRS})
+target_link_libraries(${targetAsLibForTest} util)
 
 ul_include(asio.cmake)
 ul_use_asio(${targetAsLibForTest} ${CMAKE_SOURCE_DIR}/3rdparty/asio-1.12.2.tar.gz

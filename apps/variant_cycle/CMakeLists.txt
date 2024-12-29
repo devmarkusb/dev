@@ -10,5 +10,4 @@ add_executable(${target}
         src/variant_decl.h
 )
 
-target_include_directories(${target} PUBLIC ${lib_util_INCLUDE_DIRS})
-target_include_directories(${target} PUBLIC ${ul_INCLUDE_DIRS})
+target_link_libraries(${target} util)

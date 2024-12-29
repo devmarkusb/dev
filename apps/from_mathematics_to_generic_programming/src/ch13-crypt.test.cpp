@@ -7,7 +7,7 @@ const std::array carmichael{561, 1105, 1729, 2465, 2821, 6601, 8911, 10585, 1584
 
 TEST(is_carmichael, up_to_some) {
     const auto max_test_number{carmichael.back()};
-    auto current_carmichael_idx{0};
+    auto current_carmichael_idx{0U};
     for (auto n{2}; n <= max_test_number; ++n) {
         if (math::is_prime(n)) {
             continue;

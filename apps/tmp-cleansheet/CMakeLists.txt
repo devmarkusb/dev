@@ -5,8 +5,7 @@ add_executable(${target}
         src/main.cpp
 )
 
-target_include_directories(${target} PUBLIC ${lib_util_INCLUDE_DIRS})
-target_include_directories(${target} PUBLIC ${ul_INCLUDE_DIRS})
+target_link_libraries(${target} util)
 
 ul_include(asio.cmake)
 ul_use_asio(${target} ${CMAKE_SOURCE_DIR}/3rdparty/asio-1.12.2.tar.gz
