@@ -1,9 +1,11 @@
 *.user
 .clang-format
 .idea
+.vscode
 _build*
 bin
 bin_*
+build
 clangformat.sh
 cmake-build-*
 lib
