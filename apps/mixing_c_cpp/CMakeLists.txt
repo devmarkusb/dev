@@ -31,12 +31,4 @@ endif()
 
 set(targetTest ${PROJECT_NAME}-test)
 
-add_executable(${targetTest} src/tmp.test.cpp)
-
-target_link_libraries(
-    ${targetTest}
-    PRIVATE GTest::gmock_main GTest::gtest ${targetAsLibForTest}
-)
-
-mb_devenv_set_target_defaults(${targetTest})
-mb_devenv_add_simple_test(${targetTest})
+mb_devenv_add_test(${targetTest} PRIVATE GTest::gmock ${targetAsLibForTest})
