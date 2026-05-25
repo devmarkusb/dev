@@ -1,6 +1,6 @@
 #include "gcm.h"
 
-#include "ul/ul.h"
+#include "mb/ul/ul.hpp"
 #include "gtest/gtest.h"
 #include <random>
 
@@ -21,7 +21,7 @@ constexpr auto arbitrary_even{42};
 constexpr auto arbitrary_odd{43};
 constexpr auto rand_range_min{1};
 constexpr auto rand_range_max{10'000};
-constexpr auto rand_reps{1000};
+constexpr auto rand_reps{1'000};
 
 struct Rand {
     static inline std::random_device dev;
@@ -36,10 +36,18 @@ std::string print_randoms(int r1, int r2) {
 class GcmTest : public testing::TestWithParam<std::function<int(int, int)>> {};
 
 INSTANTIATE_TEST_SUITE_P(
-    GcmVariousImpl, GcmTest,
+    GcmVariousImpl,
+    GcmTest,
     testing::Values(
-        math::gcm0, math::gcm1, math::gcm2, math::gcm3, math::gcm4, math::gcm5, math::gcm6,
-        math::gcd<math::LineSegment>, math::gcd_stein<math::LineSegment>));
+        math::gcm0,
+        math::gcm1,
+        math::gcm2,
+        math::gcm3,
+        math::gcm4,
+        math::gcm5,
+        math::gcm6,
+        math::gcd<math::LineSegment>,
+        math::gcd_stein<math::LineSegment>));
 
 // NOLINTBEGIN
 TEST_P(GcmTest, one) {
@@ -198,7 +206,8 @@ TEST_P(QuotientDeathTest, zero) {
 class QuotientRemainderTest : public testing::TestWithParam<std::function<std::pair<int, int>(int, int)>> {};
 
 INSTANTIATE_TEST_SUITE_P(
-    QuotientRemainderVariousImpl, QuotientRemainderTest,
+    QuotientRemainderVariousImpl,
+    QuotientRemainderTest,
     testing::Values(math::quotient_remainder0, math::quotient_remainder1 /*, math::quotient_remainder2*/));
 
 TEST_P(QuotientRemainderTest, zero) {
@@ -219,7 +228,8 @@ TEST_P(QuotientRemainderTest, general) {
 class QuotientRemainderDeathTest : public testing::TestWithParam<std::function<std::pair<int, int>(int, int)>> {};
 
 INSTANTIATE_TEST_SUITE_P(
-    QuotientRemainderVariousImpl, QuotientRemainderDeathTest,
+    QuotientRemainderVariousImpl,
+    QuotientRemainderDeathTest,
     testing::Values(math::quotient_remainder0, math::quotient_remainder1 /*, math::quotient_remainder2*/));
 
 TEST_P(QuotientRemainderDeathTest, zero) {

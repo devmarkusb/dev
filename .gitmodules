@@ -1,6 +1,9 @@
 [submodule "sdks/util"]
 	path = sdks/util
-	url = https://github.com/devmarkusb/util
+	url = https://github.com/devmarkusb/util.git
 [submodule "sdks/toolib"]
 	path = sdks/toolib
-	url = git@github.com:devmarkusb/toolib.git
+	url = https://github.com/devmarkusb/toolib.git
+[submodule "devenv"]
+	path = devenv
+	url = https://github.com/devmarkusb/devenv.git

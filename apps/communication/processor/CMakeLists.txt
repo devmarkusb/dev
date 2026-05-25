@@ -1,22 +1,14 @@
-include(${ul_CMAKE_DIRS}/cmake_util.cmake)
-
 project(communication_processor)
 set(target ${PROJECT_NAME})
 
-ul_include(defaults.cmake)
+add_executable(${target} src/main.cpp)
 
-add_executable(${target}
-        src/main.cpp
+mb_devenv_set_target_pthread(${target})
+mb_devenv_set_target_defaults(${target})
+
+target_include_directories(
+    ${target}
+    PRIVATE ${lib_consumer_api_INCLUDE_DIRS} ${lib_producer_api_INCLUDE_DIRS}
 )
 
-ul_set_target_pthread(${target})
-
-target_include_directories(${target} PRIVATE
-        ${lib_consumer_api_INCLUDE_DIRS}
-        ${lib_producer_api_INCLUDE_DIRS}
-)
-
-target_link_libraries(${target} PRIVATE
-        consumer_api
-        producer_api
-)
+target_link_libraries(${target} PRIVATE consumer_api producer_api)

@@ -31,8 +31,8 @@
 #include "print.h"
 #include "type_functions.h"
 
-#include "ul/narrow.h"
-#include "ul/warnings.h"
+#include "mb/ul/basiccodesupport/narrow.hpp"
+#include "mb/ul/buildenv/warnings.hpp"
 
 namespace eop {
 // Naming conventions:
@@ -409,7 +409,7 @@ struct distance_type<hf<N>> {
 
 inline void test_ch_2() {
     print("  Chapter 2\n");
-    for (int i = 1; i < 100000000; i = 10 * i) {
+    for (int i = 1; i < 100'000'000; i = 10 * i) {
         Assert(abs(i) == i);
         Assert(abs(-i) == i);
     }
@@ -418,10 +418,10 @@ inline void test_ch_2() {
     Assert(euclidean_norm(3., 4., 5.) == euclidean_norm(euclidean_norm(3., 4.), 5.));
 
     concept_Transformation(sq<int>(), 2);
-    concept_Transformation(gen_orbit<int, unsigned>(0, 0u, 5u), 0);
+    concept_Transformation(gen_orbit<int, unsigned>(0, 0U, 5U), 0);
     concept_Transformation(hf<int>(), 16);
 
-    concept_UnaryPredicate(gen_orbit<int, unsigned>(0, 0u, 5u).p, 0);
+    concept_UnaryPredicate(gen_orbit<int, unsigned>(0, 0U, 5U).p, 0);
 
     for (int i = 2; i < 5; i = successor(i))
         for (int j = 1; j < 5; j = successor(j)) {
@@ -429,24 +429,24 @@ inline void test_ch_2() {
             Assert(power_unary(i, j, sq<int>()) == tmp * tmp);
         }
 
-    Assert(distance(2, 65536, sq<int>()) == 4);
+    Assert(distance(2, 65'536, sq<int>()) == 4);
 
     // Cyclic
-    algorithms_orbit<gen_orbit<int, unsigned>>(0, 0u, 5u);
+    algorithms_orbit<gen_orbit<int, unsigned>>(0, 0U, 5U);
 
     // Rho-shaped
-    algorithms_orbit<gen_orbit<int, unsigned>>(0, 2u, 11u);
-    algorithms_orbit<gen_orbit<int, unsigned>>(7, 97u, 17u);
-    algorithms_orbit<gen_orbit<int, unsigned>>(0, 4u, 2u);
+    algorithms_orbit<gen_orbit<int, unsigned>>(0, 2U, 11U);
+    algorithms_orbit<gen_orbit<int, unsigned>>(7, 97U, 17U);
+    algorithms_orbit<gen_orbit<int, unsigned>>(0, 4U, 2U);
 
     // Terminating
-    algorithms_orbit<gen_orbit<int, unsigned>>(0, 101u, 0u);
+    algorithms_orbit<gen_orbit<int, unsigned>>(0, 101U, 0U);
 
-    Assert(convergent_point_guarded(1024, 64, 1, hf<int>()) == 64);
-    Assert(convergent_point_guarded(1025, 65, 1, hf<int>()) == 32);
-    Assert(convergent_point_guarded(64, 1024, 1, hf<int>()) == 64);
-    Assert(convergent_point_guarded(65, 1025, 1, hf<int>()) == 32);
-    Assert(convergent_point_guarded(1024, 2047, 1, hf<int>()) == 1);
+    Assert(convergent_point_guarded(1'024, 64, 1, hf<int>()) == 64);
+    Assert(convergent_point_guarded(1'025, 65, 1, hf<int>()) == 32);
+    Assert(convergent_point_guarded(64, 1'024, 1, hf<int>()) == 64);
+    Assert(convergent_point_guarded(65, 1'025, 1, hf<int>()) == 32);
+    Assert(convergent_point_guarded(1'024, 2'047, 1, hf<int>()) == 1);
 }
 
 // Chapter 3. Associative operations
@@ -477,7 +477,7 @@ inline void algorithm_power(int (*pow)(int, int, int (*)(int, int))) {
     Assert(pow(10, 1, times_int) == 10);
     Assert(pow(1, 10, times_int) == 1);
     Assert(pow(2, 2, times_int) == 4);
-    Assert(pow(2, 10, times_int) == 1024);
+    Assert(pow(2, 10, times_int) == 1'024);
     Assert(pow(10, 2, times_int) == 100);
 }
 
@@ -486,7 +486,7 @@ inline void algorithm_power_accumulate(int (*pow)(int, int, int, int (*)(int, in
     Assert(pow(99, 10, 1, times_int) == 99 * 10);
     Assert(pow(99, 1, 10, times_int) == 99 * 1);
     Assert(pow(99, 2, 2, times_int) == 99 * 4);
-    Assert(pow(99, 2, 10, times_int) == 99 * 1024);
+    Assert(pow(99, 2, 10, times_int) == 99 * 1'024);
     Assert(pow(99, 10, 2, times_int) == 99 * 100);
 
     Assert(pow(99, 1, 0, times_int) == 99);
@@ -497,7 +497,7 @@ inline void algorithm_power_accumulate_positive(int (*pow)(int, int, int, int (*
     Assert(pow(99, 10, 1, times_int) == 99 * 10);
     Assert(pow(99, 1, 10, times_int) == 99 * 1);
     Assert(pow(99, 2, 2, times_int) == 99 * 4);
-    Assert(pow(99, 2, 10, times_int) == 99 * 1024);
+    Assert(pow(99, 2, 10, times_int) == 99 * 1'024);
     Assert(pow(99, 10, 2, times_int) == 99 * 100);
 }
 
@@ -506,7 +506,7 @@ inline void algorithm_power_with_identity(int (*pow)(int, int, int (*)(int, int)
     Assert(pow(10, 1, times_int, 1) == 10);
     Assert(pow(1, 10, times_int, 1) == 1);
     Assert(pow(2, 2, times_int, 1) == 4);
-    Assert(pow(2, 10, times_int, 1) == 1024);
+    Assert(pow(2, 10, times_int, 1) == 1'024);
     Assert(pow(10, 2, times_int, 1) == 100);
 
     Assert(pow(1, 0, times_int, 1) == 1);
@@ -582,11 +582,11 @@ inline void test_ch_3() {
     Fib f10(55, 34);
     Fib f11(89, 55);
     Fib f21 = fibonacci_matrix_multiply(f10, f11);
-    Assert(f21.m0 == 10946 && f21.m1 == 6765);
+    Assert(f21.m0 == 10'946 && f21.m1 == 6'765);
     Assert(fibonacci<N>(10) == N(55));
     Assert(fibonacci<N>(11) == N(89));
-    Assert(fibonacci<N>(20) == N(6765));
-    Assert(fibonacci<N>(21) == N(10946));
+    Assert(fibonacci<N>(20) == N(6'765));
+    Assert(fibonacci<N>(21) == N(10'946));
 };
 
 // Chapter 4. Linear orderings
@@ -1171,7 +1171,7 @@ void algorithms_slow_q_and_r() {
     [[maybe_unused]] typedef long Z;
     plus<T> plus_T;
     typedef QuotientType(T) N;
-    T max(1000);
+    T max(1'000);
     T a(0);
     while (a < max) {
         T b(1);
@@ -1191,7 +1191,7 @@ void algorithms_q_and_r_nonnegative() {
     [[maybe_unused]] typedef long Z;
     plus<T> plus_T;
     typedef QuotientType(T) N;
-    T max(1000);
+    T max(1'000);
     T a(0);
     while (a < max) {
         T b(1);
@@ -1212,7 +1212,7 @@ void algorithms_q_and_r_nonnegative_fibonacci() {
     typedef long Z;
     [[maybe_unused]] plus<T> plus_T;
     [[maybe_unused]] typedef QuotientType(T) N;
-    T max(1000);
+    T max(1'000);
     T a(0);
     while (a < max) {
         T b(1);
@@ -1235,7 +1235,7 @@ void algorithms_q_and_r_nonnegative_iterative() {
     typedef long Z;
     plus<T> plus_T;
     typedef QuotientType(T) N;
-    T max(1000);
+    T max(1'000);
     T a(0);
     while (a < max) {
         T b(1);
@@ -1267,7 +1267,7 @@ template <typename T>
 REQUIRES(ArchimedeanMonoid(T)) // + numerals, successor
 void algorithm_largest_doubling() {
     [[maybe_unused]] typedef long Z;
-    T max(1000);
+    T max(1'000);
     T a(1);
     while (a < max) {
         T b(1);
@@ -1799,9 +1799,9 @@ inline void test_ch_5() {
     print("  Chapter 5\n");
 
     algorithm_abs<int>(1);
-    algorithm_abs<long long>(1l);
+    algorithm_abs<long long>(1L);
     algorithm_abs<double>(1.0);
-    algorithm_abs<long double>(1.0l);
+    algorithm_abs<long double>(1.0L);
     algorithm_abs<rational<int>>(rational<int>(1, 2));
 
     // type_functions.h defines QuotientType for several built-in integral types
@@ -1859,17 +1859,17 @@ inline void test_ch_5() {
     algorithm_largest_doubling<double>();
     algorithm_largest_doubling<Q>();
 
-    Assert(subtractive_gcd_nonzero(1000, 990) == 10);
-    Assert(subtractive_gcd_nonzero(1000u, 990u) == 10u);
+    Assert(subtractive_gcd_nonzero(1'000, 990) == 10);
+    Assert(subtractive_gcd_nonzero(1'000U, 990U) == 10U);
     Assert(subtractive_gcd_nonzero(0.75, 0.5) == 0.25);
     Assert(subtractive_gcd_nonzero(Q(3, 4), Q(1, 2)) == Q(1, 4));
 
-    Assert(subtractive_gcd(1000, 990) == 10);
-    Assert(subtractive_gcd(1000, 0) == 1000);
+    Assert(subtractive_gcd(1'000, 990) == 10);
+    Assert(subtractive_gcd(1'000, 0) == 1'000);
     Assert(subtractive_gcd(0, 990) == 990);
-    Assert(subtractive_gcd(1000u, 990u) == 10u);
-    Assert(subtractive_gcd(1000u, 0u) == 1000u);
-    Assert(subtractive_gcd(0u, 990u) == 990u);
+    Assert(subtractive_gcd(1'000U, 990U) == 10U);
+    Assert(subtractive_gcd(1'000U, 0U) == 1'000U);
+    Assert(subtractive_gcd(0U, 990U) == 990U);
     Assert(subtractive_gcd(0.75, 0.5) == 0.25);
     Assert(subtractive_gcd(0.75, 0.0) == 0.75);
     Assert(subtractive_gcd(0.0, 0.5) == 0.5);
@@ -1877,12 +1877,12 @@ inline void test_ch_5() {
     Assert(subtractive_gcd(Q(3, 4), Q(0, 2)) == Q(3, 4));
     Assert(subtractive_gcd(Q(0, 4), Q(1, 2)) == Q(1, 2));
 
-    Assert(fast_subtractive_gcd(1000, 990) == 10);
-    Assert(fast_subtractive_gcd(1000, 0) == 1000);
+    Assert(fast_subtractive_gcd(1'000, 990) == 10);
+    Assert(fast_subtractive_gcd(1'000, 0) == 1'000);
     Assert(fast_subtractive_gcd(0, 990) == 990);
-    Assert(fast_subtractive_gcd(1000u, 990u) == 10u);
-    Assert(fast_subtractive_gcd(1000u, 0u) == 1000u);
-    Assert(fast_subtractive_gcd(0u, 990u) == 990u);
+    Assert(fast_subtractive_gcd(1'000U, 990U) == 10U);
+    Assert(fast_subtractive_gcd(1'000U, 0U) == 1'000U);
+    Assert(fast_subtractive_gcd(0U, 990U) == 990U);
     Assert(fast_subtractive_gcd(0.75, 0.5) == 0.25);
     Assert(fast_subtractive_gcd(0.75, 0.0) == 0.75);
     Assert(fast_subtractive_gcd(0.0, 0.5) == 0.5);
@@ -1891,12 +1891,12 @@ inline void test_ch_5() {
     Assert(fast_subtractive_gcd(Q(0, 4), Q(1, 2)) == Q(1, 2));
 
     // gcd for EuclideanSemiring
-    Assert(gcd<int>(1000, 990) == 10);
-    Assert(gcd<int>(1000, 0) == 1000);
+    Assert(gcd<int>(1'000, 990) == 10);
+    Assert(gcd<int>(1'000, 0) == 1'000);
     Assert(gcd<int>(0, 990) == 990);
-    Assert(gcd<unsigned>(1000u, 990u) == 10u);
-    Assert(gcd<unsigned>(1000u, 0u) == 1000u);
-    Assert(gcd<unsigned>(0u, 990u) == 990u);
+    Assert(gcd<unsigned>(1'000U, 990U) == 10U);
+    Assert(gcd<unsigned>(1'000U, 0U) == 1'000U);
+    Assert(gcd<unsigned>(0U, 990U) == 990U);
     {
         typedef polynomial<rational<int>> Q_X;
         Q_X a = shift_left(Q_X(1), 2) - Q_X(1); // x^2 - 1
@@ -1928,12 +1928,12 @@ inline void test_ch_5() {
     }
 
     // gcd for EuclideanSemimodule
-    Assert(gcd<int, int>(1000, 990) == 10);
-    Assert(gcd<int, int>(1000, 0) == 1000);
+    Assert(gcd<int, int>(1'000, 990) == 10);
+    Assert(gcd<int, int>(1'000, 0) == 1'000);
     Assert(gcd<int, int>(0, 990) == 990);
-    Assert(gcd<unsigned, unsigned>(1000u, 990u) == 10u);
-    Assert(gcd<unsigned, unsigned>(1000u, 0u) == 1000u);
-    Assert(gcd<unsigned, unsigned>(0u, 990u) == 990u);
+    Assert(gcd<unsigned, unsigned>(1'000U, 990U) == 10U);
+    Assert(gcd<unsigned, unsigned>(1'000U, 0U) == 1'000U);
+    Assert(gcd<unsigned, unsigned>(0U, 990U) == 990U);
     //todo
     //    Assert(gcd<double, long int>(0.75, 0.5) == 0.25);
     //    Assert(gcd<double, long int>(0.75, 0.0) == 0.75);
@@ -3631,10 +3631,10 @@ inline void algorithms_rotate() {
 inline void test_ch_10() {
     print("  Chapter 10\n");
     algorithm_cycle_to();
-    type_temporary_buffer<char>(1000);
-    type_temporary_buffer<char>(100000);
-    type_temporary_buffer<array_k<10, char>>(1000);
-    type_temporary_buffer<array_k<10, char>>(100000);
+    type_temporary_buffer<char>(1'000);
+    type_temporary_buffer<char>(100'000);
+    type_temporary_buffer<array_k<10, char>>(1'000);
+    type_temporary_buffer<array_k<10, char>>(100'000);
     algorithms_reverse();
     algorithms_rotate();
 }
@@ -3927,7 +3927,8 @@ void merge_cases(M m) {
     c("ac", "bd", "abcd");
     c("ad", "bc", "abcd");
 
-    n("abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    n("abcdefghijklmnopqrstuvwxyz",
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
       "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ");
 
     // And so on.

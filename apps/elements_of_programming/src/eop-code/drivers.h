@@ -30,7 +30,7 @@
 #include "remainder.h"
 #include "type_functions.h"
 
-#include "ul/narrow.h"
+#include "mb/ul/basiccodesupport/narrow.hpp"
 
 namespace eop {
 // Chapter 2 - Transformations and their orbits
@@ -157,8 +157,9 @@ struct distance_type<table_transformation<I>> {
 };
 
 inline void run_table_transformation() {
-    print("Enter sequence of integers terminated by negative integer;\n"
-          "enter empty sequence (a single negative integer) to end:\n");
+    print(
+        "Enter sequence of integers terminated by negative integer;\n"
+        "enter empty sequence (a single negative integer) to end:\n");
     while (true) {
         typedef array<int> T_0;
         typedef size_type<T_0>::type N_0;
@@ -252,38 +253,39 @@ inline void run_lcg_transformation() {
     //       advanced version
     //   Karl Entacher, June 16, 2000
     //   http://crypto.mat.sbg.ac.at/results/karl/server/server.html
-    push(lcg, LCG(100000000ll + 1ll, 23ll, 0ll, 47594118ll, "Lehmer 1949"));
+    push(lcg, LCG(100'000'000LL + 1LL, 23LL, 0LL, 47'594'118LL, "Lehmer 1949"));
     // c-1 =    5882351
-    push(lcg, LCG(0x80000000ll, 11035135245ll, 12345ll, 12345ll, "ANSIC"));
+    push(lcg, LCG(0x8000'0000LL, 11'035'135'245LL, 12'345LL, 12'345LL, "ANSIC"));
     // c-1 = 2147483647 = 2^31-1
-    push(lcg, LCG(0x80000000ll, /*7^5*/ 16807ll, 0ll, 1ll, "MINSTD"));
+    push(lcg, LCG(0x8000'0000LL, /*7^5*/ 16'807LL, 0LL, 1LL, "MINSTD"));
     // c-1 =  268435455
-    push(lcg, LCG(0x80000000ll, 0x10000ll + 3ll, 0ll, 1ll, "RANDU"));
+    push(lcg, LCG(0x8000'0000LL, 0x1'0000LL + 3LL, 0LL, 1LL, "RANDU"));
     // c-1 =  536870911
-    push(lcg, LCG(0x80000000ll - 1ll, 630360016ll, 0ll, 1ll, "SIMSCRIPT"));
+    push(lcg, LCG(0x8000'0000LL - 1LL, 630'360'016LL, 0LL, 1LL, "SIMSCRIPT"));
     // c-1 = 2147483645
-    push(lcg, LCG(0x800000000ll, /*5^15*/ 30517578125ll, 7261067085ll, 0ll, "BCSLIB"));
+    push(lcg, LCG(0x8'0000'0000LL, /*5^15*/ 30'517'578'125LL, 7'261'067'085LL, 0LL, "BCSLIB"));
     // c-1 = 4294967295 on 32-bit machine or:
     //      34359738367
-    push(lcg, LCG(0x80000000ll, 452807053ll, 0ll, 1ll, "URN12"));
+    push(lcg, LCG(0x8000'0000LL, 452'807'053LL, 0LL, 1LL, "URN12"));
     // c-1 =  536870911
-    push(lcg, LCG(0x800000000ll, /*5^13*/ 1220703125ll, 0ll, 1ll, "APPLE"));
+    push(lcg, LCG(0x8'0000'0000LL, /*5^13*/ 1'220'703'125LL, 0LL, 1LL, "APPLE"));
     // c-1 = 4294967295 on 32-bit machine or:
     //       8589934591
-    push(lcg, LCG(0x100000000ll, 69069ll, 0ll, 1ll, "Super-Duper"));
+    push(lcg, LCG(0x1'0000'0000LL, 69'069LL, 0LL, 1LL, "Super-Duper"));
     // c-1 = 1073741823
-    push(lcg, LCG(0x100000000ll, 2147001325ll, 715136305ll, 0ll, "BCPL"));
+    push(lcg, LCG(0x1'0000'0000LL, 2'147'001'325LL, 715'136'305LL, 0LL, "BCPL"));
     // c-1 = 4294967295
-    push(lcg, LCG(576460752303423488ll, 302875106592253ll, 0ll, 530242871347629333ll, "NAG"));
-    push(lcg, LCG(281474976710656ll, 25214903917ll, 11, 0ll, "DRAND48"));
-    push(lcg, LCG(281474976710656ll, 44485709377909ll, 0ll, 1ll, "RANF"));
-    push(lcg, LCG(999999999989ll, 427619669081ll, 0ll, 1ll, "MAPLE"));
+    push(lcg, LCG(576'460'752'303'423'488LL, 302'875'106'592'253LL, 0LL, 530'242'871'347'629'333LL, "NAG"));
+    push(lcg, LCG(281'474'976'710'656LL, 25'214'903'917LL, 11, 0LL, "DRAND48"));
+    push(lcg, LCG(281'474'976'710'656LL, 44'485'709'377'909LL, 0LL, 1LL, "RANF"));
+    push(lcg, LCG(999'999'999'989LL, 427'619'669'081LL, 0LL, 1LL, "MAPLE"));
     // c-1 =    399149
-    push(lcg, LCG(0x100000000ll, 1664525, 1013904223ll, 0ll, "Numerical Recipes in C"));
+    push(lcg, LCG(0x1'0000'0000LL, 1'664'525, 1'013'904'223LL, 0LL, "Numerical Recipes in C"));
     // c-1 = 4294967295 = 2^32-1
 
-    print("Enter an index (out of range to end)"
-          " and a seed (negative to use default):\n");
+    print(
+        "Enter an index (out of range to end)"
+        " and a seed (negative to use default):\n");
     int i(0);
     POINTER(LCG) p = begin(lcg);
     while (i < size(lcg)) {
@@ -599,7 +601,7 @@ inline void run_slist_tests() {
     print(l1);
     print_eol();
 
-    int a[] = {17, 29, 0, 1001, 47, 3, 2, 1, 124, 49, 981, 3, 29};
+    int a[] = {17, 29, 0, 1'001, 47, 3, 2, 1, 124, 49, 981, 3, 29};
     const int a_size = sizeof(a) / sizeof(int);
     print("List:          ");
     print_range(a, a + a_size);
@@ -648,7 +650,7 @@ inline void run_list_tests() {
     print(l1);
     print_eol();
 
-    int a[] = {17, 29, 0, 1001, 47, 3, 2, 1, 124, 49, 981, 3, 29};
+    int a[] = {17, 29, 0, 1'001, 47, 3, 2, 1, 124, 49, 981, 3, 29};
     const int a_size = sizeof(a) / sizeof(int);
     print("List:         ");
     print_range(a, a + a_size);
@@ -1083,7 +1085,7 @@ void run_array_tests() {
     print_range(p.m0, p.m1);
     print_eol();
 
-    int bb[] = {17, 29, 0, 1001, 47, 3, 2, 1, 124, 49, 981, 3, 29};
+    int bb[] = {17, 29, 0, 1'001, 47, 3, 2, 1, 124, 49, 981, 3, 29};
     print("Array:  ");
     print_range(bb, bb + sizeof(bb) / sizeof(int));
     print_eol();
@@ -1096,10 +1098,10 @@ void run_array_tests() {
     print_eol();
 
     // Test sorting a large array (exercising adaptivity)
-    array<int> big(1000000, 1000000, 0);
-    const int N_BIG_BUFFER = 100000;
+    array<int> big(1'000'000, 1'000'000, 0);
+    const int N_BIG_BUFFER = 100'000;
     int big_buffer[N_BIG_BUFFER];
-    iota(1000000, begin(big));
+    iota(1'000'000, begin(big));
     reverse_bidirectional(begin(big), end(big));
     //sort(big, less<int>());
     sort_n_adaptive(begin(big), size(big), big_buffer, N_BIG_BUFFER, less<int>());

@@ -1,13 +1,75 @@
-*.user
-.clang-format
-.idea
-.vscode
-_build*
-bin
+### github C++ defaults ###
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Linker files
+*.ilk
+
+# Debugger Files
+*.pdb
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# debug information files
+*.dwo
+
+
+### custom defaults ###
+
+# macOS
+*.DS_Store
+
+# editor files
+.vscode/
+.idea/
+
+# build
+/build*/
+/compile_commands.json
+/__*/
+/_build*/
+bin/
 bin_*
-build
-clangformat.sh
 cmake-build-*
-lib
+lib/
 lib_*
-venv
+out/
+
+# python
+.venv
+venv/
+__pycache__/
+
+# misc
+CMakeUserPresets.json
+clangformat.sh
+*.user
