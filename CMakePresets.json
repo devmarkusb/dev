@@ -356,5 +356,216 @@
       "inherits": "base",
       "configurePreset": "msvc-release"
     }
+  ],
+  "workflowPresets": [
+    {
+      "name": "gcc-debug",
+      "displayName": "GCC Debug Workflow",
+      "description": "Configure, build, and test with the GCC Debug preset.",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "gcc-debug"
+        },
+        {
+          "type": "build",
+          "name": "gcc-debug"
+        },
+        {
+          "type": "test",
+          "name": "gcc-debug"
+        }
+      ]
+    },
+    {
+      "name": "gcc-release",
+      "displayName": "GCC Release Workflow",
+      "description": "Configure, build, and test with the GCC Release preset.",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "gcc-release"
+        },
+        {
+          "type": "build",
+          "name": "gcc-release"
+        },
+        {
+          "type": "test",
+          "name": "gcc-release"
+        }
+      ]
+    },
+    {
+      "name": "clang-debug",
+      "displayName": "Clang Debug Workflow",
+      "description": "Configure, build, and test with the Clang Debug preset.",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang-debug"
+        },
+        {
+          "type": "build",
+          "name": "clang-debug"
+        },
+        {
+          "type": "test",
+          "name": "clang-debug"
+        }
+      ]
+    },
+    {
+      "name": "clang-release",
+      "displayName": "Clang Release Workflow",
+      "description": "Configure, build, and test with the Clang Release preset.",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang-release"
+        },
+        {
+          "type": "build",
+          "name": "clang-release"
+        },
+        {
+          "type": "test",
+          "name": "clang-release"
+        }
+      ]
+    },
+    {
+      "name": "clang-libc++-debug",
+      "displayName": "Clang-libc++ Debug Workflow",
+      "description": "Configure, build, and test with the Clang-libc++ Debug preset.",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang-libc++-debug"
+        },
+        {
+          "type": "build",
+          "name": "clang-libc++-debug"
+        },
+        {
+          "type": "test",
+          "name": "clang-libc++-debug"
+        }
+      ]
+    },
+    {
+      "name": "clang-libc++-release",
+      "displayName": "Clang-libc++ Release Workflow",
+      "description": "Configure, build, and test with the Clang-libc++ Release preset.",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "clang-libc++-release"
+        },
+        {
+          "type": "build",
+          "name": "clang-libc++-release"
+        },
+        {
+          "type": "test",
+          "name": "clang-libc++-release"
+        }
+      ]
+    },
+    {
+      "name": "appleclang-debug",
+      "displayName": "Appleclang Debug Workflow",
+      "description": "Configure, build, and test with the Appleclang Debug preset.",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "appleclang-debug"
+        },
+        {
+          "type": "build",
+          "name": "appleclang-debug"
+        },
+        {
+          "type": "test",
+          "name": "appleclang-debug"
+        }
+      ]
+    },
+    {
+      "name": "appleclang-release",
+      "displayName": "Appleclang Release Workflow",
+      "description": "Configure, build, and test with the Appleclang Release preset.",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "appleclang-release"
+        },
+        {
+          "type": "build",
+          "name": "appleclang-release"
+        },
+        {
+          "type": "test",
+          "name": "appleclang-release"
+        }
+      ]
+    },
+    {
+      "name": "appleclang-maxsan-release",
+      "displayName": "Appleclang MaxSan Release Workflow",
+      "description": "Configure, build, and test with the Appleclang MaxSan Release preset.",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "appleclang-maxsan-release"
+        },
+        {
+          "type": "build",
+          "name": "appleclang-maxsan-release"
+        },
+        {
+          "type": "test",
+          "name": "appleclang-maxsan-release"
+        }
+      ]
+    },
+    {
+      "name": "msvc-debug",
+      "displayName": "MSVC Debug Workflow",
+      "description": "Configure, build, and test with the MSVC Debug preset.",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "msvc-debug"
+        },
+        {
+          "type": "build",
+          "name": "msvc-debug"
+        },
+        {
+          "type": "test",
+          "name": "msvc-debug"
+        }
+      ]
+    },
+    {
+      "name": "msvc-release",
+      "displayName": "MSVC Release Workflow",
+      "description": "Configure, build, and test with the MSVC Release preset.",
+      "steps": [
+        {
+          "type": "configure",
+          "name": "msvc-release"
+        },
+        {
+          "type": "build",
+          "name": "msvc-release"
+        },
+        {
+          "type": "test",
+          "name": "msvc-release"
+        }
+      ]
+    }
   ]
 }
