@@ -1,0 +1,24 @@
+---
+description: Never git push (or push tags) without explicit user approval
+alwaysApply: true
+---
+
+# Git push requires approval
+
+Do **not** run any command that publishes to a remote unless the user explicitly asks in
+that conversation turn. This includes:
+
+- `git push` (any branch, with or without `-u`)
+- `git push origin --tags` / pushing individual tags
+- `gh` commands that publish (e.g. `gh pr create` is OK when asked; pushing is not)
+
+Allowed without a separate push request:
+
+- Local git: `status`, `diff`, `log`, `fetch`, `commit` (only when user asked to commit)
+- Creating tags **locally** when it helps the task
+- CI/workflow YAML that pushes on GitHub Actions (not the agent shell)
+
+After local commits or tags, **stop** and tell the user what is ready to push; wait for
+approval. Do not push "to finish the task" or because CI expects it on the remote.
+
+Exception: user says "push", "push to origin", "publish the tag", etc. in the same request.

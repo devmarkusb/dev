@@ -31,7 +31,7 @@ void demo_tooperf_measurement() {
         }
     }
 
-    std::cout << ul::PerformanceProfiler::dump_all_items();
+    std::cout << ul::PerformanceProfiler<>::dump_all_items();
 }
 } // namespace
 
