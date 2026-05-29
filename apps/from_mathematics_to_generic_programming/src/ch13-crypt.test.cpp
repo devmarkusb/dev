@@ -3,7 +3,7 @@
 
 namespace {
 // source: Wolfram
-const std::array carmichael{561, 1105, 1729, 2465, 2821, 6601, 8911, 10585, 15841, 29341};
+const std::array carmichael{561, 1'105, 1'729, 2'465, 2'821, 6'601, 8'911, 10'585, 15'841, 29'341};
 
 TEST(is_carmichael, up_to_some) {
     const auto max_test_number{carmichael.back()};

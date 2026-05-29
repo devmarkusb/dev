@@ -28,7 +28,7 @@ Ex: integers
 Ambiguous value type: if a value of the type has more than one interpretation.
 Ex: just 2 digits to be interpreted as a year (23 meaning 1923 or 2023?)
 
-Arity(F): type attribute of the number of inputs of a functional procedure F. 
+Arity(F): type attribute of the number of inputs of a functional procedure F.
 
 Assignment: is a procedure taking two objects of the same type, making the first
 object equal to the second without modifying the second.
@@ -58,7 +58,7 @@ Ex: mammals
 Concrete species: set of attributes of essentially equivalent concrete entities.
 Ex: humans
 
-Constructor: procedure turning memory locations into an object. 
+Constructor: procedure turning memory locations into an object.
 
 Copied object (a copy): if it has the same state as another one.
 
@@ -171,13 +171,13 @@ Representationally equal values: if their data are identical sequences of 0s and
 
 Requires clause: expression built up from constant values, concrete types, formal
 parameters, applications of type attributes and type functions, equality on values
-and types, concepts, and logical connectives. 
+and types, concepts, and logical connectives.
 
 Resources: owned by object to hold its state in memory. Not necessarily contiguous in memory,
-opposed to the value being represented as a datum, a contiguous sequence of 0s and 1s. 
+opposed to the value being represented as a datum, a contiguous sequence of 0s and 1s.
 
 Result space for a functional procedure: set of all values from its codomain returned
-for inputs from its definition space. 
+for inputs from its definition space.
 
 Snapshot: is a complete collection of the attributes of a concrete entity in a particular
 point of time.
@@ -187,7 +187,7 @@ Species: abstract or concrete species.
 Starting address: unique address from where all resources of an object can be reached.
 There is a starting address for every object.
 
-State of object: value of some value type, represented as data in memory. 
+State of object: value of some value type, represented as data in memory.
 
 Store: change content of an address.
 
@@ -206,7 +206,7 @@ Type concept: a concept defined on one type.
 
 Type constructor: mechanism for creating a new type from existing types.
 Notation for n-ary type constructor C applied to types T_0,...,T_{n-1} is
-C_{T_0,...,T_{n-1}}. Example pair_{T_0,T_1}, or analogously for structs. 
+C_{T_0,...,T_{n-1}}. Example pair_{T_0,T_1}, or analogously for structs.
 
 Type function (occasionally indexed): a mapping from a type to an affiliated type.
 So this is mapping between concepts (as domain and codomain).
@@ -222,7 +222,7 @@ Uniquely represented value type: if and only if at most one value corresponds to
 abstract entity.
 Ex: non-unique would be a number as truth value, any non-zero meaning true.
 
-Value: is the combination of representation (datum) and interpretion (entity).
+Value: is the combination of representation (datum) and interpretation (entity).
 
 Value type: a correspondence between a species and a set of datums.
 
@@ -230,9 +230,9 @@ Weakening: a concept C weakens a concept C', whenever C' refines C.
 
 Well-formed datum w.r.t. a value type: if and only if that datum represents an abstract entity.
 
-Well-formed object: iff its state is well-formed. 
+Well-formed object: iff its state is well-formed.
 
-## Excercises
+## Exercises
 
 * 1.1 don't see anything to do
 * 2.4 too lazy

@@ -25,7 +25,7 @@ void demo_tooperf_measurement() {
         ul::math::random_frac();
         {
             ul::PerformanceProfiler perfscope1("crunsh_n", 1);
-            const auto res = crunsh_n(100000);
+            const auto res = crunsh_n(100'000);
             perfscope1.start_new_item("output");
             std::cout << "calc result: " << res << "\n";
         }

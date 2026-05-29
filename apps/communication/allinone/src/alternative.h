@@ -7,7 +7,7 @@
 #include "util/allthethings.h"
 #include "asio.hpp"
 
-/** Idea is to simulate a multi-process szenario as realistically as possible in this allinone app.
+/** Idea is to simulate a multi-process scenario as realistically as possible in this allinone app.
     todo: wip
  */
 namespace client_server {

@@ -2,7 +2,7 @@
 
 CC       = g++
 DEBUG    = -O0 -ggdb -pg
-//CFLAGS   = -Wall 
+//CFLAGS   = -Wall
 CFLAGS   =
 CXXFLAGS = $(CFLAGS)
 LDFLAGS	 = -g
@@ -14,12 +14,12 @@ INCLUDES=eop.h assertions.h integers.h pointers.h type_functions.h drivers.h int
 all:$(TARGETS)
 
 eop: eop.o
-	$(CC) $(LDFLAGS) $^ -o $@ 
+	$(CC) $(LDFLAGS) $^ -o $@
 
 eop.o: eop.cpp $(INCLUDES)
 	$(CC) $(CXXFLAGS) -c $< -o $@
 
-.PHONY: clean 
+.PHONY: clean
 
 clean :
 	rm -rf eop
@@ -27,5 +27,3 @@ clean :
 
 archive :
 	zip -u -v eop-code.zip Makefile eop.cpp $(INCLUDES)
-
-

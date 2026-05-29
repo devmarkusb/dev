@@ -8,6 +8,7 @@ Euclidean domain E: integral domain with operations quotient and
 remainder s.t. for b!=0 and all a: a=quotient(a,b)b+remainder(a,b)
 holds and there is a non-negative norm ||x|| from E to natural
 numbers with:
+
 * ||a||=0 <=> a=0
 * b!=0 => ||ab||>=||a||
 * ||remainder(a,b)||<||b||
@@ -36,7 +37,7 @@ Value type: set of values sharing a common interpretation.
 Zero divisor: element x!=0 of a ring for which there is a y!=0
 with xy=0.
 
-# Excercises
+## Exercises
 
 ## Failed
 
@@ -54,4 +55,3 @@ with xy=0.
 * 9.3 accomplished only the following order: commutativity,
   distributivity, associativity (so, the latter not independently).
   Helpful was proving a'b=ab+b first.
-

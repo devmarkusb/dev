@@ -1,3 +1,5 @@
+# elements_of_programming src
+
 The eop-code dir contains the original code from or complementing the book.
 Only minor customizations and fixes (of compilation nature) are allowed there.
 

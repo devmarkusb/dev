@@ -1,5 +1,12 @@
 # dev (development)
 
+[![continuous integration tests](https://github.com/devmarkusb/dev/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/devmarkusb/dev/actions/workflows/ci.yml)
+[![clang-tidy](https://github.com/devmarkusb/dev/actions/workflows/clang-tidy.yml/badge.svg?branch=main)](https://github.com/devmarkusb/dev/actions/workflows/clang-tidy.yml)
+[![cppcheck](https://github.com/devmarkusb/dev/actions/workflows/cppcheck.yml/badge.svg?branch=main)](https://github.com/devmarkusb/dev/actions/workflows/cppcheck.yml)
+[![lint check (pre-commit)](https://github.com/devmarkusb/dev/actions/workflows/pre-commit-check.yml/badge.svg?branch=main)](https://github.com/devmarkusb/dev/actions/workflows/pre-commit-check.yml)
+[![License](https://img.shields.io/github/license/devmarkusb/dev)](LICENSE)
+[![C++](https://img.shields.io/badge/C%2B%2B-26-blue)](CMakeLists.txt)
+
 This is a repo to jump start arbitrary development, mainly in C++, CMake,
 Shell, but also Python, perhaps others to come.
 

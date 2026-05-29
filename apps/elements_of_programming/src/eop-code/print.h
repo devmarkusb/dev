@@ -127,7 +127,7 @@ struct print_visit {
     }
 
     void operator()(visit v, C c) {
-        if (((v == visit::pre && b_pre) || (v == visit::in && b_in) || (v == visit::post && b_post))) {
+        if ((v == visit::pre && b_pre) || (v == visit::in && b_in) || (v == visit::post && b_post)) {
             print(source(c));
             print(" ");
         }

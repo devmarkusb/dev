@@ -2179,7 +2179,7 @@ struct lexicographical_less_k<0, I0, I1> {
     }
 };
 
-// Exercise 7.6: bifurcate_compare_nonempty (using 3-way comparsion)
+// Exercise 7.6: bifurcate_compare_nonempty (using 3-way comparison)
 
 // concept Comparator3Way(F) is
 //     HomogeneousFunction(F)
@@ -4057,8 +4057,19 @@ I sort_n_with_buffer(I f, DistanceType(I) n, B f_b, R r) {
 template <typename I, typename R>
 REQUIRES(Mutable(I) && ForwardIterator(I) && Relation(R) && ValueType(I) == Domain(R))
 void merge_n_step_0(
-    I f0, DistanceType(I) n0, I f1, DistanceType(I) n1, R r, I& f0_0, DistanceType(I) & n0_0, I& f0_1,
-    DistanceType(I) & n0_1, I& f1_0, DistanceType(I) & n1_0, I& f1_1, DistanceType(I) & n1_1) {
+    I f0,
+    DistanceType(I) n0,
+    I f1,
+    DistanceType(I) n1,
+    R r,
+    I& f0_0,
+    DistanceType(I) & n0_0,
+    I& f0_1,
+    DistanceType(I) & n0_1,
+    I& f1_0,
+    DistanceType(I) & n1_0,
+    I& f1_1,
+    DistanceType(I) & n1_1) {
     // Precondition: $\property{mergeable}(f_0, n_0, f_1, n_1, r)$
     f0_0 = f0;
     n0_0 = half_nonnegative(n0);
@@ -4074,8 +4085,19 @@ void merge_n_step_0(
 template <typename I, typename R>
 REQUIRES(Mutable(I) && ForwardIterator(I) && Relation(R) && ValueType(I) == Domain(R))
 void merge_n_step_1(
-    I f0, DistanceType(I) n0, I f1, DistanceType(I) n1, R r, I& f0_0, DistanceType(I) & n0_0, I& f0_1,
-    DistanceType(I) & n0_1, I& f1_0, DistanceType(I) & n1_0, I& f1_1, DistanceType(I) & n1_1) {
+    I f0,
+    DistanceType(I) n0,
+    I f1,
+    DistanceType(I) n1,
+    R r,
+    I& f0_0,
+    DistanceType(I) & n0_0,
+    I& f0_1,
+    DistanceType(I) & n0_1,
+    I& f1_0,
+    DistanceType(I) & n1_0,
+    I& f1_1,
+    DistanceType(I) & n1_1) {
     // Precondition: $\property{mergeable}(f_0, n_0, f_1, n_1, r)$
     f0_0 = f0;
     n0_1 = half_nonnegative(n1);
@@ -6201,13 +6223,13 @@ void swap_basic(T& x, T& y) {
 template <typename T>
     REQUIRES(Regular(T))
     UnderlyingType(T) & underlying_ref(T& x) {
-    return reinterpret_cast<UnderlyingType(T)&>(x);
+    return reinterpret_cast<UnderlyingType(T) &>(x);
 }
 
 template <typename T>
     REQUIRES(Regular(T))
     const UnderlyingType(T) & underlying_ref(const T& x) {
-    return reinterpret_cast<UnderlyingType(T)&>(const_cast<T&>(x));
+    return reinterpret_cast<UnderlyingType(T) &>(const_cast<T&>(x));
 }
 
 template <typename T>

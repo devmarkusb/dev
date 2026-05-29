@@ -15,7 +15,7 @@ constexpr size_t hardware_destructive_interference_size = 64;
 constexpr size_t hardware_constructive_interference_size = 64;
 
 constexpr unsigned k_timing_trials_to_compute_average = 100;
-constexpr unsigned k_inner_loop_trials = 1000000;
+constexpr unsigned k_inner_loop_trials = 1'000'000;
 
 typedef unsigned UselessResultT;
 typedef double ElapsedSecsT;
@@ -59,7 +59,7 @@ UselessResultT sample_array_threadfunc(Latch& latch, unsigned thread_index, T& v
     // prepare for computation
     std::random_device rd;
     std::mt19937 mt{rd()};
-    std::uniform_int_distribution<int> dist{0, 4096};
+    std::uniform_int_distribution<int> dist{0, 4'096};
 
     auto& element = vec[vec.size() / 2 + thread_index];
 
@@ -79,7 +79,7 @@ UselessResultT sample_pair_threadfunc(Latch& latch, unsigned, T& pair) {
     // prepare for computation
     std::random_device rd;
     std::mt19937 mt{rd()};
-    std::uniform_int_distribution<int> dist{0, 4096};
+    std::uniform_int_distribution<int> dist{0, 4'096};
 
     latch.count_down_and_wait();
 
@@ -188,7 +188,7 @@ int main() {
         std::cout << "Running naive_int test." << std::endl;
 
         std::vector<NaiveInt> vec;
-        vec.resize((1u << 28) / sizeof(NaiveInt)); // allocate 256 mibibytes
+        vec.resize((1U << 28) / sizeof(NaiveInt)); // allocate 256 mibibytes
 
         run_tests(
             [&](Threadlatch& latch, unsigned thread_index) {
@@ -200,7 +200,7 @@ int main() {
         std::cout << "Running cache_int test." << std::endl;
 
         std::vector<CacheInt> vec;
-        vec.resize((1u << 28) / sizeof(CacheInt)); // allocate 256 mibibytes
+        vec.resize((1U << 28) / sizeof(CacheInt)); // allocate 256 mibibytes
 
         run_tests(
             [&](Threadlatch& latch, unsigned thread_index) {

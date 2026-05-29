@@ -116,7 +116,7 @@ struct measure_gcd {
     }
 
     inline void operator()() {
-        t = gcd<Q, Q>(Q(250, 1000), Q(750, 1000));
+        t = gcd<Q, Q>(Q(250, 1'000), Q(750, 1'000));
     }
 };
 
@@ -131,8 +131,8 @@ struct measure_reverse_bidirectional {
 
     measure_reverse_bidirectional()
         : legend("10 repetitions of reverse_bidirectional(f, f+10000000)")
-        , N(10000000)
-        , REPETITIONS(100000000 / N)
+        , N(10'000'000)
+        , REPETITIONS(100'000'000 / N)
         , a(N, N, T(17))
         , f(begin(a))
         , l(end(a)) {
@@ -209,8 +209,8 @@ inline void measure_reverse_algorithms() {
     typedef int T;
     print_labels<T>();
 
-    for (int N = 10; N <= 100000000; N *= 10) {
-        const int REPETITIONS = 100000000 / N;
+    for (int N = 10; N <= 100'000'000; N *= 10) {
+        const int REPETITIONS = 100'000'000 / N;
         array<T> a(N, N, T(17));
         POINTER(T) f = begin(a);
         POINTER(T) l = end(a);
@@ -276,7 +276,7 @@ struct measure_sort_linked {
 
     measure_sort_linked()
         : legend("sort_linked(reverse(iota(100000)))")
-        , N(100000)
+        , N(100'000)
         , REPETITIONS(1) {
         after<slist<T>> pos(a, end(a));
         int i(0);
@@ -294,7 +294,7 @@ struct measure_sort_linked {
 };
 
 inline void measure_sort_n_adaptive_compares() {
-    for (int n = 64; n <= 32768; n *= 4) {
+    for (int n = 64; n <= 32'768; n *= 4) {
         typedef POINTER(int) I;
         //        typedef DistanceType(IteratorType(array<T>)) N;
         typedef ptrdiff_t N;
@@ -327,12 +327,12 @@ struct measure_sort_n_adaptive {
 
     measure_sort_n_adaptive()
         : legend("sort_n_adaptive(reverse(iota(100000)))")
-        , N(100000)
+        , N(100'000)
         , REPETITIONS(1)
         , a(N, N, T(17))
         , f(begin(a))
         , l(end(a))
-        , b(100000, 100000, T(0)) {
+        , b(100'000, 100'000, T(0)) {
         iota(N, f);
         reverse_bidirectional(f, l);
         // Assert(decreasing_range(f, l));

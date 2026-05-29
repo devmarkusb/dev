@@ -8,6 +8,7 @@ UL_WARNING_DISABLE_CLANG_ALL
 #pragma GCC diagnostic ignored "-Wunused-function"
 
 // clang-format on
+
 namespace {
 inline namespace mb {
 void recurse_children(

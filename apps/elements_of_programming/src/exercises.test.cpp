@@ -14,7 +14,7 @@ const auto neg_example_nr{-15};
 
 template <typename T>
 using TransformationFctByValue = T (*)(T);
-}
+} // namespace
 
 template <typename T>
 struct input_type<TransformationFctByValue<T>, 0> {
@@ -106,7 +106,7 @@ std::ostream& orbit_dump(std::ostream& os, F f, P p, std::string_view loglabel) 
     orbit_dump(os, f, p, pos_example_nr * 2, example_count);
     return os;
 }
-} // namespace eop
+} // namespace
 
 using namespace eop;
 
@@ -126,7 +126,8 @@ TEST(intersectTest, dumps) {
 84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,terminated
 )");
     orbit_dump(
-        std::cout, non_terminating_orbit,
+        std::cout,
+        non_terminating_orbit,
         [](int) {
             return true;
         },
@@ -163,10 +164,10 @@ TEST(intersectTest, both_non_terminating) {
 }
 
 TEST(convergent_point_guardedTest, misc) {
-    EXPECT_TRUE(convergent_point_guarded(1024, 64, hf<int>{}, hf_pred) == 64);
-    EXPECT_TRUE(convergent_point_guarded(1025, 65, hf<int>{}, hf_pred) == 32);
-    EXPECT_TRUE(convergent_point_guarded(64, 1024, hf<int>{}, hf_pred) == 64);
-    EXPECT_TRUE(convergent_point_guarded(65, 1025, hf<int>{}, hf_pred) == 32);
-    EXPECT_TRUE(convergent_point_guarded(1024, 2047, hf<int>{}, hf_pred) == 1);
+    EXPECT_TRUE(convergent_point_guarded(1'024, 64, hf<int>{}, hf_pred) == 64);
+    EXPECT_TRUE(convergent_point_guarded(1'025, 65, hf<int>{}, hf_pred) == 32);
+    EXPECT_TRUE(convergent_point_guarded(64, 1'024, hf<int>{}, hf_pred) == 64);
+    EXPECT_TRUE(convergent_point_guarded(65, 1'025, hf<int>{}, hf_pred) == 32);
+    EXPECT_TRUE(convergent_point_guarded(1'024, 2'047, hf<int>{}, hf_pred) == 1);
 }
-}
+} // namespace eop

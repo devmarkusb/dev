@@ -1,7 +1,5 @@
 project(views_coro-alt)
 
-add_executable(${PROJECT_NAME}
-    src/main.cpp
-)
+add_executable(${PROJECT_NAME} src/main.cpp)
 
 target_link_libraries(${PROJECT_NAME} util)
