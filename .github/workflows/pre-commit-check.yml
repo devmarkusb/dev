@@ -17,3 +17,5 @@ permissions:
 jobs:
   pre-commit:
     uses: devmarkusb/devenv/.github/workflows/pre-commit.yml@main
+    secrets:
+      checkout_token: ${{ secrets.SUBMODULES_PAT }}

@@ -11,3 +11,4 @@ jobs:
     secrets:
       APP_ID: ${{ secrets.MB_PRE_COMMIT_AUTO_UPDATER_APP_ID }}
       PRIVATE_KEY: ${{ secrets.MB_PRE_COMMIT_AUTO_UPDATER_PRIVATE_KEY }}
+      checkout_token: ${{ secrets.SUBMODULES_PAT }}

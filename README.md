@@ -38,3 +38,16 @@ not to push huge stuff into the repo that isn't appropriate to stay.
 Obviously we have the distinction between `apps` and `libs`.
 The local `util` lib is meant to provide utils only for this dev repo
 exclusively.
+
+## CI with private submodules (`toolib`)
+
+GitHub Actions cannot clone private submodule repos with its built-in token. You only need to do this **once**:
+
+1. Open [GitHub token settings](https://github.com/settings/tokens?type=beta) (fine-grained token) or classic tokens.
+2. Create a token with **read** access to repositories `dev` and `toolib` (Contents: read-only is enough).
+3. In the **`devmarkusb/dev`** repo: **Settings → Secrets and variables → Actions → New repository secret**.
+4. Name: `SUBMODULES_PAT`, value: paste the token.
+
+The workflows already pass that secret to checkout. After you add the secret, re-run CI.
+
+**Deploy order:** push the `devenv` workflow changes to `devmarkusb/devenv` first (this repo pins `@main`), then push `dev`.

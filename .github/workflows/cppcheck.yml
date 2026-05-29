@@ -19,3 +19,5 @@ concurrency:
 jobs:
   cppcheck:
     uses: devmarkusb/devenv/.github/workflows/cppcheck.yml@main
+    secrets:
+      checkout_token: ${{ secrets.SUBMODULES_PAT }}

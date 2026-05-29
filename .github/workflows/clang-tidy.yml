@@ -17,5 +17,7 @@ concurrency:
 jobs:
   clang-tidy:
     uses: devmarkusb/devenv/.github/workflows/clang-tidy-review.yml@main
+    secrets:
+      checkout_token: ${{ secrets.SUBMODULES_PAT }}
     with:
       clang_image: ghcr.io/bemanproject/infra-containers-clang:latest
