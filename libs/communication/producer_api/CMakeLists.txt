@@ -14,6 +14,8 @@ add_library(
     ${TargetLibName_SRC_INCS}
 )
 
+set_target_properties(${TargetLibName} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 target_include_directories(${TargetLibName} PUBLIC include)
 
 mb_devenv_set_target_defaults(${TargetLibName})
