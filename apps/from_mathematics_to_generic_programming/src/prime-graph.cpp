@@ -1,7 +1,7 @@
 #include "prime-sieve.h"
 #include "mb/ul/ul.hpp"
 
-#include "matplotlibcpp.h"
+#include "matplotlibcpp_msvc_embed.hpp"
 
 namespace {
 template <typename T>

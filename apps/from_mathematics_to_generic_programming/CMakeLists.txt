@@ -38,7 +38,6 @@ target_link_libraries(prime-sieveBm benchmark_main mb::util)
 
 mb_ul_include(matplotlib-cpp.cmake)
 add_executable(prime-graph src/prime-sieve.h src/prime-graph.cpp)
-target_include_directories(prime-graph PRIVATE ${matplotlib-cpp_INCLUDE_DIRS})
 target_link_libraries(prime-graph matplotlib_cpp mb::util)
 
 add_executable(prime-palindromes src/prime-sieve.h src/prime-palindromes.cpp)
