@@ -2183,8 +2183,8 @@ struct lexicographical_less_k<0, I0, I1> {
 
 // concept Comparator3Way(F) is
 //     HomogeneousFunction(F)
-//  /\ Arity(F) = 2
-//  /\ Codomain(F) = int
+//     Arity(F) = 2
+//     Codomain(F) = int
 
 // property(F : Comparator3Way)
 // three_way_compare : F
@@ -4463,39 +4463,39 @@ struct less<counted_range<I>> {
 
 // concept Position(T) means
 //     BaseType : Position -> Linearizable
-//  /\ IteratorType : Position -> Iterator
-//  /\ ValueType : Position -> Regular
+//     IteratorType : Position -> Iterator
+//     ValueType : Position -> Regular
 //         T |- ValueType(IteratorType(T))
-//  /\ SizeType : Position -> Integer
+//     SizeType : Position -> Integer
 //         T |- SizeType(IteratorType(T))
-//  /\ base : T -> BaseType(T)
-//  /\ current : T -> IteratorType(T)
-//  /\ begin : T -> IteratorType(T)
+//     base : T -> BaseType(T)
+//     current : T -> IteratorType(T)
+//     begin : T -> IteratorType(T)
 //         x |- begin(base(x))
-//  /\ end : T -> IteratorType(T)
+//     end : T -> IteratorType(T)
 //         x |- end(base(x))
 
 
 // concept DynamicSequence(T) means
 //     Sequence(T)
-//  /\ T supports insert and erase
+//     T supports insert and erase
 
 
 // concept InsertPosition(T) means
 //     Position(T)
-//  /\ BaseType : Position -> DynamicSequence
+//     BaseType : Position -> DynamicSequence
 
-// model InsertPosition(before) /\ InsertPosition(after) /\
-//       InsertPosition(front) /\ InsertPosition(back)
+// model InsertPosition(before) && InsertPosition(after) &&
+//     InsertPosition(front) && InsertPosition(back)
 
 
 // concept ErasePosition(T) means
 //     Position(T)
-//  /\ BaseType : Position -> DynamicSequence
+//     BaseType : Position -> DynamicSequence
 
-// model ErasePosition(before) /\ ErasePosition(after) /\
-//       ErasePosition(front) /\ ErasePosition(back) /\
-//       ErasePosition(at)
+// model ErasePosition(before) && ErasePosition(after) &&
+//     ErasePosition(front) && ErasePosition(back) &&
+//     ErasePosition(at)
 
 template <typename S>
 REQUIRES(DynamicSequence(S))

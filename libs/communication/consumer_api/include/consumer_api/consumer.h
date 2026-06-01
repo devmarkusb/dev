@@ -6,7 +6,7 @@
 namespace consumer {
 using Product = std::vector<int>;
 
-void consume(const Product& pro);
+void consume(const Product& product);
 } // namespace consumer
 
 #endif

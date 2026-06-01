@@ -116,8 +116,8 @@ TEST(semiring, tests) {
 }
 
 TEST(multiply, tests) {
-    using math::operator<<;
-    using math::operator*;
+    using math::operator<<; // cppcheck-suppress constStatement ; used by std::cout below.
+    using math::operator*; // cppcheck-suppress constStatement
     std::cout << col_vec1 << "\n";
     std::cout << row_vec1 << "\n";
     std::cout << scalar1 << "\n";
@@ -165,7 +165,7 @@ TEST(power_semigroup, transitive_closure) {
 
     EXPECT_EQ(math::power_semigroup(adjacencyMatrix, 1, math::MatMulGenBool<ElemT, Matrix>{}), adjacencyMatrix);
 
-    using math::operator<<;
+    using math::operator<<; // cppcheck-suppress constStatement
     std::cout << math::power_semigroup(adjacencyMatrix, 2, math::MatMulGenBool<ElemT, Matrix>{}) << "\n";
 
     std::cout << math::power_semigroup(adjacencyMatrix, dim - 1, math::MatMulGenBool<ElemT, Matrix>{}) << "\n";
@@ -205,7 +205,7 @@ TEST(power_semigroup, transitive_closure2) {
 
     EXPECT_EQ(math::power_semigroup(weighted_adjacency_matrix, 1, MatMulGenTropical{}), weighted_adjacency_matrix);
 
-    using math::operator<<;
+    using math::operator<<; // cppcheck-suppress constStatement
     std::cout << math::power_semigroup(weighted_adjacency_matrix, 2, MatMulGenTropical{}) << "\n";
 
     std::cout << math::power_semigroup(weighted_adjacency_matrix, dim - 1, MatMulGenTropical{}) << "\n";

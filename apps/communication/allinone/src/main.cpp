@@ -31,7 +31,7 @@ public:
 
     ~App() override {
         if (is_running_)
-            terminate();
+            App::terminate();
         std::cout << "Application destructed" << std::endl;
     }
 

@@ -69,7 +69,11 @@ namespace chatgpt {
 using std::vector;
 
 // Function to check if it's possible to add the pair (a, b) to the hierarchy
-bool is_valid(int a, int b, vector<vector<int>>& respect_list, vector<int>& hierarchy) {
+bool is_valid(
+    int a,
+    int b,
+    const vector<vector<int>>& respect_list,
+    vector<int>& hierarchy) { // cppcheck-suppress constParameterReference ; hierarchy is updated.
     // Check if a respects b
     if (find(respect_list[a].begin(), respect_list[a].end(), b) == respect_list[a].end()) {
         return false;
@@ -86,7 +90,7 @@ bool is_valid(int a, int b, vector<vector<int>>& respect_list, vector<int>& hier
     }
 
     // Check if a is already a descendant of b or vice versa
-    if (hierarchy[a] != -1 && hierarchy[b] != -1) {
+    if (hierarchy[a] != -1 || hierarchy[b] != -1) {
         int curr_a = a;
         int curr_b = b;
         while (hierarchy[curr_a] != -1) {

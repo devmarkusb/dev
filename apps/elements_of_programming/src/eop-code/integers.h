@@ -23,8 +23,6 @@
 
 #include "intrinsics.h"
 
-#include <ciso646> // bitand
-
 namespace eop {
 // Exercise 3.2
 
@@ -91,13 +89,13 @@ bool one(const I& a) {
 template <typename I>
 REQUIRES(Integer(I))
 bool even(const I& a) {
-    return (a bitand I(1)) == I(0);
+    return (a & I(1)) == I(0);
 }
 
 template <typename I>
 REQUIRES(Integer(I))
 bool odd(const I& a) {
-    return (a bitand I(1)) != I(0);
+    return (a & I(1)) != I(0);
 }
 
 // Chapter 5: definition of half for Integer types, to model HalvableMonoid:

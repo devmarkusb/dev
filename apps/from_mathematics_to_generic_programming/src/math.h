@@ -388,7 +388,7 @@ struct Tropical {
 
     constexpr Tropical() noexcept = default;
 
-    constexpr /*implicit*/ Tropical(double d) noexcept
+    constexpr explicit Tropical(double d) noexcept
         : d_{d} {
     }
 

@@ -7,15 +7,15 @@
 
 struct Args {
     static std::pair<std::optional<Args>, int> parse_command_line(int argc, char** argv) {
-        Args args;
-        CLI::App app{"Debugging experimental app"};
-
         std::optional<Args> res_args;
         int exit_code{};
         try {
+            Args args;
+            CLI::App app{"Debugging experimental app"};
             app.parse(argc, argv);
             res_args = args;
         } catch (const CLI::ParseError& e) {
+            CLI::App app{"Debugging experimental app"};
             exit_code = app.exit(e);
         }
 

@@ -9,7 +9,7 @@ UL_WARNING_DISABLE_CLANG(missing-prototypes)
 
 // clang-format on
 
-[[maybe_unused]] int solution(int n, std::vector<std::vector<int>> tree) {
+[[maybe_unused]] int solution(int n, const std::vector<std::vector<int>>& tree) {
     // convert input to adjacency list
     std::vector<std::vector<size_t>> tree_adjlist(static_cast<size_t>(n));
     for (const auto& e : tree) {
@@ -26,9 +26,8 @@ UL_WARNING_DISABLE_CLANG(missing-prototypes)
         std::queue<size_t> nodes;
         nodes.push(start);
 
-        size_t node{};
         while (!nodes.empty()) {
-            node = nodes.front();
+            const size_t node = nodes.front();
             nodes.pop();
 
             if (dist[node] > max_d.first) {
@@ -63,7 +62,7 @@ UL_WARNING_DISABLE_GCC(unused-function)
 // clang-format on
 using std::vector;
 
-int solution(int n, vector<vector<int>> tree) {
+int solution(int n, const vector<vector<int>>& tree) {
     // Initialize a vector to store the maximum depth of each vertex.
     vector<int> max_depths(n, -1);
 

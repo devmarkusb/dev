@@ -619,7 +619,7 @@ void property_transitive(R r, Domain(R) x, Domain(R) y, Domain(R) z) {
 template <typename R>
 REQUIRES(Relation(R))
 void property_total_ordering(R r, const Domain(R) & x0, const Domain(R) & x1, const Domain(R) & x2) {
-    // Precondition: total_ordering(r) /\ r(x0, x1) /\ r(x1, x2)
+    // Precondition: total_ordering(r) && r(x0, x1) && r(x1, x2)
 
     Assert(r(x0, x1) && r(x1, x2));
 
@@ -632,7 +632,7 @@ void property_total_ordering(R r, const Domain(R) & x0, const Domain(R) & x1, co
 template <typename R>
 REQUIRES(Relation(R))
 void property_reflexive_total_ordering(R r, const Domain(R) & x0, const Domain(R) & x1, const Domain(R) & x2) {
-    // Precondition: total_ordering(r) /\ r(x0, x1) /\ r(x1, x2)
+    // Precondition: total_ordering(r) && r(x0, x1) && r(x1, x2)
 
     Assert(r(x0, x1) && r(x1, x2));
 
@@ -1291,7 +1291,7 @@ inline double remainder(double x, double y) {
 
 // concept IntegralDomain(T) means
 //     CommutativeSemiring(T)
-//  /\ (all a,b in T) a*b = T(0) => (a = T(0) \/ b = T(0))
+//     (all a,b in T) a*b = T(0) => (a = T(0) || b = T(0))
 
 // We vary from the usual definition by allowing a semiring rather than a ring.
 // The second condition means there are no zero divisors.
@@ -1462,20 +1462,20 @@ struct quotient_type<double> {
 // PolynomialRing(T) equals by definition
 //     ValueType : Polynomial -> CommutativeSemiring
 //     IndexType : Polynomial -> Integer
-//  /\ degree : T -> IndexType(T)
-//  /\ coefficient : T x IndexType(T) -> ValueType(T)
-//  /\ lc : T �> ValueType(T)
-//            a \mapsto coefficient(a, degree(a))
-//  /\ tc : T �> ValueType(T)
-//            a \mapsto coefficient(a, 0)
-//  /\ indeterminate : -> T
-//  /\ evaluate : T x ValueType(T) -> ValueType(T)
-//  /\ � : ValueType(T) x T -> T
-//  /\ + : T x T -> T
-//  /\ � : T x T -> T
-//  /\ shift_left : T x Integer -> T
-//        (a, n) \mapsto power(indeterminate(), n, �) � a
-//  /\  ...
+//     degree : T -> IndexType(T)
+//     coefficient : T x IndexType(T) -> ValueType(T)
+//     lc : T �> ValueType(T)
+//         a \mapsto coefficient(a, degree(a))
+//     tc : T �> ValueType(T)
+//         a \mapsto coefficient(a, 0)
+//     indeterminate : -> T
+//     evaluate : T x ValueType(T) -> ValueType(T)
+//     � : ValueType(T) x T -> T
+//     + : T x T -> T
+//     � : T x T -> T
+//     shift_left : T x Integer -> T
+//         (a, n) \mapsto power(indeterminate(), n, �) � a
+//     ...
 
 
 template <typename T>
@@ -1484,7 +1484,7 @@ struct polynomial {
     typedef int IndexType;
     array<T> coeff;
 
-    // Invariant: degree(f) = size(f.coeff) - 1 /\
+    // Invariant: degree(f) = size(f.coeff) - 1 &&
     //            coefficient(f, i) = f.coeff[degree(f) - i]
     polynomial()
         : coeff(IndexType(1), IndexType(1), T(0)) {
@@ -1744,7 +1744,7 @@ pair<polynomial<T>, polynomial<T>> quotient_remainder(const polynomial<T>& f, co
         r = r - q_i * g;
     }
     return pair<polynomial<T>, polynomial<T>>(q, r);
-    // Postcondition: f = q * g + r /\ degree(r) < degree(g)
+    // Postcondition: f = q * g + r && degree(r) < degree(g)
 }
 
 template <typename T>
@@ -4063,7 +4063,7 @@ void concept_Linearizable(W& w) {
 template <typename S>
 REQUIRES(Sequence(S))
 void concept_Sequence(S& s0, S& s1, ValueType(S) & x) {
-    // Precondition: s0 < s1 /\ !empty(s1) /\ x != s1[0]
+    // Precondition: s0 < s1 && !empty(s1) && x != s1[0]
     Assert(begin(s1) != end(s1));
     Assert(x != s1[0]);
 
@@ -4082,7 +4082,7 @@ void concept_Sequence(S& s0, S& s1, ValueType(S) & x) {
 template <typename T0, typename T1>
 REQUIRES(ConstantSizeSequence(T0) && ConstantSizeSequence(T1) && ValueType(T0) == ValueType(T1))
 void concept_ConstantSizeSequence(T0& a0, T1& a1, ValueType(T1) & x) {
-    // Precondition: a0 < a1 /\ x != a1[0]
+    // Precondition: a0 < a1 && x != a1[0]
 
     if (verbose) {
         print("      ");
@@ -4247,7 +4247,7 @@ void test_Position(S& s, IteratorType(S) i) {
 template <typename S>
 REQUIRES(DynamicSequence(S))
 void concept_DynamicSequence(S& s0, S& s1, ValueType(S) & x) {
-    // Precondition: s0 < s1 /\ x != s1[0]
+    // Precondition: s0 < s1 && x != s1[0]
     typedef IteratorType(S) I;
 
     concept_Sequence(s0, s1, x);
@@ -4327,7 +4327,7 @@ void type_list() {
 template <typename S>
 REQUIRES(SingleExtentArray(S))
 void type_single_extent_array(S& s0, S& s1, ValueType(S) & x) {
-    // Precondition: s0 < s1 /\ x != s1[0]
+    // Precondition: s0 < s1 && x != s1[0]
     concept_DynamicSequence(s0, s1, x);
 
     // construct from capacity

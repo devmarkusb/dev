@@ -6,8 +6,8 @@ namespace {
 // The idea is to have a container of these but wanting a view of one of its members instead (without a transformed
 // copy to store), iterable ideally.
 struct S {
-    int x{};
-    int y{};
+    int x{}; // cppcheck-suppress unusedStructMember ; used when __cpp_lib_ranges is enabled.
+    int y{}; // cppcheck-suppress unusedStructMember
 };
 
 #if ENABLE_VIEWS_TRANSFORM_DEMO
@@ -35,8 +35,8 @@ void any_of_ys_no_span(auto any_of_ys) {
 } // namespace
 
 int main(int, char*[]) {
-    std::vector<S> ss{{1, 10}, {2, 20}};
-    std::vector<S> ss2{{11, 100}, {12, 200}};
+    std::vector<S> ss{{1, 10}, {2, 20}}; // cppcheck-suppress unreadVariable ; used when __cpp_lib_ranges is enabled.
+    std::vector<S> ss2{{11, 100}, {12, 200}}; // cppcheck-suppress unreadVariable
 
 #if ENABLE_VIEWS_TRANSFORM_DEMO
     auto x = std::views::transform(ss, [](auto elem) {

@@ -1,0 +1,8 @@
+# cppcheck 2.20 crashes on this translation unit with exhaustive checking.
+sdks/util/src/basiccodesupport/bits.test.cpp
+
+# Legacy Elements of Programming exercise port; not maintained for exhaustive static analysis.
+apps/elements_of_programming
+
+# Vendored third-party headers (not maintained in-tree).
+3rdparty
