@@ -396,6 +396,14 @@ struct Tropical {
         return d_;
     }
 
+    friend constexpr Tropical operator+(Tropical lhs, Tropical rhs) noexcept {
+        return Tropical{static_cast<double>(lhs) + static_cast<double>(rhs)};
+    }
+
+    friend constexpr Tropical operator*(Tropical lhs, Tropical rhs) noexcept {
+        return Tropical{static_cast<double>(lhs) * static_cast<double>(rhs)};
+    }
+
     // auto operator<=>(const Tropical&) const noexcept = default;
 
 private:

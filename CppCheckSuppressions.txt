@@ -8,5 +8,4 @@ unusedScopedObject:*/*.test.cpp
 passedByValue:*/c_string_view.hpp
 constParameterCallback:*/*.bm.cpp
 ctuOneDefinitionRuleViolation:*/args.h
-initializerList:sdks/toolib/include/mb/toolib/math/pair.hpp
 copyCtorPointerCopying:sdks/toolib/include/mb/toolib/math/matrix.hpp

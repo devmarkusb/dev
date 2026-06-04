@@ -1,10 +1,10 @@
 # dev (development)
 
-[![continuous integration tests](https://github.com/devmarkusb/dev/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/devmarkusb/dev/actions/workflows/ci.yml)
-[![clang-tidy](https://github.com/devmarkusb/dev/actions/workflows/clang-tidy.yml/badge.svg?branch=main)](https://github.com/devmarkusb/dev/actions/workflows/clang-tidy.yml)
-[![cppcheck](https://github.com/devmarkusb/dev/actions/workflows/cppcheck.yml/badge.svg?branch=main)](https://github.com/devmarkusb/dev/actions/workflows/cppcheck.yml)
-[![lint check (pre-commit)](https://github.com/devmarkusb/dev/actions/workflows/pre-commit-check.yml/badge.svg?branch=main)](https://github.com/devmarkusb/dev/actions/workflows/pre-commit-check.yml)
-[![License](https://img.shields.io/github/license/devmarkusb/dev)](LICENSE)
+[![continuous integration tests](https://img.shields.io/badge/continuous%20integration%20tests-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)](https://github.com/devmarkusb/dev/actions/workflows/ci.yml)
+[![clang-tidy](https://img.shields.io/badge/clang--tidy-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)](https://github.com/devmarkusb/dev/actions/workflows/clang-tidy.yml)
+[![cppcheck](https://img.shields.io/badge/cppcheck-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)](https://github.com/devmarkusb/dev/actions/workflows/cppcheck.yml)
+[![lint check (pre-commit)](https://img.shields.io/badge/lint%20check%20(pre--commit)-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white)](https://github.com/devmarkusb/dev/actions/workflows/pre-commit-check.yml)
+[![License](https://img.shields.io/badge/License-BSL--1.0-blue)](LICENSE)
 [![C++](https://img.shields.io/badge/C%2B%2B-26-blue)](CMakeLists.txt)
 
 This is a repo to jump start arbitrary development, mainly in C++, CMake,

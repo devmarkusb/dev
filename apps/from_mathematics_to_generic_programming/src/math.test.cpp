@@ -189,18 +189,19 @@ TEST(power_semigroup, transitive_closure) {
 // aka shortest_length
 TEST(power_semigroup, transitive_closure2) {
     constexpr auto dim{7};
-    constexpr auto inf{math::Tropical::inf};
-    using Matrix = math::Matrix<math::Tropical, dim, dim>;
-    using MatMulGenTropical = math::MatMulGenTropical<math::Tropical, dim, dim, dim>;
+    using T = math::Tropical;
+    constexpr T inf{T{T::inf}};
+    using Matrix = math::Matrix<T, dim, dim>;
+    using MatMulGenTropical = math::MatMulGenTropical<T, dim, dim, dim>;
     // aka distances (directed)
     constexpr auto weighted_adjacency_matrix{Matrix{{
-        {0, 6, inf, 3, inf, inf, inf},
-        {inf, 0, inf, inf, 2, 10, inf},
-        {7, inf, 0, inf, inf, inf, inf},
-        {inf, inf, 5, 0, inf, 4, inf},
-        {inf, inf, inf, inf, 0, inf, 3},
-        {inf, inf, 6, inf, 7, 0, 8},
-        {inf, 9, inf, inf, inf, inf, 0},
+        {T{0}, T{6}, inf, T{3}, inf, inf, inf},
+        {inf, T{0}, inf, inf, T{2}, T{10}, inf},
+        {T{7}, inf, T{0}, inf, inf, inf, inf},
+        {inf, inf, T{5}, T{0}, inf, T{4}, inf},
+        {inf, inf, inf, inf, T{0}, inf, T{3}},
+        {inf, inf, T{6}, inf, T{7}, T{0}, T{8}},
+        {inf, T{9}, inf, inf, inf, inf, T{0}},
     }}};
 
     EXPECT_EQ(math::power_semigroup(weighted_adjacency_matrix, 1, MatMulGenTropical{}), weighted_adjacency_matrix);
@@ -212,13 +213,13 @@ TEST(power_semigroup, transitive_closure2) {
 
     // aka the shortest paths to everywhere
     constexpr auto transitive_closure{Matrix{{
-        {0, 6, 8, 3, 8, 7, 11},
-        {23, 0, 16, 26, 2, 10, 5},
-        {7, 13, 0, 10, 15, 14, 18},
-        {12, 18, 5, 0, 11, 4, 12},
-        {35, 12, 28, 38, 0, 22, 3},
-        {13, 17, 6, 16, 7, 0, 8},
-        {32, 9, 25, 35, 11, 19, 0},
+        {T{0}, T{6}, T{8}, T{3}, T{8}, T{7}, T{11}},
+        {T{23}, T{0}, T{16}, T{26}, T{2}, T{10}, T{5}},
+        {T{7}, T{13}, T{0}, T{10}, T{15}, T{14}, T{18}},
+        {T{12}, T{18}, T{5}, T{0}, T{11}, T{4}, T{12}},
+        {T{35}, T{12}, T{28}, T{38}, T{0}, T{22}, T{3}},
+        {T{13}, T{17}, T{6}, T{16}, T{7}, T{0}, T{8}},
+        {T{32}, T{9}, T{25}, T{35}, T{11}, T{19}, T{0}},
     }}};
 
     EXPECT_EQ(math::power_semigroup(weighted_adjacency_matrix, dim - 1, MatMulGenTropical{}), transitive_closure);

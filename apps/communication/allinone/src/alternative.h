@@ -25,7 +25,7 @@ public:
         std::cout << "Application destructed" << std::endl;
     }
 
-    consumer::Product send_to_processor(const producer::Product& product) {
+    static consumer::Product send_to_processor(const producer::Product& product) {
         consumer::Product processed;
         processed.reserve(product.size());
 
@@ -44,7 +44,7 @@ public:
             asio::steady_timer timer{io_context_};
             while (is_running_) {
                 timer.expires_from_now(input_interval);
-                auto future_res{std::async(&App::send_to_processor, this, producer::produce())};
+                auto future_res{std::async(&App::send_to_processor, producer::produce())};
                 auto status{future_res.wait_for(input_interval)};
                 if (status != std::future_status::ready) {
                     std::cout << "result did not return in time\n";
