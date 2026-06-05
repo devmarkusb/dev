@@ -3,8 +3,8 @@
 UL_PRAGMA_WARNINGS_PUSH
 // clang-format off
 UL_WARNING_DISABLE_CLANG_ALL
-#pragma GCC diagnostic ignored "-Wsign-compare"
-#pragma GCC diagnostic ignored "-Wunused-function"
+UL_WARNING_DISABLE_GCC(sign-compare)
+UL_WARNING_DISABLE_GCC(unused-function)
 
 // clang-format on
 
@@ -183,8 +183,6 @@ int solution(int n, vector<vector<int>> respect_list) {
 UL_PRAGMA_WARNINGS_POP
 } // namespace chatgpt
 } // namespace
-
-UL_PRAGMA_WARNINGS_POP
 
 int main() {
     std::cout << solution(4, {{0, 1}, {1, 2}, {2, 3}, {3, 0}, {1, 3}}) << "\n"; // expected 32

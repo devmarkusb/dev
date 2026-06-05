@@ -6,13 +6,13 @@ namespace {
     return static_cast<size_t>(i);
 }
 
-[[nodiscard]] size_t vec_idx(int i, size_t size) {
+[[nodiscard]] size_t vec_idx(int i, [[maybe_unused]] size_t size) {
     UL_EXPECT(i >= 0);
     UL_EXPECT(static_cast<size_t>(i) < size);
     return static_cast<size_t>(i);
 }
 
-namespace mb {
+inline namespace mb {
 UL_PRAGMA_WARNINGS_PUSH
 // clang-format off
 UL_WARNING_DISABLE_CLANG(sign-conversion)
@@ -20,20 +20,18 @@ UL_WARNING_DISABLE_CLANG(missing-prototypes)
 
 // clang-format on
 
-[[maybe_unused]] int solution(int n, const std::vector<std::vector<int>>& tree) {
+int solution(int n, const std::vector<std::vector<int>>& tree) {
     UL_EXPECT(n >= 2);
     UL_EXPECT(tree.size() == static_cast<size_t>(n - 1));
-    for (const auto& e : tree) {
-        UL_EXPECT(e.size() == 2);
-        UL_EXPECT(0 <= e[0] && e[0] < n);
-        UL_EXPECT(0 <= e[1] && e[1] < n);
-        UL_EXPECT(e[0] != e[1]);
-    }
 
     // convert input to adjacency list
     const size_t n_sz = nonneg_sz(n);
     std::vector<std::vector<size_t>> tree_adjlist(n_sz);
     for (const auto& e : tree) {
+        UL_EXPECT(e.size() == 2);
+        UL_EXPECT(0 <= e[0] && e[0] < n);
+        UL_EXPECT(0 <= e[1] && e[1] < n);
+        UL_EXPECT(e[0] != e[1]);
         const size_t u = vec_idx(e[0], n_sz);
         const size_t v = vec_idx(e[1], n_sz);
         tree_adjlist[u].push_back(v);
@@ -76,7 +74,7 @@ UL_WARNING_DISABLE_CLANG(missing-prototypes)
 UL_PRAGMA_WARNINGS_POP
 } // namespace mb
 
-inline namespace chatgpt {
+namespace chatgpt {
 UL_PRAGMA_WARNINGS_PUSH
 UL_WARNING_DISABLE_CLANG_ALL
 // clang-format off
