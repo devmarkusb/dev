@@ -1060,7 +1060,7 @@ void run_array_tests() {
 
     typedef DistanceType(IteratorType(matrix)) N;
     N n = max(size(m) / N(10), N(100));
-    UnderlyingType(row) r;
+    UnderlyingType(row) r{};
     array<UnderlyingType(row)> buffer(n, n, r);
     //reverse_n_adaptive(begin(m), size(m), begin(buffer), size(buffer));
     //print("reversed: "); print(m); print_eol();

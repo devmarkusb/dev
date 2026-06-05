@@ -261,10 +261,12 @@ E bezout_y(E x, E a, E b) {
 
 template <BinaryInteger N>
 N gcd_stein(N m, N n) {
-    if (m < N(0))
-        m = -m;
-    if (n < N(0))
-        n = -n;
+    if constexpr (std::is_signed_v<N>) {
+        if (m < N(0))
+            m = -m;
+        if (n < N(0))
+            n = -n;
+    }
     if (m == N(0))
         return n;
     if (n == N(0))

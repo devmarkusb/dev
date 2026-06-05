@@ -6003,10 +6003,15 @@ REQUIRES(Regular(T))
 struct array_prefix {
     POINTER(T) m;
     POINTER(T) l;
-    T a;
-    // Invariant: $[addressof(a), m)$ are constructed elements
-    // Invariant: $[m, l)$ are unconstructed (reserve) elements
+    // Invariant: constructed elements span [array_prefix_storage(p), m)
+    // Invariant: unconstructed reserve elements span [m, l)
 };
+
+template <typename T>
+REQUIRES(Regular(T))
+POINTER(T) array_prefix_storage(POINTER(array_prefix<T>) p) {
+    return reinterpret_cast<POINTER(T)>(reinterpret_cast<char*>(p) + sizeof(array_prefix<T>));
+}
 
 template <typename T>
 REQUIRES(Regular(T))
@@ -6014,9 +6019,8 @@ POINTER(array_prefix<T>) allocate_array(DistanceType(T*) n) {
     typedef POINTER(array_prefix<T>) P;
     if (zero(n))
         return P(0);
-    int bsize = int(predecessor(n)) * static_cast<int>(sizeof(T));
-    P p = P(malloc(sizeof(array_prefix<T>) + static_cast<size_t>(bsize)));
-    POINTER(T) f = &sink(p).a;
+    P p = P(malloc(sizeof(array_prefix<T>) + static_cast<size_t>(n) * sizeof(T)));
+    POINTER(T) f = array_prefix_storage(p);
     sink(p).m = f;
     sink(p).l = f + n;
     return p;
@@ -6120,7 +6124,7 @@ IteratorType(array<T>) begin(const array<T>& x) {
     typedef IteratorType(array<T>) I;
     if (x.p == P(0))
         return I(0);
-    return I(addressof(source(x.p).a));
+    return I(array_prefix_storage(x.p));
 }
 
 template <typename T>
