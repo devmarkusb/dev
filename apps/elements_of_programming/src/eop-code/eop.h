@@ -4185,7 +4185,7 @@ I sort_n(I f, DistanceType(I) n, R r) {
 template <int k, typename T>
 REQUIRES(0 < k && k <= MaximumValue(int) / sizeof(T) && Regular(T))
 struct array_k {
-    T a[k];
+    T a[static_cast<unsigned int>(k)];
 
     T& operator[](int i) {
         // Precondition: $0 \leq i < \func{size}(x)$
