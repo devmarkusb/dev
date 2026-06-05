@@ -80,6 +80,7 @@ UL_WARNING_DISABLE_CLANG_ALL
 // clang-format off
 UL_WARNING_DISABLE_GCC(sign-compare)
 UL_WARNING_DISABLE_GCC(unused-function)
+UL_WARNING_DISABLE_GCC(unused-variable)
 // clang-format on
 using std::vector;
 
