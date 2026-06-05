@@ -297,20 +297,20 @@ inline void run_lcg_transformation() {
         i = successor(i);
     }
     while (true) {
-        int i;
+        int idx;
         LCG::T x;
-        read(i);
+        read(idx);
         read(x);
-        if (!(0 <= i && int(i) < size(lcg)))
+        if (!(0 <= idx && int(idx) < size(lcg)))
             return;
         if (x < 0)
-            x = source(p + i).x0;
+            x = source(p + idx).x0;
         print("orbit of ");
         print(x);
         print(" under ");
-        print(source(p + i).name);
+        print(source(p + idx).name);
         print(": ");
-        output_orbit_structure(source(p + i).x0, source(p + i), always_defined<LCG::T>);
+        output_orbit_structure(source(p + idx).x0, source(p + idx), always_defined<LCG::T>);
     }
 }
 

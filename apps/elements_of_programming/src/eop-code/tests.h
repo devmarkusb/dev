@@ -368,15 +368,15 @@ void algorithms_orbit(Domain(F) x, DistanceType(F) h, DistanceType(F) c) {
         Assert(t.m2 == y);
     }
     if (!zero(c)) {
-        triple<N, N, T> t = orbit_structure_nonterminating_orbit(x, f);
+        triple<N, N, T> t_nt = orbit_structure_nonterminating_orbit(x, f);
         if (zero(h)) { // circular
-            Assert(zero(t.m0));
-            Assert(t.m1 == predecessor(c));
-            Assert(t.m2 == x);
+            Assert(zero(t_nt.m0));
+            Assert(t_nt.m1 == predecessor(c));
+            Assert(t_nt.m2 == x);
         } else { // rho-shaped
-            Assert(t.m0 == h);
-            Assert(t.m1 == predecessor(c));
-            Assert(t.m2 == y);
+            Assert(t_nt.m0 == h);
+            Assert(t_nt.m1 == predecessor(c));
+            Assert(t_nt.m2 == y);
         }
     }
 }
@@ -1071,8 +1071,8 @@ inline void test_ch_4() {
 
     {
         const int ca = 1, cb = 2, cc = 3, cd = 4, ce = 5;
-        int b = 12, d = 14;
-        Assert(median_5(1, cb, b, d, 15, less<int>()) == 12);
+        int mb = 12, md = 14;
+        Assert(median_5(1, cb, mb, md, 15, less<int>()) == 12);
         Assert(median_5(ca, cb, cc, cd, ce, less<int>()) == 3);
         algorithm_median_5();
     }
@@ -2178,8 +2178,8 @@ inline void test_ch_6() {
         Assert(increasing_range(begin(lb), end(lb), less<Z>()));
         Assert(!increasing_range(begin(lc), end(lc), less<Z>()));
         {
-            Z f[] = {0, 0, 1, 1, 2, 3, 5, 5};
-            slist<Z> lf(counted_range<Z*>(f, sizeof(f) / sizeof(Z)));
+            Z fz[] = {0, 0, 1, 1, 2, 3, 5, 5};
+            slist<Z> lf(counted_range<Z*>(fz, sizeof(fz) / sizeof(Z)));
             Assert(!strictly_increasing_range(begin(lf), end(lf), less<Z>()));
             Assert(increasing_range(begin(lf), end(lf), less<Z>()));
         }
@@ -4165,11 +4165,11 @@ inline void type_array_k() {
             extend_sequence_n(sl0, 3, 3);
             extend_sequence_n(sl1, 4, 4);
             typedef array_k<5, SL> A_SL;
-            A_SL a0;
-            A_SL a1;
-            a0[0] = sl0;
-            a1[0] = sl1; // establish a0 < a1
-            concept_ConstantSizeSequence(a0, a1, sl0);
+            A_SL as0;
+            A_SL as1;
+            as0[0] = sl0;
+            as1[0] = sl1; // establish as0 < as1
+            concept_ConstantSizeSequence(as0, as1, sl0);
         }
 
         typedef slist<DA> SL;
@@ -4409,9 +4409,9 @@ inline void type_array() {
             extend_sequence_n(sl0, 3, 3);
             extend_sequence_n(sl1, 4, 4);
             typedef array<SL> A_SL;
-            A_SL a0(2, 2, sl0);
-            A_SL a1(2, 2, sl1); // establish a0 < a1
-            type_single_extent_array(a0, a1, sl0);
+            A_SL as0(2, 2, sl0);
+            A_SL as1(2, 2, sl1); // establish as0 < as1
+            type_single_extent_array(as0, as1, sl0);
         }
 
         typedef slist<CA> SL;
@@ -4525,12 +4525,12 @@ inline void test_ch_12() {
     {
         print("    before, after, front, back, at\n");
         const int N = 10;
-        array<int> da(N, N, 0);
-        iota(N, begin(da));
-        slist<int> sl(da);
-        list<int> l(da);
-        test_Position(da, successor(begin(da)));
-        test_Position(sl, successor(begin(sl)));
+        array<int> arr(N, N, 0);
+        iota(N, begin(arr));
+        slist<int> sli(arr);
+        list<int> l(arr);
+        test_Position(arr, successor(begin(arr)));
+        test_Position(sli, successor(begin(sli)));
         test_Position(l, successor(begin(l)));
     }
 

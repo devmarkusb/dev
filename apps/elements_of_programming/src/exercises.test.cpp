@@ -108,8 +108,6 @@ std::ostream& orbit_dump(std::ostream& os, F f, P p, std::string_view loglabel) 
 }
 } // namespace
 
-using namespace eop;
-
 TEST(intersectTest, dumps) {
     orbit_dump(std::cout, terminating_orbit, terminating_orbit_pred, "terminating_orbit");
     std::stringstream ss;
