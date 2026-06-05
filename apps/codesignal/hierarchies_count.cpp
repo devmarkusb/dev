@@ -14,7 +14,7 @@ namespace {
     return static_cast<size_t>(i);
 }
 
-[[nodiscard]] size_t vec_idx(int i, size_t size) {
+[[nodiscard]] size_t vec_idx(int i, [[maybe_unused]] size_t size) {
     UL_EXPECT(i >= 0);
     UL_EXPECT(static_cast<size_t>(i) < size);
     return static_cast<size_t>(i);
@@ -48,7 +48,7 @@ void recurse_children(
     UL_EXPECT(1 <= n && n <= 100);
     UL_EXPECT(
         n - 1 <= static_cast<int>(respect_list.size()) && static_cast<int>(respect_list.size()) <= n * (n - 1) / 2);
-    for (const auto& resp_pair : respect_list) {
+    for ([[maybe_unused]] const auto& resp_pair : respect_list) {
         UL_EXPECT(resp_pair.size() == 2);
         UL_EXPECT(0 <= resp_pair[0] && resp_pair[0] < n);
         UL_EXPECT(0 <= resp_pair[1] && resp_pair[1] < n);
@@ -163,7 +163,7 @@ int solution(int n, vector<vector<int>> respect_list) {
     const size_t n_sz = nonneg_sz(n);
     UL_EXPECT(respect_list.size() == n_sz);
     for (const auto& neighbors : respect_list) {
-        for (int x : neighbors) {
+        for ([[maybe_unused]] int x : neighbors) {
             UL_EXPECT(0 <= x && x < n);
         }
     }

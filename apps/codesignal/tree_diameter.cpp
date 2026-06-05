@@ -88,7 +88,7 @@ int solution(int n, const vector<vector<int>>& tree) {
     const size_t n_sz = nonneg_sz(n);
     UL_EXPECT(tree.size() == n_sz);
     for (int i = 0; i < n; ++i) {
-        const size_t i_i = vec_idx(i, n_sz);
+        [[maybe_unused]] const size_t i_i = vec_idx(i, n_sz);
         UL_EXPECT(!tree[i_i].empty());
         UL_EXPECT(0 <= tree[i_i][0] && tree[i_i][0] < n);
     }
