@@ -25,8 +25,13 @@ if(MB_DEV_BUILD_TESTS)
         src/permutation.test.cpp
     )
     mb_devenv_add_simple_test(mathTest)
-    target_include_directories(mathTest PRIVATE ${CMAKE_SOURCE_DIR}/3rdparty/..)
-    target_link_libraries(mathTest GTest::gtest_main util)
+    add_library(bigint_3rdparty INTERFACE)
+    target_include_directories(
+        bigint_3rdparty
+        SYSTEM
+        INTERFACE ${CMAKE_SOURCE_DIR}/3rdparty
+    )
+    target_link_libraries(mathTest GTest::gtest_main util bigint_3rdparty)
 
     add_executable(prime-sieveTest src/prime-sieve.h src/prime-sieve.test.cpp)
     mb_devenv_add_simple_test(prime-sieveTest)

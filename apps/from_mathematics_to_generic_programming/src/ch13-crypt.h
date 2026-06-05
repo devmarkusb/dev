@@ -4,7 +4,7 @@
 #include "gcm.h"
 #include "math.h"
 
-#include "3rdparty/BigInt.hpp"
+#include "BigInt.hpp"
 
 namespace math {
 // E13.1
