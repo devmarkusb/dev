@@ -31,7 +31,7 @@ public:
 
         std::this_thread::sleep_for(simulated_additional_processing_time);
         std::transform(std::cbegin(product), std::cend(product), std::back_inserter(processed), [](const auto string) {
-            return string.size();
+            return static_cast<int>(string.size());
         });
 
         return processed;
