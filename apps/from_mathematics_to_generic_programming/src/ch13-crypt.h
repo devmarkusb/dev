@@ -3,14 +3,8 @@
 
 #include "gcm.h"
 #include "math.h"
-#include "mb/ul/ul.hpp"
 
-UL_PRAGMA_WARNINGS_PUSH
-// clang-format off
-UL_WARNING_DISABLE_GCC(conversion)
-// clang-format on
 #include "3rdparty/BigInt.hpp"
-UL_PRAGMA_WARNINGS_POP
 
 namespace math {
 // E13.1
